@@ -69,9 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   strips.forEach(function(strip) {
     const arrow = strip.querySelector('.ps-arrow');
-    const panel = strip.querySelector('.ps-panel');
 
-    if (arrow && panel) {
+    if (arrow) {
       arrow.addEventListener('click', function(e) {
         e.stopPropagation();
         const isOpen = strip.classList.contains('open');
@@ -84,44 +83,45 @@ document.addEventListener('DOMContentLoaded', function() {
   // ========================
   // LIGHTBOX
   // ========================
-  const lbx = document.getElementById('lbx');
-  const lbxImg = document.getElementById('lbxImg');
+  var lbx = document.getElementById('lbx');
+  var lbxImg = document.getElementById('lbx-img');
 
   function openLbx(src) {
     if (!lbx || !lbxImg) return;
     lbxImg.src = src;
-    lbx.classList.add('active');
+    lbx.style.display = 'flex';
     document.body.style.overflow = 'hidden';
   }
 
   function closeLbx() {
     if (!lbx) return;
-    lbx.classList.remove('active');
-    lbxImg.src = '';
+    lbx.style.display = 'none';
+    if (lbxImg) lbxImg.src = '';
     document.body.style.overflow = '';
   }
 
   // Open lightbox on image click (event delegation)
   document.addEventListener('click', function(e) {
-    if (e.target.tagName === 'IMG' && (e.target.closest('.ps-img-wrap') || e.target.closest('.misc-img-wrap'))) {
+    var img = e.target;
+    if (img.tagName === 'IMG' && img.closest && (img.closest('.ps-img-wrap') || img.closest('.misc-img-wrap'))) {
       e.preventDefault();
-      e.stopPropagation();
-      if (e.target.src) openLbx(e.target.src);
+      if (img.src) openLbx(img.src);
     }
   });
 
-  // Close lightbox
+  // Close lightbox when clicking overlay or X span
   if (lbx) {
     lbx.addEventListener('click', function(e) {
       if (e.target === lbx || e.target.tagName === 'SPAN') closeLbx();
     });
   }
 
+  // Close on Escape
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeLbx();
   });
 
-  // Set cursor for images
+  // Set cursor for clickable images
   function setCursors() {
     document.querySelectorAll('.ps-img-wrap img, .misc-img-wrap img').forEach(function(img) {
       img.style.cursor = 'zoom-in';
@@ -129,16 +129,13 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   setCursors();
 
-  const imgObserver = new MutationObserver(setCursors);
-  imgObserver.observe(document.body, {childList: true, subtree: true});
-
   // ========================
   // HERO SCROLL INDICATOR
   // ========================
-  const heroScroll = document.querySelector('.hero-scroll');
+  var heroScroll = document.querySelector('.hero-scroll');
   if (heroScroll) {
     heroScroll.addEventListener('click', function() {
-      const projects = document.getElementById('projects');
+      var projects = document.getElementById('projects');
       if (projects) projects.scrollIntoView({behavior: 'smooth'});
     });
   }
