@@ -341,3 +341,50 @@ const setActiveNav = () => {
 window.addEventListener('scroll', setActiveNav);
 window.addEventListener('load', setActiveNav);
 window.addEventListener('resize', setActiveNav);
+
+// ========================
+// LIGHTBOX
+// ========================
+(function(){
+  const lbx = document.getElementById('lbx');
+  const lbxImg = document.getElementById('lbx-img');
+  if(!lbx || !lbxImg) return;
+
+  function openLbx(src){
+    lbxImg.src = src;
+    lbx.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLbx(){
+    lbx.style.display = 'none';
+    document.body.style.overflow = '';
+    lbxImg.src = '';
+  }
+
+  lbx.addEventListener('click', function(e){
+    if(e.target === lbx || e.target.tagName === 'SPAN') closeLbx();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeLbx();
+  });
+
+  function addLbxToImages(){
+    const imgs = document.querySelectorAll('.ps-img-wrap img, .misc-img-wrap img');
+    imgs.forEach(function(img){
+      if(!img.hasAttribute('data-lbx')){
+        img.setAttribute('data-lbx','1');
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', function(){
+          if(this.src) openLbx(this.src);
+        });
+      }
+    });
+  }
+
+  addLbxToImages();
+
+  const observer = new MutationObserver(addLbxToImages);
+  observer.observe(document.body, {childList:true, subtree:true});
+})();
