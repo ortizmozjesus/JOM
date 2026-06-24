@@ -212,32 +212,155 @@ nav{display:flex;align-items:center;gap:2rem;}
 .misc-cap{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:.4rem .4rem .6rem;}
 
 /* ── ABOUT ── */
-#about{padding:6rem 2.5rem 5rem;border-top:1px solid var(--line);}
-.about-wrap{
-  max-width:1100px;margin:0 auto;display:grid;
-  grid-template-columns:1.3fr 1fr;gap:4rem;align-items:start;
+
+#about{
+  padding:6rem 2.5rem 5rem;
+  border-top:1px solid var(--line);
 }
-.sec-label{font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--red);display:inline-block;margin-bottom:.8rem;}
-.about-title{font-family:var(--fh);font-size:clamp(1.8rem,4vw,2.6rem);text-transform:uppercase;margin-bottom:1.5rem;line-height:1.05;}
-.about-text{font-size:.95rem;line-height:1.9;color:var(--muted);margin-bottom:1.8rem;max-width:600px;}
-.about-chips{display:flex;flex-direction:column;gap:.5rem;margin-bottom:2rem;}
-.chip{display:flex;align-items:flex-start;gap:.5rem;font-size:.82rem;color:var(--muted);}
-.cdot{width:6px;height:6px;border-radius:50%;background:var(--red);margin-top:.45rem;flex-shrink:0;}
+
+.about-wrap{
+  max-width:1100px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:row;
+  gap:3.5rem;
+  align-items:flex-start;
+}
+
+.about-left{
+  flex:1.2;
+  min-width:0;
+}
+
+.about-right{
+  flex:1;
+  min-width:260px;
+}
+
+.sec-label{
+  font-size:.72rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--red);
+  display:inline-block;
+  margin-bottom:.8rem;
+}
+
+.about-title{
+  font-family:var(--fh);
+  font-size:clamp(1.9rem,4vw,2.8rem);
+  text-transform:uppercase;
+  margin-bottom:1.6rem;
+  line-height:1.05;
+  text-align:left;
+}
+
+.about-text{
+  font-size:.95rem;
+  line-height:1.9;
+  color:var(--muted);
+  margin-bottom:1.9rem;
+  max-width:640px;
+  text-align:left;
+}
+
+.about-chips{
+  display:flex;
+  flex-direction:column;
+  gap:.55rem;
+  margin-bottom:2.1rem;
+}
+
+.chip{
+  display:flex;
+  align-items:flex-start;
+  gap:.5rem;
+  font-size:.82rem;
+  color:var(--muted);
+}
+
+.cdot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--red);
+  margin-top:.45rem;
+  flex-shrink:0;
+}
+
 .btn-red{
-  display:inline-block;padding:.6rem 1.4rem;background:var(--red);color:var(--white);
-  font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;border-radius:999px;
+  display:inline-block;
+  padding:.6rem 1.5rem;
+  background:var(--red);
+  color:var(--white);
+  font-size:.8rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  border-radius:999px;
   transition:background .3s,transform .2s;
 }
-.btn-red:hover{background:var(--red2);transform:translateY(-1px);}
-.skills-block{
-  display:flex;flex-direction:column;gap:1.5rem;border:1px solid var(--line);
-  padding:1.5rem 1.4rem;border-radius:.5rem;background:rgba(15,15,15,.8);
-}
-.skill-g{display:flex;flex-direction:column;gap:.35rem;}
-.sk-label{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
-.sk-items{display:flex;flex-wrap:wrap;gap:.4rem;font-size:.82rem;}
-.sk-items span{padding:.2rem .55rem;border-radius:999px;border:1px solid var(--line);color:var(--muted);}
 
+/* columna de skills */
+.skills-block{
+  display:flex;
+  flex-direction:column;
+  gap:1.4rem;
+  border:1px solid var(--line);
+  padding:1.5rem 1.4rem;
+  border-radius:.6rem;
+  background:rgba(15,15,15,.9);
+}
+
+.skill-g{
+  display:flex;
+  flex-direction:column;
+  gap:.35rem;
+}
+
+.sk-label{
+  font-size:.75rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+.sk-items{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.4rem;
+  font-size:.82rem;
+}
+
+.sk-items span{
+  padding:.2rem .6rem;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--muted);
+}
+
+/* responsive about */
+@media(max-width:960px){
+  .about-wrap{
+    flex-direction:column;
+    gap:2.5rem;
+  }
+  .about-right{
+    width:100%;
+    min-width:0;
+  }
+}
+
+@media(max-width:600px){
+  #about{
+    padding:4rem 1.5rem 3rem;
+  }
+  .about-title{
+    font-size:clamp(1.7rem,6.5vw,2.2rem);
+  }
+  .about-text{
+    font-size:.9rem;
+  }
+}
 /* ── CONTACT ── */
 #contact{padding:5rem 2.5rem 3rem;border-top:1px solid var(--line);}
 .contact-wrap{
