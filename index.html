@@ -1,47 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio de Jesús Ortiz Muñoz — Arquitecto en formación. Proyectos de vivienda, urbanismo y equipamientos en Sevilla y Atenas.">
+  <title>PORTFOLIO — Jesús Ortiz Muñoz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
 
-  <head>
-    <meta charset="UTF-8">
-    <title>PORTFOLIO</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="./style.css">
-
-  </head>
-    
-  <body>
-  <!-- NAV -->
+<!-- ── NAV ── -->
 <header id="hdr">
   <a class="logo" href="#hero">JOM</a>
   <nav>
     <a class="nl" href="#projects" data-es="Proyectos" data-en="Projects">Proyectos</a>
-    <a class="nl" href="#about" data-es="Sobre mí" data-en="About">Sobre mí</a>
-    <a class="nl" href="#contact" data-es="Contacto" data-en="Contact">Contacto</a>
+    <a class="nl" href="#about"    data-es="Sobre mí"  data-en="About">Sobre mí</a>
+    <a class="nl" href="#contact"  data-es="Contacto"  data-en="Contact">Contacto</a>
     <button class="lb" id="lb">
       <span class="la" data-l="es">ES</span><span class="ls">/</span><span data-l="en">EN</span>
     </button>
   </nav>
-  <button class="hbg" id="hbg"><span></span><span></span><span></span></button>
+  <button class="hbg" id="hbg" aria-label="Abrir menú"><span></span><span></span><span></span></button>
 </header>
 
-<!-- MOBILE MENU -->
-<div class="mob" id="mob">
-  <button class="mob-close" id="mobClose">✕</button>
+<!-- ── MOBILE MENU ── -->
+<div class="mob" id="mob" role="dialog" aria-label="Menú principal">
+  <button class="mob-close" id="mobClose" aria-label="Cerrar menú">✕</button>
   <a href="#projects" data-es="Proyectos" data-en="Projects">Proyectos</a>
-  <a href="#about" data-es="Sobre mí" data-en="About">Sobre mí</a>
-  <a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a>
+  <a href="#about"    data-es="Sobre mí"  data-en="About">Sobre mí</a>
+  <a href="#contact"  data-es="Contacto"  data-en="Contact">Contacto</a>
   <div class="mob-lang">
     <button data-l="es" class="la">ES</button><span>/</span><button data-l="en">EN</button>
   </div>
 </div>
 
-<!-- HERO -->
+<!-- ── HERO ── -->
 <section id="hero">
   <div class="hero-grid"></div>
   <div class="hero-glow"></div>
   <div class="hero-cnt">
-    <p class="hero-eye" data-es="Arquitectura & Diseño" data-en="Architecture & Design">Arquitectura & Diseño</p>
+    <p class="hero-eye" data-es="Arquitectura &amp; Diseño" data-en="Architecture &amp; Design">Arquitectura &amp; Diseño</p>
     <h1 class="hero-name">
       <span class="hn-line"><span>Jesús</span></span>
       <span class="hn-line"><span>Ortiz</span></span>
@@ -49,13 +50,13 @@
     </h1>
     <p class="hero-loc">Sevilla · Atenas · 2026</p>
   </div>
-  <div class="hero-scroll">
+  <div class="hero-scroll" id="heroScroll">
     <span data-es="Explorar" data-en="Explore">Explorar</span>
     <div class="hs-line"></div>
   </div>
 </section>
 
-<!-- PROYECTOS -->
+<!-- ── PROYECTOS ── -->
 <section id="projects">
 
   <!-- FRANJA 1: Escuela de Danza -->
@@ -64,8 +65,8 @@
     <div class="ps-overlay"></div>
     <div class="ps-header">
       <h2 class="ps-title" data-es="Escuela de Danza" data-en="Dance School">Escuela de Danza</h2>
-      <div class="ps-meta" data-es="Equipamiento · Atenas · NTUA 2026" data-en="Facility · Athens · NTUA 2026">Equipamiento · Atenas · NTUA 2026</div>
-      <div class="ps-arrow">↓</div>
+      <p class="ps-meta" data-es="Equipamiento · Atenas · NTUA 2026" data-en="Facility · Athens · NTUA 2026">Equipamiento · Atenas · NTUA 2026</p>
+      <span class="ps-arrow" aria-hidden="true">↓</span>
     </div>
     <div class="ps-body">
       <div class="ps-body-inner">
@@ -81,21 +82,20 @@
             <span class="ps-tag">Maquetación</span>
           </div>
           <div class="ps-section-label" data-es="Herramientas" data-en="Tools">Herramientas</div>
-          
-          <a class="
+          <p class="ps-tools">AutoCAD · SketchUp · Photoshop · InDesign</p>
         </div>
         <div class="ps-img-col">
           <div class="ps-img-grid">
             <div class="ps-img-wrap tall">
-              <img src="danza-seccion-longitudinal.png" alt="Escuela de Danza — Sección" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="danza-seccion-longitudinal.png" alt="Escuela de Danza — Sección longitudinal" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Sección longitudinal E1:100" data-en="Longitudinal section E1:100">Sección longitudinal E1:100</span>
             </div>
             <div class="ps-img-wrap">
-              <img src="danza-planta-principal.png" alt="Planta" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="danza-planta-principal.png" alt="Planta principal" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Planta principal" data-en="Main floor plan">Planta principal</span>
             </div>
             <div class="ps-img-wrap">
-              <img src="danza-diagrama-acustico.png" alt="Diagrama" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="danza-diagrama-acustico.png" alt="Diagrama acústico" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Diagrama acústico" data-en="Acoustic diagram">Diagrama acústico</span>
             </div>
           </div>
@@ -110,8 +110,8 @@
     <div class="ps-overlay"></div>
     <div class="ps-header">
       <h2 class="ps-title">PROMETEUS</h2>
-      <div class="ps-meta" data-es="Vivienda mixta · Sevilla · Taller 3" data-en="Mixed housing · Seville · Studio 3">Vivienda mixta · Sevilla · Taller 3</div>
-      <div class="ps-arrow">↓</div>
+      <p class="ps-meta" data-es="Vivienda mixta · Sevilla · Taller 3" data-en="Mixed housing · Seville · Studio 3">Vivienda mixta · Sevilla · Taller 3</p>
+      <span class="ps-arrow" aria-hidden="true">↓</span>
     </div>
     <div class="ps-body">
       <div class="ps-body-inner">
@@ -128,20 +128,19 @@
           </div>
           <div class="ps-section-label" data-es="Herramientas" data-en="Tools">Herramientas</div>
           <p class="ps-tools">AutoCAD · QGIS · Photoshop · InDesign · SketchUp</p>
-          <a class="
         </div>
         <div class="ps-img-col">
           <div class="ps-img-grid">
             <div class="ps-img-wrap tall">
-              <img src="prometeus-analisis-implantacion.png" alt="PROMETEUS — Implantación" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="prometeus-analisis-implantacion.png" alt="PROMETEUS — Implantación" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Análisis de implantación urbana" data-en="Urban implantation analysis">Análisis de implantación urbana</span>
             </div>
             <div class="ps-img-wrap">
-              <img src="prometeus-planta-baja.png" alt="Planta" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="prometeus-planta-baja.png" alt="Planta baja E1:100" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Planta baja E1:100" data-en="Ground floor E1:100">Planta baja E1:100</span>
             </div>
             <div class="ps-img-wrap">
-              <img src="prometeus-fachada-ajardinada.png" alt="Fachada vegetal" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="prometeus-fachada-ajardinada.png" alt="Fachada vegetal" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Detalle fachada ajardinada" data-en="Green facade detail">Detalle fachada ajardinada</span>
             </div>
           </div>
@@ -156,8 +155,8 @@
     <div class="ps-overlay"></div>
     <div class="ps-header">
       <h2 class="ps-title" data-es="Casa-Taller Escultor" data-en="Sculptor's House">Casa-Taller Escultor</h2>
-      <div class="ps-meta" data-es="Vivienda · Montaña · Proyectos III" data-en="Housing · Mountain · Projects III">Vivienda · Montaña · Proyectos III</div>
-      <div class="ps-arrow">↓</div>
+      <p class="ps-meta" data-es="Vivienda · Montaña · Proyectos III" data-en="Housing · Mountain · Projects III">Vivienda · Montaña · Proyectos III</p>
+      <span class="ps-arrow" aria-hidden="true">↓</span>
     </div>
     <div class="ps-body">
       <div class="ps-body-inner">
@@ -174,20 +173,19 @@
           </div>
           <div class="ps-section-label" data-es="Herramientas" data-en="Tools">Herramientas</div>
           <p class="ps-tools">AutoCAD · SketchUp · Photoshop · Dibujo a mano</p>
-          <a class="
         </div>
         <div class="ps-img-col">
           <div class="ps-img-grid">
             <div class="ps-img-wrap tall">
-              <img src="casataller-axonometrico.png" alt="Casa Escultor" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="casataller-axonometrico.png" alt="Casa Escultor — Axonométrico" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Axonométrico abierto" data-en="Open axonometric">Axonométrico abierto</span>
             </div>
             <div class="ps-img-wrap">
-              <img src="casataller-planta-acceso.png" alt="Planta" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="casataller-planta-acceso.png" alt="Planta acceso" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Planta acceso" data-en="Access floor plan">Planta acceso</span>
             </div>
             <div class="ps-img-wrap">
-              <img src="casataller-dibujo-mano.png" alt="Dibujo a mano" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="casataller-dibujo-mano.png" alt="Dibujo a mano — interior taller" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Dibujo a mano — interior taller" data-en="Hand drawing — workshop interior">Dibujo a mano — interior taller</span>
             </div>
           </div>
@@ -202,8 +200,8 @@
     <div class="ps-overlay"></div>
     <div class="ps-header">
       <h2 class="ps-title" data-es="Casa del Guarda" data-en="Guard House">Casa del Guarda</h2>
-      <div class="ps-meta" data-es="Vivienda unifamiliar · Alamillo · Proyectos III" data-en="Single family · Alamillo · Projects III">Vivienda unifamiliar · Alamillo · Proyectos III</div>
-      <div class="ps-arrow">↓</div>
+      <p class="ps-meta" data-es="Vivienda unifamiliar · Alamillo · Proyectos III" data-en="Single family · Alamillo · Projects III">Vivienda unifamiliar · Alamillo · Proyectos III</p>
+      <span class="ps-arrow" aria-hidden="true">↓</span>
     </div>
     <div class="ps-body">
       <div class="ps-body-inner">
@@ -220,20 +218,19 @@
           </div>
           <div class="ps-section-label" data-es="Herramientas" data-en="Tools">Herramientas</div>
           <p class="ps-tools">AutoCAD · SketchUp · Photoshop · Dibujo a mano</p>
-          <a class="
         </div>
         <div class="ps-img-col">
           <div class="ps-img-grid">
             <div class="ps-img-wrap tall">
-              <img src="guarda-implantacion.png" alt="Casa del Guarda" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="guarda-implantacion.png" alt="Casa del Guarda — Implantación" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Implantación en el parque" data-en="Park implantation">Implantación en el parque</span>
             </div>
             <div class="ps-img-wrap">
-              <img src="guarda-planta-vivienda.png" alt="Planta" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="guarda-planta-vivienda.png" alt="Planta vivienda" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Planta vivienda" data-en="Floor plan">Planta vivienda</span>
             </div>
             <div class="ps-img-wrap">
-              <img src="guarda-render-exterior.png" alt="Render" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
+              <img src="guarda-render-exterior.png" alt="Render exterior" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
               <span class="ps-img-cap" data-es="Render exterior" data-en="Exterior render">Render exterior</span>
             </div>
           </div>
@@ -248,47 +245,35 @@
     <div class="ps-overlay"></div>
     <div class="ps-header">
       <h2 class="ps-title" data-es="Miscellaneous" data-en="Miscellaneous">Miscellaneous</h2>
-      <div class="ps-meta" data-es="Dibujos · Renders · Exploraciones personales" data-en="Drawings · Renders · Personal explorations">Dibujos · Renders · Exploraciones personales</div>
-      <div class="ps-arrow">↓</div>
+      <p class="ps-meta" data-es="Dibujos · Renders · Exploraciones personales" data-en="Drawings · Renders · Personal explorations">Dibujos · Renders · Exploraciones personales</p>
+      <span class="ps-arrow" aria-hidden="true">↓</span>
     </div>
     <div class="ps-body">
       <div class="ps-body-inner misc-body">
         <p class="misc-intro" data-es="Trabajos realizados fuera del ámbito académico: dibujos a mano, renders de exploración, detalles constructivos y piezas gráficas creadas por iniciativa propia." data-en="Work created outside the academic context: hand drawings, exploratory renders, constructive details and graphic pieces made on personal initiative.">Trabajos realizados fuera del ámbito académico: dibujos a mano, renders de exploración, detalles constructivos y piezas gráficas creadas por iniciativa propia.</p>
         <div class="misc-grid">
           <div class="misc-item">
-            <div class="misc-img-wrap">
-              <img src="misc-dibujo-espacio-publico.png" alt="Dibujo 1" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
-            </div>
+            <div class="misc-img-wrap"><img src="misc-dibujo-espacio-publico.png" alt="Dibujo a mano — espacio público" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
             <span class="misc-cap" data-es="Dibujo a mano — espacio público" data-en="Hand drawing — public space">Dibujo a mano — espacio público</span>
           </div>
           <div class="misc-item">
-            <div class="misc-img-wrap">
-              <img src="misc-render-volumetrico.png" alt="Render 1" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
-            </div>
+            <div class="misc-img-wrap"><img src="misc-render-volumetrico.png" alt="Render de exploración volumétrica" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
             <span class="misc-cap" data-es="Render de exploración volumétrica" data-en="Volumetric exploration render">Render de exploración volumétrica</span>
           </div>
           <div class="misc-item">
-            <div class="misc-img-wrap">
-              <img src="misc-detalle-constructivo.png" alt="Detalle" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
-            </div>
+            <div class="misc-img-wrap"><img src="misc-detalle-constructivo.png" alt="Detalle constructivo" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
             <span class="misc-cap" data-es="Detalle constructivo — estudio" data-en="Constructive detail — study">Detalle constructivo — estudio</span>
           </div>
           <div class="misc-item">
-            <div class="misc-img-wrap">
-              <img src="misc-sketch-atenas.png" alt="Sketch" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
-            </div>
+            <div class="misc-img-wrap"><img src="misc-sketch-atenas.png" alt="Sketch urbano — Atenas" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
             <span class="misc-cap" data-es="Sketch urbano — Atenas" data-en="Urban sketch — Athens">Sketch urbano — Atenas</span>
           </div>
           <div class="misc-item">
-            <div class="misc-img-wrap">
-              <img src="misc-fotografia-arquitectonica.png" alt="Fotografía" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
-            </div>
+            <div class="misc-img-wrap"><img src="misc-fotografia-arquitectonica.png" alt="Fotografía arquitectónica" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
             <span class="misc-cap" data-es="Fotografía arquitectónica" data-en="Architectural photography">Fotografía arquitectónica</span>
           </div>
           <div class="misc-item">
-            <div class="misc-img-wrap">
-              <img src="misc-collage.png" alt="Exploración" onerror="this.parentNode.classList.add('no-img');this.remove()"/>
-            </div>
+            <div class="misc-img-wrap"><img src="misc-collage.png" alt="Exploración gráfica — collage" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
             <span class="misc-cap" data-es="Exploración gráfica — collage" data-en="Graphic exploration — collage">Exploración gráfica — collage</span>
           </div>
         </div>
@@ -298,7 +283,7 @@
 
 </section>
 
-<!-- ABOUT -->
+<!-- ── ABOUT ── -->
 <section id="about">
   <div class="about-wrap fade-in">
     <div class="about-left">
@@ -310,54 +295,61 @@
         <div class="chip"><span class="cdot"></span><span data-es="Español nativo · Inglés B2/C1 · Griego básico" data-en="Spanish native · English B2/C1 · Basic Greek">Español nativo · Inglés B2/C1 · Griego básico</span></div>
         <div class="chip"><span class="cdot"></span><span data-es="Interés en espacio público, paisaje y sostenibilidad" data-en="Interest in public space, landscape and sustainability">Interés en espacio público, paisaje y sostenibilidad</span></div>
       </div>
-      <a class="btn-red" href="JesusOrtizUrbanismo8Portfolio.pdf" target="_blank" data-es="Descargar Portfolio PDF" data-en="Download Portfolio PDF">Descargar Portfolio PDF</a>
+      <a class="btn-red" href="JesusOrtizUrbanismo8Portfolio.pdf" target="_blank" rel="noopener"
+         data-es="Descargar Portfolio PDF" data-en="Download Portfolio PDF">Descargar Portfolio PDF</a>
     </div>
     <div class="about-right">
       <div class="skills-block">
         <div class="skill-g">
           <div class="sk-label">CAD / BIM</div>
           <div class="sk-items">
-				<span data-es="AutoCAD · Avanzado" data-en="AutoCAD · Advanced">AutoCAD · Avanzado</span><span data-es="SketchUp · Medio" data-en="SketchUp · Intermediate">SketchUp · Medio</span><span data-es="Revit básico" data-en="Revit Basic">Revit básico</span>
+            <span data-es="AutoCAD · Avanzado"  data-en="AutoCAD · Advanced">AutoCAD · Avanzado</span>
+            <span data-es="SketchUp · Medio"    data-en="SketchUp · Intermediate">SketchUp · Medio</span>
+            <span data-es="Revit básico"         data-en="Revit Basic">Revit básico</span>
           </div>
         </div>
         <div class="skill-g">
-          										<div class="sk-label" data-es="GIS / Mapping" data-en="GIS / Mapping">GIS / Mapping</div>
+          <div class="sk-label">GIS / Mapping</div>
           <div class="sk-items">
-								<span data-es="QGIS · Básico" data-en="QGIS · Basic">QGIS · Básico</span><span data-es="Google Earth · Avanzado" data-en="Google Earth · Advanced">Google Earth · Avanzado</span>
-				
-        </div>
-        <div class="skill-g">
-			<div class="sk-label" data-es="Other" data-en="Other">Other</div>
-          <div class="sk-items">
-								<span data-es="Canva" data-en="Canva">Canva</span>
+            <span data-es="QGIS · Básico"              data-en="QGIS · Basic">QGIS · Básico</span>
+            <span data-es="Google Earth · Avanzado"    data-en="Google Earth · Advanced">Google Earth · Avanzado</span>
           </div>
         </div>
-        		<div class="skill-g">
-
-              			<div class="sk-label" data-es="Render" data-en="Render">Render</div>
-			<div class="sk-items">
-				<span data-es="VRay · Avanzado" data-en="VRay · Advanced">VRay · Avanzado</span>
-				
-			</div>
-		</div>
+        <div class="skill-g">
+          <div class="sk-label">Render</div>
+          <div class="sk-items">
+            <span data-es="VRay · Avanzado" data-en="VRay · Advanced">VRay · Avanzado</span>
+          </div>
+        </div>
+        <div class="skill-g">
+          <div class="sk-label">Other</div>
+          <div class="sk-items">
+            <span>Canva</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
+<!-- ── CONTACT ── -->
 <section id="contact">
   <div class="contact-wrap fade-in">
     <div class="contact-left">
-      			<div class="contact-photo">
-				<img src="JesusOrtizPhoto.png" alt="Jesús Ortiz Muñoz">
-			</div>
+      <div class="contact-photo">
+        <img src="JesusOrtizPhoto.png" alt="Jesús Ortiz Muñoz" loading="lazy" onerror="this.parentNode.style.background='#242424'">
+      </div>
       <span class="sec-label" data-es="Contacto" data-en="Contact">Contacto</span>
       <h2 class="contact-title">
-        <span data-es="Hablemos" data-en="Let's talk">Hablemos</span><br>
+        <span data-es="Hablemos"       data-en="Let's talk">Hablemos</span><br>
         <span class="red" data-es="de arquitectura" data-en="about architecture">de arquitectura</span>
       </h2>
       <p class="contact-desc" data-es="Abierto a prácticas y colaboraciones en estudios de arquitectura, urbanismo y diseño de interiores." data-en="Open to internships and collaborations in architecture, urbanism and interior design studios.">Abierto a prácticas y colaboraciones en estudios de arquitectura, urbanismo y diseño de interiores.</p>
+      <div class="contact-btns">
+        <a class="btn-red"   href="JesusOrtizUrbanismo8Portfolio.pdf" target="_blank" rel="noopener" data-es="Portfolio PDF" data-en="Portfolio PDF">Portfolio PDF</a>
+        <a class="btn-ghost" href="mailto:ortizmozjesus@gmail.com"     data-es="Escribir email" data-en="Send email">Escribir email</a>
+        <a class="btn-ghost" href="JesusOrtizCV.pdf" target="_blank" rel="noopener" data-es="Currículum" data-en="Resume">Currículum</a>
+      </div>
     </div>
     <div class="contact-right">
       <div class="ci">
@@ -366,30 +358,32 @@
       </div>
       <div class="ci">
         <div class="ci-label">LinkedIn</div>
-        <div class="ci-val"><a href="https://www.linkedin.com/in/jesús-ortiz-muñoz" target="_blank">linkedin.com/in/jesús-ortiz</a></div>
+        <div class="ci-val"><a href="https://www.linkedin.com/in/jes%C3%BAs-ortiz-mu%C3%B1oz" target="_blank" rel="noopener">linkedin.com/in/jesús-ortiz</a></div>
       </div>
       <div class="ci">
         <div class="ci-label" data-es="Ubicación" data-en="Location">Ubicación</div>
-        				<div class="ci-val" data-es="Sevilla, España" data-en="Seville, Spain">Sevilla, España</div>
+        <div class="ci-val" data-es="Sevilla, España" data-en="Seville, Spain">Sevilla, España</div>
       </div>
-      			<div class="ci">
-				<div class="ci-label" data-es="CURRÍCULUM" data-en="RESUME">CURRÍCULUM</div>
-				<div class="ci-val"><a href="JesusOrtizCV.pdf" target="_blank" data-es="Descargar CV" data-en="Download CV">Descargar CV</a></div>
-			</div>
-      <div class="contact-btns">
-        <a class="btn-red" href="JesusOrtizUrbanismo8Portfolio.pdf" target="_blank" data-es="Portfolio PDF" data-en="Portfolio PDF">Portfolio PDF</a>
-        <a class="btn-ghost" href="mailto:ortizmozjesus@gmail.com" data-es="Escribir email" data-en="Send email">Escribir email</a>
-        		<a class="btn-ghost" href="JesusOrtizCV.pdf" target="_blank" data-es="Currículum" data-en="Resume">Currículum</a>
+      <div class="ci">
+        <div class="ci-label" data-es="Currículum" data-en="Resume">Currículum</div>
+        <div class="ci-val"><a href="JesusOrtizCV.pdf" target="_blank" rel="noopener" data-es="Descargar CV" data-en="Download CV">Descargar CV</a></div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ── FOOTER ── -->
 <footer>
-  <span>Jesús Ortiz Muñoz</span> —
+  <span>Jesús Ortiz Muñoz — 2026</span>
+  <span>Sevilla · Atenas</span>
 </footer>
-    <script  src="./script.js"></script>
 
-  <div id="lbx" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;cursor:zoom-out;align-items:center;justify-content:center;"><img id="lbx-img" style="max-width:95vw;max-height:90vh;object-fit:contain;box-shadow:0 0 60px rgba(0,0,0,.8);"/><span  style="position:fixed;top:20px;right:30px;color:#fff;font-size:2.5rem;cursor:pointer;line-height:1;font-family:sans-serif;">&#x2715;</span></div></body>
-  
+<!-- ── LIGHTBOX ── -->
+<div id="lbx" role="dialog" aria-label="Imagen ampliada" aria-modal="true">
+  <img id="lbx-img" src="" alt="">
+  <button class="lbx-close" id="lbxClose" aria-label="Cerrar">&#x2715;</button>
+</div>
+
+<script src="./script.js"></script>
+</body>
 </html>
