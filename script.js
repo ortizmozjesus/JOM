@@ -1,4 +1,54 @@
-// =========================
+lbx.addEventListener('click', function(e){
+    if(e.target === lbx || e.target.tagName === 'SPAN') closeLbx();
+lbx.addEventListener('click', function(e){
+    if(e.target === lbx || e.target.tagName === 'SPAN') closeLbx();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeLbx();
+  });
+
+  document.addEventListener('click', function(e){
+    const img = e.target.closest('.ps-img-wrap img, .misc-img-wrap img');
+    if(e.target.tagName === 'IMG' && (e.target.closest('.ps-img-wrap') || e.target.closest('.misc-img-wrap'))){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.target.src) openLbx(e.target.src);
+    }
+  });
+
+  document.querySelectorAll('.ps-img-wrap img, .misc-img-wrap img').forEach(function(img){
+    img.style.cursor = 'zoom-in';
+  });
+
+  const observer = new MutationObserver(function(){
+    document.querySelectorAll('.ps-img-wrap img, .misc-img-wrap img').forEach(function(img){
+      img.style.cursor = 'zoom-in';
+    });
+  });
+  observer.observe(document.body, {childList:true, subtree:true});
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeLbx();
+  });
+
+  function addLbxToImages(){
+    const imgs = document.querySelectorAll('.ps-img-wrap img, .misc-img-wrap img');
+    imgs.forEach(function(img){
+      if(!img.hasAttribute('data-lbx')){
+        img.setAttribute('data-lbx','1');
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', function(){
+          if(this.src) openLbx(this.src);
+        });
+      }
+    });
+  }
+
+  addLbxToImages();
+
+  const observer = new MutationObserver(addLbxToImages);
+  observer.observe(document.body, {childList:true, subtree:true});
 // UTILIDAD: BLOQUEAR SCROLL
 // =========================
 const lockScroll = () => {
