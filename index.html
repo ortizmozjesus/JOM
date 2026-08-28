@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio de Jesús Ortiz Muñoz — Arquitecto en formación. Proyectos de vivienda, urbanismo y equipamientos en Sevilla y Atenas.">
+  <title>PORTFOLIO — Jesús Ortiz Muñoz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="canonical" href="https://ortizmozjesus.github.io/JOM/">
+
+  <!-- Previsualizacion al compartir el enlace (LinkedIn, WhatsApp, email) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ortizmozjesus.github.io/JOM/">
+  <meta property="og:title" content="Jesús Ortiz Muñoz — Portfolio de Arquitectura">
+  <meta property="og:description" content="Vivienda, urbanismo y equipamientos. Universidad de Sevilla · NTUA Atenas. Disponible para prácticas en estudio.">
+  <meta property="og:image" content="https://ortizmozjesus.github.io/JOM/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jesús Ortiz Muñoz — Portfolio de Arquitectura">
+  <meta name="twitter:description" content="Vivienda, urbanismo y equipamientos. Universidad de Sevilla · NTUA Atenas.">
+  <meta name="twitter:image" content="https://ortizmozjesus.github.io/JOM/og-image.jpg">
+
+  <meta name="theme-color" content="#0f0f0f">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f0f0f'/%3E%3Ctext x='16' y='23' font-family='Helvetica,Arial,sans-serif' font-size='16' font-weight='bold' fill='%23cc0000' text-anchor='middle'%3EJO%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<header id="hdr">
+  <a class="logo" href="#hero">JOM</a>
+  <nav>
+    <a class="nl" href="#projects" data-es="Proyectos" data-en="Projects">Proyectos</a>
+    <a class="nl" href="#about"    data-es="Sobre mí"  data-en="About">Sobre mí</a>
+    <a class="nl" href="#contact"  data-es="Contacto"  data-en="Contact">Contacto</a>
+    <button class="lb" id="lb">
+      <span class="la" data-l="es">ES</span><span class="ls">/</span><span data-l="en">EN</span>
+    </button>
+  </nav>
+  <button class="hbg" id="hbg" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+</header>
+
+<!-- ── MOBILE MENU ── -->
+<div class="mob" id="mob" role="dialog" aria-label="Menú principal">
+  <button class="mob-close" id="mobClose" aria-label="Cerrar menú">✕</button>
+  <a href="#projects" data-es="Proyectos" data-en="Projects">Proyectos</a>
+  <a href="#about"    data-es="Sobre mí"  data-en="About">Sobre mí</a>
+  <a href="#contact"  data-es="Contacto"  data-en="Contact">Contacto</a>
+  <div class="mob-lang">
+    <button data-l="es" class="la">ES</button><span>/</span><button data-l="en">EN</button>
+  </div>
+</div>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-cnt">
+    <p class="hero-eye" data-es="Arquitectura &amp; Diseño" data-en="Architecture &amp; Design">Arquitectura &amp; Diseño</p>
+    <h1 class="hero-name">
+      <span class="hn-line red"><span>Jesús</span></span>
+      <span class="hn-line"><span>Ortiz</span></span>
+      <span class="hn-line red"><span>Muñoz</span></span>
+    </h1>
+    <p class="hero-tag" data-es="Estudiante de arquitectura (Univ. de Sevilla · NTUA Atenas). Vivienda, urbanismo y equipamientos. Buscando prácticas en estudio." data-en="Architecture student (Univ. of Seville · NTUA Athens). Housing, urbanism and public facilities. Looking for a studio internship.">Estudiante de arquitectura (Univ. de Sevilla · NTUA Atenas). Vivienda, urbanismo y equipamientos. Buscando prácticas en estudio.</p>
+    <div class="hero-btns">
+      <a class="btn-red" href="#projects" data-es="Ver proyectos" data-en="View projects">Ver proyectos</a>
+      <a class="btn-ghost" href="JesusOrtizCV.pdf" target="_blank" rel="noopener" data-es="Descargar CV" data-en="Download CV">Descargar CV</a>
+    </div>
+    <p class="hero-loc">Sevilla · Atenas · 2026</p>
+  </div>
+  <div class="hero-scroll" id="heroScroll">
+    <span data-es="Explorar" data-en="Explore">Explorar</span>
+    <div class="hs-line"></div>
+  </div>
+</section>
+
+<!-- ── PROYECTOS ── -->
+<section id="projects">
+
+  <!-- FRANJA 1: Escuela de Danza -->
+  <div class="proj-strip" data-index="0">
+    <div class="ps-bg" style="background-image:url('danza-portada.webp')"></div>
+    <div class="ps-overlay"></div>
+    <div class="ps-header" role="button" tabindex="0">
+      <h2 class="ps-title" data-es="Escuela de Danza" data-en="Dance School">Escuela de Danza</h2>
+      <p class="ps-meta" data-es="Equipamiento · Atenas · NTUA 2026" data-en="Facility · Athens · NTUA 2026">Equipamiento · Atenas · NTUA 2026</p>
+      <span class="ps-open" data-es="Ver proyecto" data-en="View project">Ver proyecto</span>
+      <span class="ps-arrow" aria-hidden="true">↓</span>
+    </div>
+    <div class="ps-body">
+      <div class="ps-body-inner">
+        <div class="ps-text-col">
+          <div class="ps-section-label" data-es="Concepto" data-en="Concept">Concepto</div>
+          <p class="ps-concept" data-es="Equipamiento cultural resuelto desde la sección: un patio vertical organiza la luz y la circulación, y una segunda piel de fachada regula el asoleo y la privacidad de las salas de ensayo." data-en="A cultural facility resolved through its section: a vertical courtyard organises light and circulation, while a second-skin facade controls solar gain and the privacy of the rehearsal rooms.">Equipamiento cultural resuelto desde la sección: un patio vertical organiza la luz y la circulación, y una segunda piel de fachada regula el asoleo y la privacidad de las salas de ensayo.</p>
+          <div class="ps-section-label" data-es="Mi papel" data-en="My role">Mi papel</div>
+          <div class="ps-tags">
+            <span class="ps-tag">Diseño conceptual</span>
+            <span class="ps-tag">Secciones E1:100</span>
+            <span class="ps-tag">Diagrama acústico</span>
+            <span class="ps-tag">Fachada</span>
+            <span class="ps-tag">Maquetación</span>
+          </div>
+          <div class="ps-section-label" data-es="Herramientas" data-en="Tools">Herramientas</div>
+          <p class="ps-tools">AutoCAD · SketchUp · Photoshop · InDesign</p>
+        </div>
+        <div class="ps-img-col">
+          <div class="ps-cover-wrap">
+            <img src="danza-portada.webp" alt="Escuela de Danza — Portada" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+            <span class="ps-img-cap" data-es="Vista general" data-en="General view">Vista general</span>
+          </div>
+          <div class="ps-img-grid">
+            <div class="ps-img-wrap tall">
+              <img src="danza-seccion-longitudinal.webp" alt="Escuela de Danza — Sección longitudinal" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Sección longitudinal E1:100" data-en="Longitudinal section E1:100">Sección longitudinal E1:100</span>
+            </div>
+            <div class="ps-img-wrap">
+              <img src="danza-planta-principal.webp" alt="Planta principal" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Planta principal" data-en="Main floor plan">Planta principal</span>
+            </div>
+            <div class="ps-img-wrap">
+              <img src="danza-diagrama-acustico.webp" alt="Diagrama acústico" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Diagrama acústico" data-en="Acoustic diagram">Diagrama acústico</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRANJA 2: PROMETEUS -->
+  <div class="proj-strip" data-index="1">
+    <div class="ps-bg" style="background-image:url('prometeus-portada.webp')"></div>
+    <div class="ps-overlay"></div>
+    <div class="ps-header" role="button" tabindex="0">
+      <h2 class="ps-title">PROMETEUS</h2>
+      <p class="ps-meta" data-es="Vivienda mixta · Sevilla · Taller 3" data-en="Mixed housing · Seville · Studio 3">Vivienda mixta · Sevilla · Taller 3</p>
+      <span class="ps-open" data-es="Ver proyecto" data-en="View project">Ver proyecto</span>
+      <span class="ps-arrow" aria-hidden="true">↓</span>
+    </div>
+    <div class="ps-body">
+      <div class="ps-body-inner">
+        <div class="ps-text-col">
+          <div class="ps-section-label" data-es="Concepto" data-en="Concept">Concepto</div>
+          <p class="ps-concept" data-es="Edificio de uso mixto en el borde de la muralla de Sevilla. Vivienda asequible y espacios de trabajo compartidos sobre un zócalo público que cose la parcela con los Jardines del Valle; la fachada vegetal actúa como filtro climático." data-en="Mixed-use building on the edge of Seville's city wall. Affordable housing and shared workspaces over a public plinth stitching the plot to the Jardines del Valle; the green facade works as a climatic filter.">Edificio de uso mixto en el borde de la muralla de Sevilla. Vivienda asequible y espacios de trabajo compartidos sobre un zócalo público que cose la parcela con los Jardines del Valle; la fachada vegetal actúa como filtro climático.</p>
+          <div class="ps-section-label" data-es="Mi papel" data-en="My role">Mi papel</div>
+          <div class="ps-tags">
+            <span class="ps-tag">Análisis urbano</span>
+            <span class="ps-tag">Implantación</span>
+            <span class="ps-tag">Fachada vegetal</span>
+            <span class="ps-tag">Sección constructiva</span>
+            <span class="ps-tag">Sostenibilidad</span>
+          </div>
+          <div class="ps-section-label" data-es="Herramientas" data-en="Tools">Herramientas</div>
+          <p class="ps-tools">AutoCAD · SketchUp · Photoshop · InDesign</p>
+        </div>
+        <div class="ps-img-col">
+          <div class="ps-cover-wrap">
+            <img src="prometeus-portada.webp" alt="PROMETEUS — Portada" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+            <span class="ps-img-cap" data-es="Vista general" data-en="General view">Vista general</span>
+          </div>
+          <div class="ps-img-grid">
+            <div class="ps-img-wrap tall">
+              <img src="prometeus-analisis-implantacion.webp" alt="PROMETEUS — Implantación" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Análisis de implantación urbana" data-en="Urban implantation analysis">Análisis de implantación urbana</span>
+            </div>
+            <div class="ps-img-wrap">
+              <img src="prometeus-planta-baja.webp" alt="Planta baja E1:100" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Planta baja E1:100" data-en="Ground floor E1:100">Planta baja E1:100</span>
+            </div>
+            <div class="ps-img-wrap">
+              <img src="prometeus-fachada-ajardinada.webp" alt="Fachada vegetal" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Detalle fachada ajardinada" data-en="Green facade detail">Detalle fachada ajardinada</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRANJA 3: Casa-Taller Escultor -->
+  <div class="proj-strip" data-index="2">
+    <div class="ps-bg" style="background-image:url('casataller-portada.webp')"></div>
+    <div class="ps-overlay"></div>
+    <div class="ps-header" role="button" tabindex="0">
+      <h2 class="ps-title" data-es="Casa-Taller Escultor" data-en="Sculptor's House">Casa-Taller Escultor</h2>
+      <p class="ps-meta" data-es="Vivienda · Montaña · Proyectos III" data-en="Housing · Mountain · Projects III">Vivienda · Montaña · Proyectos III</p>
+      <span class="ps-open" data-es="Ver proyecto" data-en="View project">Ver proyecto</span>
+      <span class="ps-arrow" aria-hidden="true">↓</span>
+    </div>
+    <div class="ps-body">
+      <div class="ps-body-inner">
+        <div class="ps-text-col">
+          <div class="ps-section-label" data-es="Concepto" data-en="Concept">Concepto</div>
+          <p class="ps-concept" data-es="Vivienda y taller para un escultor dentro de un volumen de 8×8 m. El programa se escalona para separar trabajo y descanso bajo una única envolvente, con el taller abierto al paisaje de montaña." data-en="House and workshop for a sculptor within an 8×8 m volume. The programme steps to separate work from rest under a single envelope, with the workshop opening onto the mountain landscape.">Vivienda y taller para un escultor dentro de un volumen de 8×8 m. El programa se escalona para separar trabajo y descanso bajo una única envolvente, con el taller abierto al paisaje de montaña.</p>
+          <div class="ps-section-label" data-es="Mi papel" data-en="My role">Mi papel</div>
+          <div class="ps-tags">
+            <span class="ps-tag">Concept design</span>
+            <span class="ps-tag">Plantas + Secciones</span>
+            <span class="ps-tag">Dibujos a mano</span>
+            <span class="ps-tag">Axonométrico</span>
+            <span class="ps-tag">Render</span>
+          </div>
+          <div class="ps-section-label" data-es="Herramientas" data-en="Tools">Herramientas</div>
+          <p class="ps-tools">AutoCAD · SketchUp · Photoshop · Dibujo a mano</p>
+        </div>
+        <div class="ps-img-col">
+          <div class="ps-cover-wrap">
+            <img src="casataller-portada.webp" alt="Casa-Taller — Portada" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+            <span class="ps-img-cap" data-es="Vista general" data-en="General view">Vista general</span>
+          </div>
+          <div class="ps-img-grid">
+            <div class="ps-img-wrap tall">
+              <img src="casataller-axonometrico.webp" alt="Casa Escultor — Axonométrico" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Axonométrico abierto" data-en="Open axonometric">Axonométrico abierto</span>
+            </div>
+            <div class="ps-img-wrap">
+              <img src="casataller-planta-acceso.webp" alt="Planta acceso" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Planta acceso" data-en="Access floor plan">Planta acceso</span>
+            </div>
+            <div class="ps-img-wrap">
+              <img src="casataller-dibujo-mano.webp" alt="Dibujo a mano — interior taller" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Dibujo a mano — interior taller" data-en="Hand drawing — workshop interior">Dibujo a mano — interior taller</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRANJA 4: Casa del Guarda -->
+  <div class="proj-strip" data-index="3">
+    <div class="ps-bg" style="background-image:url('guarda-portada.webp')"></div>
+    <div class="ps-overlay"></div>
+    <div class="ps-header" role="button" tabindex="0">
+      <h2 class="ps-title" data-es="Casa del Guarda" data-en="Guard House">Casa del Guarda</h2>
+      <p class="ps-meta" data-es="Vivienda unifamiliar · Alamillo · Proyectos III" data-en="Single family · Alamillo · Projects III">Vivienda unifamiliar · Alamillo · Proyectos III</p>
+      <span class="ps-open" data-es="Ver proyecto" data-en="View project">Ver proyecto</span>
+      <span class="ps-arrow" aria-hidden="true">↓</span>
+    </div>
+    <div class="ps-body">
+      <div class="ps-body-inner">
+        <div class="ps-text-col">
+          <div class="ps-section-label" data-es="Concepto" data-en="Concept">Concepto</div>
+          <p class="ps-concept" data-es="Vivienda unifamiliar en el Parque del Alamillo, Sevilla. La sección transversal ordena el proyecto y gradúa la relación con el arbolado existente, del acceso cubierto a la terraza sobre el parque." data-en="Single-family house in Alamillo Park, Seville. The cross section orders the project and grades its relationship with the existing trees, from the covered entrance to the terrace over the park.">Vivienda unifamiliar en el Parque del Alamillo, Sevilla. La sección transversal ordena el proyecto y gradúa la relación con el arbolado existente, del acceso cubierto a la terraza sobre el parque.</p>
+          <div class="ps-section-label" data-es="Mi papel" data-en="My role">Mi papel</div>
+          <div class="ps-tags">
+            <span class="ps-tag">Implantación</span>
+            <span class="ps-tag">Sección transversal</span>
+            <span class="ps-tag">Alzados</span>
+            <span class="ps-tag">Boceto inicial</span>
+            <span class="ps-tag">Render exterior</span>
+          </div>
+          <div class="ps-section-label" data-es="Herramientas" data-en="Tools">Herramientas</div>
+          <p class="ps-tools">AutoCAD · SketchUp · Photoshop · Dibujo a mano</p>
+        </div>
+        <div class="ps-img-col">
+          <div class="ps-cover-wrap">
+            <img src="guarda-portada.webp" alt="Casa del Guarda — Portada" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+            <span class="ps-img-cap" data-es="Vista general" data-en="General view">Vista general</span>
+          </div>
+          <div class="ps-img-grid">
+            <div class="ps-img-wrap tall">
+              <img src="guarda-implantacion.webp" alt="Casa del Guarda — Implantación" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Implantación en el parque" data-en="Park implantation">Implantación en el parque</span>
+            </div>
+            <div class="ps-img-wrap">
+              <img src="guarda-planta-vivienda.webp" alt="Planta vivienda" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Planta vivienda" data-en="Floor plan">Planta vivienda</span>
+            </div>
+            <div class="ps-img-wrap">
+              <img src="guarda-render-exterior.webp" alt="Render exterior" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()">
+              <span class="ps-img-cap" data-es="Render exterior" data-en="Exterior render">Render exterior</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRANJA 5: MISCELLANEOUS -->
+  <div class="proj-strip misc-strip" data-index="4">
+    <div class="ps-bg" style="background-image:url('misc-portada.webp')"></div>
+    <div class="ps-overlay"></div>
+    <div class="ps-header" role="button" tabindex="0">
+      <h2 class="ps-title" data-es="Miscellaneous" data-en="Miscellaneous">Miscellaneous</h2>
+      <p class="ps-meta" data-es="Dibujos · Renders · Exploraciones personales" data-en="Drawings · Renders · Personal explorations">Dibujos · Renders · Exploraciones personales</p>
+      <span class="ps-open" data-es="Ver proyecto" data-en="View project">Ver proyecto</span>
+      <span class="ps-arrow" aria-hidden="true">↓</span>
+    </div>
+    <div class="ps-body">
+      <div class="ps-body-inner misc-body">
+        <p class="misc-intro" data-es="Trabajo gráfico y de exploración al margen del encargo académico: dibujo a mano, estudios volumétricos, detalles constructivos y fotografía de arquitectura." data-en="Graphic and exploratory work outside academic assignments: hand drawing, volumetric studies, construction details and architectural photography.">Trabajo gráfico y de exploración al margen del encargo académico: dibujo a mano, estudios volumétricos, detalles constructivos y fotografía de arquitectura.</p>
+        <div class="misc-grid">
+          <div class="misc-item">
+            <div class="misc-img-wrap"><img src="misc-dibujo-espacio-publico.webp" alt="Dibujo a mano — espacio público" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
+            <span class="misc-cap" data-es="Dibujo a mano — espacio público" data-en="Hand drawing — public space">Dibujo a mano — espacio público</span>
+          </div>
+          <div class="misc-item">
+            <div class="misc-img-wrap"><img src="misc-render-volumetrico.webp" alt="Render de exploración volumétrica" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
+            <span class="misc-cap" data-es="Render de exploración volumétrica" data-en="Volumetric exploration render">Render de exploración volumétrica</span>
+          </div>
+          <div class="misc-item">
+            <div class="misc-img-wrap"><img src="misc-detalle-constructivo.webp" alt="Detalle constructivo" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
+            <span class="misc-cap" data-es="Detalle constructivo — estudio" data-en="Constructive detail — study">Detalle constructivo — estudio</span>
+          </div>
+          <div class="misc-item">
+            <div class="misc-img-wrap"><img src="misc-sketch-atenas.webp" alt="Sketch urbano — Atenas" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
+            <span class="misc-cap" data-es="Sketch urbano — Atenas" data-en="Urban sketch — Athens">Sketch urbano — Atenas</span>
+          </div>
+          <div class="misc-item">
+            <div class="misc-img-wrap"><img src="misc-fotografia-arquitectonica.webp" alt="Fotografía arquitectónica" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
+            <span class="misc-cap" data-es="Fotografía arquitectónica" data-en="Architectural photography">Fotografía arquitectónica</span>
+          </div>
+          <div class="misc-item">
+            <div class="misc-img-wrap"><img src="misc-collage.webp" alt="Exploración gráfica — collage" loading="lazy" onerror="this.parentNode.classList.add('no-img');this.remove()"></div>
+            <span class="misc-cap" data-es="Exploración gráfica — collage" data-en="Graphic exploration — collage">Exploración gráfica — collage</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRANJA 6: RENDERS -->
+  <div class="proj-strip misc-strip" data-index="5" id="rendersStrip">
+    <div class="ps-bg" style="background-image:url('misc-render-volumetrico.webp')"></div>
+    <div class="ps-overlay"></div>
+    <div class="ps-header" role="button" tabindex="0">
+      <h2 class="ps-title" data-es="Renders" data-en="Renders">Renders</h2>
+      <p class="ps-meta" data-es="Visualización · Interior y exterior" data-en="Visualisation · Interior and exterior">Visualización · Interior y exterior</p>
+      <span class="ps-open" data-es="Ver proyecto" data-en="View project">Ver proyecto</span>
+      <span class="ps-arrow" aria-hidden="true">↓</span>
+    </div>
+    <div class="ps-body">
+      <div class="ps-body-inner misc-body">
+        <p class="misc-intro" data-es="Visualización arquitectónica a distintas escalas: conjunto urbano, vivienda unifamiliar e interiores. Estudios de material, luz natural y atmósfera realizados con VRay y SketchUp." data-en="Architectural visualisation across scales: urban complex, single-family house and interiors. Material, natural light and atmosphere studies produced with VRay and SketchUp.">Visualización arquitectónica a distintas escalas: conjunto urbano, vivienda unifamiliar e interiores. Estudios de material, luz natural y atmósfera realizados con VRay y SketchUp.</p>
+        <div class="render-grid" id="renderGrid">
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-01.webp" alt="Vista desde la galería" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Vista desde la galería" data-en="View from the gallery">Vista desde la galería</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-02.webp" alt="Vista aérea del conjunto" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Vista aérea del conjunto" data-en="Aerial view of the complex">Vista aérea del conjunto</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-03.webp" alt="Patio central y pérgolas" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Patio central y pérgolas" data-en="Central courtyard and pergolas">Patio central y pérgolas</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-04.webp" alt="Frente al río" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Frente al río" data-en="River front">Frente al río</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-05.webp" alt="Alzado longitudinal" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Alzado longitudinal" data-en="Longitudinal elevation">Alzado longitudinal</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-06.webp" alt="Vista aérea del conjunto urbano" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Vista aérea del conjunto urbano" data-en="Aerial view of the urban complex">Vista aérea del conjunto urbano</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-07.webp" alt="Calle interior y bloques" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Calle interior y bloques" data-en="Inner street and blocks">Calle interior y bloques</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-08.webp" alt="Fachada a pie de calle" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Fachada a pie de calle" data-en="Street-level facade">Fachada a pie de calle</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-09.webp" alt="Planta baja porticada y patios" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Planta baja porticada y patios" data-en="Arcaded ground floor and courtyards">Planta baja porticada y patios</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-10.webp" alt="Vivienda entre el arbolado" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Vivienda entre el arbolado" data-en="House among the trees">Vivienda entre el arbolado</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-11.webp" alt="Volumen acristalado sobre el zócalo" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Volumen acristalado sobre el zócalo" data-en="Glazed volume over the plinth">Volumen acristalado sobre el zócalo</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-12.webp" alt="Alzado al atardecer" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Alzado al atardecer" data-en="Elevation at dusk">Alzado al atardecer</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-13.webp" alt="Comedor y cocina" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Comedor y cocina" data-en="Dining room and kitchen">Comedor y cocina</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-14.webp" alt="Salón y estantería de obra" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Salón y estantería de obra" data-en="Living room and built-in shelving">Salón y estantería de obra</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-15.webp" alt="Doble altura desde la escalera" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Doble altura desde la escalera" data-en="Double height from the stairs">Doble altura desde la escalera</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-16.webp" alt="Dormitorio desde el desnivel" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Dormitorio desde el desnivel" data-en="Bedroom from the split level">Dormitorio desde el desnivel</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-17.webp" alt="Dormitorio al atardecer" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+            <span class="render-cap" data-es="Dormitorio al atardecer" data-en="Bedroom at dusk">Dormitorio al atardecer</span>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-18.webp" alt="Render 18" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-19.webp" alt="Render 19" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+          </div>
+          <div class="render-item">
+            <div class="render-img-wrap"><img src="render-20.webp" alt="Render 20" loading="lazy" onerror="if(!this.dataset.f){this.dataset.f='1';this.src=this.src.replace('.webp','.jpg');}else if(this.dataset.f==='1'){this.dataset.f='2';this.src=this.src.replace('.jpg','.png');}else{this.closest('.render-item').remove();}"></div>
+          </div>
+        </div>
+        <p class="render-empty" id="renderEmpty" hidden data-es="Galería en preparación." data-en="Gallery in preparation.">Galería en preparación.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-wrap fade-in">
+    <div class="about-left">
+      <span class="sec-label" data-es="Sobre mí" data-en="About me">Sobre mí</span>
+      <h2 class="about-title" data-es="Arquitecto en formación" data-en="Architect in training">Arquitecto en formación</h2>
+      <p class="about-text" data-es="Estudiante de último curso de Arquitectura en la Universidad de Sevilla, con estancia académica en la NTUA de Atenas. Compagino el proyecto con prácticas en constructora, donde trabajo en presupuestos, mediciones y certificaciones de obra. Me interesa el paso del concepto al detalle construido y busco incorporarme a un estudio donde aportar en diseño, representación y documentación técnica." data-en="Final-year Architecture student at the University of Seville, with an academic exchange at NTUA Athens. I combine design work with an internship at a construction company, handling budgets, quantity take-offs and site certifications. I am interested in the step from concept to built detail and I am looking to join a studio where I can contribute in design, representation and technical documentation.">Estudiante de último curso de Arquitectura en la Universidad de Sevilla, con estancia académica en la NTUA de Atenas. Compagino el proyecto con prácticas en constructora, donde trabajo en presupuestos, mediciones y certificaciones de obra. Me interesa el paso del concepto al detalle construido y busco incorporarme a un estudio donde aportar en diseño, representación y documentación técnica.</p>
+      <div class="about-chips">
+        <div class="chip"><span class="cdot"></span><span>AutoCAD · SketchUp · Revit · VRay · Photoshop · InDesign · Presto</span></div>
+        <div class="chip"><span class="cdot"></span><span data-es="Español nativo · Inglés B2 Cambridge" data-en="Spanish native · English B2 Cambridge">Español nativo · Inglés B2 Cambridge</span></div>
+        <div class="chip"><span class="cdot"></span><span data-es="Interés en espacio público, paisaje y sostenibilidad" data-en="Interest in public space, landscape and sustainability">Interés en espacio público, paisaje y sostenibilidad</span></div>
+      </div>
+      <div class="about-exp">
+        <div class="exp-item">
+          <div class="exp-role" data-es="Técnico de edificación — prácticas" data-en="Building technician — internship">Técnico de edificación — prácticas</div>
+          <div class="exp-org" data-es="Esteban Portillo Construcciones · 2026 – actualidad" data-en="Esteban Portillo Construcciones · 2026 – present">Esteban Portillo Construcciones · 2026 – actualidad</div>
+          <p class="exp-desc" data-es="Presupuestos, mediciones y certificaciones de obra. Control de albaranes y apoyo a jefatura de obra en documentación técnica." data-en="Budgets, quantity take-offs and site certifications. Delivery-note control and support to site management on technical documentation.">Presupuestos, mediciones y certificaciones de obra. Control de albaranes y apoyo a jefatura de obra en documentación técnica.</p>
+        </div>
+        <div class="exp-item">
+          <div class="exp-role" data-es="Herramientas propias con IA" data-en="In-house AI tooling">Herramientas propias con IA</div>
+          <div class="exp-org" data-es="Proyecto personal · 2025 – actualidad" data-en="Personal project · 2025 – present">Proyecto personal · 2025 – actualidad</div>
+          <p class="exp-desc" data-es="Automatización de documentación técnica: conversión de presupuestos PDF a BC3 para Presto, registro de facturas y cruce de albaranes con presupuesto." data-en="Automation of technical documentation: converting PDF budgets into BC3 for Presto, invoice logging and cross-checking delivery notes against the budget.">Automatización de documentación técnica: conversión de presupuestos PDF a BC3 para Presto, registro de facturas y cruce de albaranes con presupuesto.</p>
+        </div>
+      </div>
+      <a class="btn-red" href="JesusOrtizCV.pdf" target="_blank" rel="noopener"
+         data-es="Descargar CV" data-en="Download CV">Descargar CV</a>
+    </div>
+    <div class="about-right">
+      <div class="skills-block">
+        <div class="skill-g">
+          <div class="sk-label">CAD / BIM</div>
+          <div class="sk-items">
+            <span data-es="AutoCAD · Avanzado"  data-en="AutoCAD · Advanced">AutoCAD · Avanzado</span>
+            <span data-es="SketchUp · Medio"    data-en="SketchUp · Intermediate">SketchUp · Medio</span>
+            <span data-es="Revit básico"         data-en="Revit Basic">Revit básico</span>
+          </div>
+        </div>
+        <div class="skill-g">
+          <div class="sk-label" data-es="Obra y mediciones" data-en="Site &amp; quantities">Obra y mediciones</div>
+          <div class="sk-items">
+            <span data-es="Presto · Presupuestos y certificaciones" data-en="Presto · Budgets and certifications">Presto · Presupuestos y certificaciones</span>
+            <span data-es="Mediciones y control de albaranes" data-en="Quantity take-offs and delivery notes">Mediciones y control de albaranes</span>
+          </div>
+        </div>
+        <div class="skill-g">
+          <div class="sk-label">Render</div>
+          <div class="sk-items">
+            <span data-es="VRay · Avanzado" data-en="VRay · Advanced">VRay · Avanzado</span>
+          </div>
+        </div>
+        <div class="skill-g">
+          <div class="sk-label" data-es="IA y automatización" data-en="AI &amp; automation">IA y automatización</div>
+          <div class="sk-items">
+            <span data-es="Agentes y flujos de trabajo propios" data-en="Custom agents and workflows">Agentes y flujos de trabajo propios</span>
+            <span data-es="Automatización de documentación técnica" data-en="Technical documentation automation">Automatización de documentación técnica</span>
+          </div>
+        </div>
+        <div class="skill-g">
+          <div class="sk-label" data-es="Gráfica" data-en="Graphics">Gráfica</div>
+          <div class="sk-items">
+            <span>Photoshop · InDesign · Canva</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="contact-wrap fade-in">
+    <div class="contact-left">
+      <div class="contact-photo">
+        <img src="JesusOrtizPhoto.webp" alt="Jesús Ortiz Muñoz" loading="lazy" onerror="this.parentNode.style.background='#242424'">
+      </div>
+      <span class="sec-label" data-es="Contacto" data-en="Contact">Contacto</span>
+      <h2 class="contact-title">
+        <span data-es="Hablemos"       data-en="Let's talk">Hablemos</span><br>
+        <span class="red" data-es="de arquitectura" data-en="about architecture">de arquitectura</span>
+      </h2>
+      <p class="contact-desc" data-es="Disponible para prácticas y colaboración en estudio de arquitectura, urbanismo o interiorismo. Incorporación inmediata." data-en="Available for an internship or collaboration in an architecture, urbanism or interior design studio. Immediate start.">Disponible para prácticas y colaboración en estudio de arquitectura, urbanismo o interiorismo. Incorporación inmediata.</p>
+      <div class="contact-btns">
+        <a class="btn-red"   href="mailto:ortizmozjesus@hotmail.com" data-es="Escribir email" data-en="Send email">Escribir email</a>
+        <a class="btn-ghost" href="JesusOrtizCV.pdf" target="_blank" rel="noopener" data-es="Currículum" data-en="Resume">Currículum</a>
+      </div>
+    </div>
+    <div class="contact-right">
+      <div class="ci">
+        <div class="ci-label">Email</div>
+        <div class="ci-val"><a href="mailto:ortizmozjesus@hotmail.com">ortizmozjesus@hotmail.com</a></div>
+      </div>
+      <div class="ci">
+        <div class="ci-label">LinkedIn</div>
+        <div class="ci-val"><a href="https://www.linkedin.com/in/jes%C3%BAs-ortiz-mu%C3%B1oz" target="_blank" rel="noopener">linkedin.com/in/jesús-ortiz</a></div>
+      </div>
+      <div class="ci">
+        <div class="ci-label" data-es="Ubicación" data-en="Location">Ubicación</div>
+        <div class="ci-val" data-es="Sevilla, España" data-en="Seville, Spain">Sevilla, España</div>
+      </div>
+      <div class="ci">
+        <div class="ci-label" data-es="Currículum" data-en="Resume">Currículum</div>
+        <div class="ci-val"><a href="JesusOrtizCV.pdf" target="_blank" rel="noopener" data-es="Descargar CV" data-en="Download CV">Descargar CV</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <span>Jesús Ortiz Muñoz — 2026</span>
+  <span>Sevilla · Atenas</span>
+</footer>
+
+<!-- ── LIGHTBOX ── -->
+<div id="lbx" role="dialog" aria-label="Imagen ampliada" aria-modal="true">
+  <img id="lbx-img" src="" alt="">
+  <button class="lbx-close" id="lbxClose" aria-label="Cerrar">&#x2715;</button>
+</div>
+
+<script src="./script.js"></script>
+</body>
+</html>
