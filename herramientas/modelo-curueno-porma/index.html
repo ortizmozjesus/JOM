@@ -1,0 +1,756 @@
+<!doctype html><html lang="es"><head>
+<meta name="description" content="Herramienta de Jesús Ortiz Muñoz: arquitectura y programación."><link rel="icon" href="../../favicon.svg"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body><div class="jom-bar"><a href="../../herramientas.html">Herramientas</a><span>Modelo Curueño-Porma</span></div><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Hedvig+Letters+Serif:opsz@12..24&display=swap"><title>Modelo Curueño-Porma</title>
+
+
+
+<style>/* Hallmark · shape: Portfolio Index · genre: editorial · theme: Studio (deal 3/3, seed portfolio-arquitectura-estudiante-proyectos-a195·c8a659d1·2026-10-30·r0) · job: hire · draw: custom-by-brief
+ * hero: Ledge, name beside a crop-marked plate · nav: edge-aligned wordmark and four pages · footer: rule, wordmark over links · imagery: the author's own drawings and renders · signature: a drawing sheet with crop marks and a dimension line drawn at its real pixel width
+ * axes: light/roman-serif/warm · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
+:root{--lit-1:rgba(0,0,0,.45);--lit-2:#f1f7f8;--lit-3:#0a1522;--lit-4:#aa4600;--lit-5:#e97219;--lit-6:#f9fcfd;--lit-7:#c4cccf;--lit-8:#58626a;--fam-1:'Geist',ui-sans-serif,system-ui,sans-serif;--fam-2:'Hedvig Letters Serif',ui-serif,Georgia,serif!important;}
+
+/* Concepto: mesa de dibujo. Lámina A1 apaisada a la izquierda, mandos y lecturas alrededor. Tinta por magnitud: marrón = terreno, azul = agua, bermellón = personas y pasarela. */
+:root{
+  --ws:#dde2df; --panel:#f3f5f3; --line:#c5cdc9; --sheet:#fcfcf8;
+  --ink:#1b2427; --ink2:#4a575c; --ink3:#78878c;
+  --topo:#8a5826; --water:#1b67a3; --people:#c2392a; --ok:#2c7a4b; --warn:#a9680f;
+  --chip:#e6ebe8; --focus:#1b67a3;
+  --f-display:'Hedvig Letters Serif',Georgia,serif;
+  --f-body:'Geist',ui-sans-serif,system-ui,sans-serif;
+  --f-mono:'Geist',ui-sans-serif,system-ui,sans-serif;
+}
+
+
+*{box-sizing:border-box}
+body{background:var(--ws);color:var(--ink);font:14px/1.45 var(--f-body);padding-inline:16px;padding-block:14px 28px}
+h1,h2,h3{margin:0;font-weight:600;text-wrap:balance}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1500px;margin-inline:auto;display:flex;flex-direction:column;gap:14px}
+.cart{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:6px 24px;padding-bottom:10px;border-bottom:1.5px solid var(--ink)}
+.eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:0;color:var(--ink3)}
+.cart h1{font:600 clamp(24px,3.4vw,38px)/1.02 var(--f-display);letter-spacing:0;margin-top:6px}
+.cart-q{margin:0;font:italic 500 clamp(17px,2vw,22px)/1.15 var(--f-display);color:var(--ink2);max-width:34ch}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:14px;align-items:start}
+.stage{display:flex;flex-direction:column;gap:10px;min-width:0}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--panel)}
+.seg button{border:0;background:transparent;padding:6px 11px;cursor:pointer;font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:3px 10px 3px 8px;cursor:pointer;font-size:13px}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--ink3)}
+.chip[aria-pressed="true"]{border-color:var(--ink)}
+.chip[aria-pressed="false"]{opacity:.55}
+.chip[data-c="topo"] i{background:var(--topo)} .chip[data-c="agua"] i{background:var(--water)}
+.chip[data-c="pob"] i,.chip[data-c="red"] i{background:var(--people)}
+.sheetwrap{position:relative;border:1px solid var(--line);background:var(--sheet);box-shadow:0 1px 0 var(--line),0 14px 30px -18px var(--lit-1);aspect-ratio:841/575;max-width:100%;overflow:hidden;touch-action:none}
+#sheet{display:block;width:100%;height:100%;cursor:crosshair;user-select:none}
+#sheet text{font-family:var(--f-display)}
+.zoom{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:4px}
+.zoom button{width:30px;height:30px;border:1px solid var(--line);background:var(--panel);border-radius:6px;cursor:pointer;font-weight:600}
+.busy{position:absolute;left:10px;bottom:10px;background:var(--ink);color:var(--sheet);font:500 12px var(--f-mono);padding:4px 9px;border-radius:5px}
+.status{display:flex;flex-wrap:wrap;gap:4px 18px;font:400 12.5px var(--f-mono);color:var(--ink2)}
+.status b{font-weight:500;color:var(--ink)}
+.tag{display:inline-block;padding:0 6px;border-radius:4px;font:500 11px/18px var(--f-mono);letter-spacing:0;}
+.t-real{background:color-mix(in srgb,var(--ok) 22%,transparent);color:var(--ok)}
+.t-sup{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}
+.t-apr{background:color-mix(in srgb,var(--ink3) 25%,transparent);color:var(--ink2)}
+.reads{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-width:0}
+.card h3{font:600 17px/1.1 var(--f-display);letter-spacing:0;margin-bottom:8px}
+.card.wide{grid-column:1/-1}
+.card p{margin:.3em 0;color:var(--ink2);font-size:13px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{font:500 11px var(--f-mono);letter-spacing:0;color:var(--ink3);text-align:left;padding:3px 8px 5px 0;border-bottom:1px solid var(--line)}
+td{padding:5px 8px 5px 0;border-bottom:1px solid color-mix(in srgb,var(--line) 60%,transparent);vertical-align:top}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
+tr.best td{font-weight:600}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;position:sticky;top:10px;max-height:calc(100vh - 20px);overflow:auto}
+details{border-bottom:1px solid var(--line)}
+details:last-child{border-bottom:0}
+summary{cursor:pointer;padding:11px 14px;font:600 16px var(--f-display);letter-spacing:0;list-style:none;display:flex;justify-content:space-between;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'+';font-family:var(--f-mono);color:var(--ink3)}
+details[open] summary::after{content:'\2212'}
+.body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:9px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;align-items:center}
+.row label{font-size:13px;color:var(--ink2)}
+.row output{font:500 12.5px var(--f-mono);min-width:3.4em;text-align:right}
+.row input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--ink)}
+.row select,.row input[type=number],.in{width:100%;border:1px solid var(--line);background:var(--sheet);border-radius:5px;padding:4px 6px}
+.row.inline{grid-template-columns:minmax(0,1fr) 112px}
+.sub{font:500 11px var(--f-mono);letter-spacing:0;color:var(--ink3);margin-top:4px}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--sheet);border-radius:6px;padding:6px 12px;cursor:pointer;font-weight:500}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.note{font-size:12.5px;color:var(--ink2);margin:0}
+.warn{color:var(--warn)}
+.vil td{padding:3px 6px 3px 0}
+.vil input{width:100%;min-width:0;border:1px solid var(--line);background:var(--sheet);border-radius:4px;padding:2px 4px;font:12px var(--f-mono)}
+.snd{display:flex;justify-content:space-between;align-items:center;gap:8px;font:12.5px var(--f-mono)}
+.snd button{border:0;background:transparent;cursor:pointer;color:var(--ink3);font-size:16px}
+.copybox{width:100%;height:84px;font:11px var(--f-mono);border:1px solid var(--line);background:var(--sheet);border-radius:5px;padding:6px}
+svg.mini text{font-family:var(--f-mono);font-size:9px;fill:var(--ink2)}
+@media (max-width:980px){.app{grid-template-columns:minmax(0,1fr)}.panel{position:static;max-height:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---- Studio skin ---- */
+:root{--ws:#e5edef;--panel:#f9fcfd;--line:#c4cccf;--sheet:#fbfdfd;--ink:#0a1522;--ink2:#2f3943;--ink3:#58626a;--topo:#8a5826;--water:#1b67a3;--people:#c2392a;--ok:#2c7a4b;--warn:#a9680f;--chip:#e5edef;--focus:#aa4600;color-scheme:light}
+
+html,body{margin:0;background:var(--lit-2)!important;color:var(--lit-3)!important}
+body{font-family:var(--fam-1);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--fam-2);font-weight:400!important;letter-spacing:0!important;text-transform:none!important;font-stretch:100%!important;color:var(--lit-3)}
+h1{line-height:1}
+h2,.eyebrow,[class*=eyebrow]{letter-spacing:0!important;text-transform:none!important;font-size:inherit}
+button,input,select,textarea,.btn,.chip,.b{border-radius:2px!important;font-family:var(--fam-1)}
+button:not(.x):not([class*=lb]){cursor:pointer}
+:focus-visible{outline:2px solid var(--lit-4)!important;outline-offset:2px}
+input[type=range]{accent-color:var(--lit-5)}
+.num,output,td{font-variant-numeric:tabular-nums}
+.jom-bar{position:fixed;inset:0 0 auto 0;z-index:1000;height:34px;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 max(14px,env(safe-area-inset-right,0px)) 0 max(14px,env(safe-area-inset-left,0px));background:var(--lit-6);color:var(--lit-3);font:500 13px 'Geist',ui-sans-serif,system-ui,sans-serif;border-bottom:1px solid var(--lit-7)}
+.jom-bar a{color:var(--lit-3);text-decoration:underline;text-decoration-color:transparent;text-underline-offset:.2em;text-decoration-thickness:1px;transition:text-decoration-color 160ms}
+.jom-bar a:hover{text-decoration-color:var(--lit-5)}.jom-bar span{color:var(--lit-8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-top:34px!important}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+h1{font-size:clamp(28px,4vw,46px)!important}
+html,body{overflow-x:clip}
+.byline{font-size:.9rem;color:var(--ink3);margin:.25rem 0 1rem}
+</style>
+
+<div class="wrap">
+  <header class="cart">
+    <div>
+      <h1>Cerezales, Ambasaguas, Barrio de N.ª Sra., Devesa</h1>
+      <p class="byline">Ideación Gráfica Arquitectónica, D4, Jesús Ortiz Muñoz</p>
+    </div>
+    <p class="cart-q">¿Dónde une una pasarela a las personas que viven aquí?</p>
+  </header>
+
+  <div class="app">
+    <section class="stage" aria-label="Plano">
+      <div class="tools">
+        <div class="seg" role="group" aria-label="Modo del cursor">
+          <button id="mVer" aria-pressed="true">Ver sección</button>
+          <button id="mSonda" aria-pressed="false">Añadir sondeo</button>
+        </div>
+        <div class="chips" id="chips">
+          <button class="chip" data-c="topo" aria-pressed="true"><i></i>Topografía</button>
+          <button class="chip" data-c="agua" aria-pressed="true"><i></i>Agua</button>
+          <button class="chip" data-c="pob" aria-pressed="true"><i></i>Población</button>
+          <button class="chip" data-c="red" aria-pressed="true"><i></i>Caminos y pasarelas</button>
+          <button class="chip" data-c="reticula" aria-pressed="true"><i></i>Retícula</button>
+          <button class="chip" data-c="puentes" aria-pressed="true"><i></i>Puentes</button>
+          <button class="chip" data-c="edif" aria-pressed="true"><i></i>Edificios</button>
+        </div>
+      </div>
+      <div class="sheetwrap" id="sheetwrap">
+        <svg id="sheet" viewBox="0 0 841 575" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Plano A1 con topografía, profundidad del agua y población"></svg>
+        <div class="zoom"><button id="zIn" aria-label="Acercar">+</button><button id="zOut" aria-label="Alejar">−</button><button id="zReset" aria-label="Ver lámina entera">⤢</button></div>
+        <div class="busy" id="busy" hidden>calculando…</div>
+      </div>
+      <div class="status" id="status"></div>
+      <div class="reads">
+        <div class="card"><h3>Sección S1</h3><div id="secBox"></div></div>
+        <div class="card"><h3>Profundidad a lo largo del cauce</h3><div id="profBox"></div></div>
+        <div class="card wide"><h3>Pasarelas candidatas</h3><div class="scroll" id="candBox"></div></div>
+        <div class="card wide"><h3>Tiempo a pie entre pueblos</h3><div class="scroll" id="pairBox"></div></div>
+        <div class="card wide"><h3>De dónde sale cada dato</h3><div class="scroll" id="provBox"></div></div>
+      </div>
+    </section>
+
+    <aside class="panel" aria-label="Parámetros">
+      <details open><summary>Plano</summary><div class="body">
+        <div class="row inline"><label for="p_scale">Escala</label><select id="p_scale" data-k="scale" data-d="grid"><option value="5000">1:5000</option><option value="10000">1:10000</option></select></div>
+        <div class="row inline"><label for="p_cx">Centro x (m)</label><input class="in" type="number" id="p_cx" data-k="cx" data-d="grid" step="50"></div>
+        <div class="row inline"><label for="p_cy">Centro y (m)</label><input class="in" type="number" id="p_cy" data-k="cy" data-d="grid" step="50"></div>
+        <p class="note">Lámina A1 apaisada 841 × 575 mm. El origen (0, 0) es el centro de los cuatro pueblos.</p>
+      </div></details>
+
+      <details open><summary>Topografía</summary><div class="body">
+        <div class="row inline"><label for="p_interval">Equidistancia</label><select id="p_interval" data-k="interval" data-d="draw"><option value="2">2 m</option><option value="5">5 m</option><option value="10">10 m</option><option value="20">20 m</option></select></div>
+        <div class="row inline"><label for="p_indexEvery">Curva maestra cada</label><select id="p_indexEvery" data-k="indexEvery" data-d="draw"><option value="2">2.ª</option><option value="4">4.ª</option><option value="5">5.ª</option><option value="10">10.ª</option></select></div>
+        <div class="sub">Modelo digital del terreno</div>
+        <p class="note" id="demNote">Ahora el terreno es un modelo supuesto. Carga el MDT05 (.tif) del CNIG para sustituirlo.</p>
+        <input class="in" type="file" id="demFile" accept=".tif,.tiff,image/tiff" aria-label="Archivo MDT05">
+      </div></details>
+
+      <details open><summary>Agua</summary><div class="body">
+        <div class="sub">Río Porma</div>
+        <div class="row"><label for="p_qP">Caudal Q (m³/s)</label><output id="o_qP"></output><input type="range" id="p_qP" data-k="qP" data-d="hyd" min="0.5" max="30" step="0.1"></div>
+        <div class="row"><label for="p_wP">Ancho (m)</label><output id="o_wP"></output><input type="range" id="p_wP" data-k="wP" data-d="fields" min="10" max="50" step="1"></div>
+        <div class="sub">Río Curueño</div>
+        <div class="row"><label for="p_qC">Caudal Q (m³/s)</label><output id="o_qC"></output><input type="range" id="p_qC" data-k="qC" data-d="hyd" min="0.2" max="15" step="0.1"></div>
+        <div class="row"><label for="p_wC">Ancho (m)</label><output id="o_wC"></output><input type="range" id="p_wC" data-k="wC" data-d="fields" min="6" max="40" step="1"></div>
+        <div class="sub">Canal de Arriola y acequias</div>
+        <div class="row"><label for="p_qK">Caudal Q (m³/s)</label><output id="o_qK"></output><input type="range" id="p_qK" data-k="qK" data-d="hyd" min="0.05" max="4" step="0.05"></div>
+        <div class="row"><label for="p_wK">Ancho (m)</label><output id="o_wK"></output><input type="range" id="p_wK" data-k="wK" data-d="hyd" min="1.5" max="10" step="0.5"></div>
+        <div class="sub">Dibujo de la profundidad</div>
+        <div class="row"><label for="p_tickSp">Distancia entre estaciones (m)</label><output id="o_tickSp"></output><input type="range" id="p_tickSp" data-k="tickSp" data-d="draw" min="60" max="300" step="20"></div>
+        <div class="row"><label for="p_exag">Exageración (mm por m de agua)</label><output id="o_exag"></output><input type="range" id="p_exag" data-k="exag" data-d="draw" min="10" max="120" step="5"></div>
+        <div class="row inline"><label for="p_side">Lado de las marcas</label><select id="p_side" data-k="side" data-d="draw"><option value="1">Izquierda del cauce</option><option value="-1">Derecha del cauce</option></select></div>
+        <div class="row inline"><label for="p_unc">Mostrar incertidumbre</label><input type="checkbox" id="p_unc" data-k="unc" data-d="draw"></div>
+        <div class="sub">Sondeos (puntos medidos)</div>
+        <div class="row inline"><label for="sdDepth">Profundidad medida (m)</label><input class="in" type="number" id="sdDepth" value="0.60" step="0.05" min="0.05" max="5"></div>
+        <p class="note">Pulsa «Añadir sondeo» sobre el plano y haz clic en un cauce. Cada punto corrige la estimación a su alrededor y reduce la incertidumbre.</p>
+        <div class="row"><label for="p_infl">Alcance de un sondeo (m)</label><output id="o_infl"></output><input type="range" id="p_infl" data-k="infl" data-d="hyd" min="100" max="1500" step="50"></div>
+        <div id="sndList" class="body" style="padding:0"></div>
+      </div></details>
+
+      <details open><summary>Población</summary><div class="body">
+        <div class="row inline"><label for="p_dotVal">1 punto =</label><select id="p_dotVal" data-k="dotVal" data-d="draw"><option value="1">1 habitante</option><option value="2">2 habitantes</option><option value="5">5 habitantes</option></select></div>
+        <div class="row inline"><label for="p_symStyle">Símbolo</label><select id="p_symStyle" data-k="symStyle" data-d="draw"><option value="both">Círculo con puntos</option><option value="dots">Solo puntos</option><option value="circle">Círculo proporcional</option></select></div>
+        <div class="row inline"><label for="p_catchOn">Radio de paseo</label><input type="checkbox" id="p_catchOn" data-k="catchOn" data-d="draw"></div>
+        <div class="row"><label for="p_catchMin">Minutos a pie</label><output id="o_catchMin"></output><input type="range" id="p_catchMin" data-k="catchMin" data-d="draw" min="3" max="25" step="1"></div>
+        <div class="scroll"><table class="vil" id="vilTbl"><thead><tr><th>Pueblo</th><th>Hab.</th><th>Lat.</th><th>Lon.</th></tr></thead><tbody></tbody></table></div>
+      </div></details>
+
+      <details open><summary>Pasarela</summary><div class="body">
+        <div class="row inline"><label for="p_useBridges">Contar puentes existentes</label><input type="checkbox" id="p_useBridges" data-k="useBridges" data-d="fields"></div>
+        <div class="row"><label for="p_crossK">Coste de vadear el río (× distancia)</label><output id="o_crossK"></output><input type="range" id="p_crossK" data-k="crossK" data-d="fields" min="20" max="500" step="10"></div>
+        <div class="row"><label for="p_canalK">Coste de saltar una acequia (m)</label><output id="o_canalK"></output><input type="range" id="p_canalK" data-k="canalK" data-d="fields" min="0" max="120" step="5"></div>
+        <div class="row"><label for="p_speed">Velocidad a pie (km/h)</label><output id="o_speed"></output><input type="range" id="p_speed" data-k="speed" data-d="score" min="3" max="6" step="0.1"></div>
+        <div class="row"><label for="p_lambda">Peso de la luz (min por 100 m)</label><output id="o_lambda"></output><input type="range" id="p_lambda" data-k="lambda" data-d="score" min="0" max="1" step="0.01"></div>
+        <div class="row inline"><label for="p_nCand">Pasarelas a proponer</label><select id="p_nCand" data-k="nCand" data-d="score"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div>
+        <div class="row inline"><label for="p_netSel">Red de caminos con</label><select id="p_netSel" data-k="netSel" data-d="score"><option value="P1">P1</option><option value="P12">P1 y P2</option><option value="P123">P1, P2 y P3</option><option value="none">Solo lo existente</option></select></div>
+      </div></details>
+
+      <details><summary>Exportar</summary><div class="body">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="bSvg">Copiar SVG del plano</button>
+          <button class="btn ghost" id="bJson">Copiar parámetros</button>
+          <button class="btn ghost" id="bReset">Restablecer</button>
+        </div>
+        <textarea class="copybox" id="copyBox" readonly hidden aria-label="Texto copiado"></textarea>
+        <div class="sub">Edificios (opcional)</div>
+        <p class="note">Sube un GeoJSON de huellas en lat/lon (por ejemplo exportado desde QGIS con el Catastro).</p>
+        <input class="in" type="file" id="bldFile" accept=".geojson,.json,application/geo+json,application/json" aria-label="Archivo GeoJSON de edificios">
+        <p class="note" id="copyMsg" aria-live="polite"></p>
+      </div></details>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/geotiff@2.1.3/dist-browser/geotiff.js"></script>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var NS='http://www.w3.org/2000/svg';
+function fmt(n,d){if(d==null)d=1;return Number(n).toFixed(d).replace('.',',')}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function f2(n){return Math.round(n*100)/100}
+
+/* ====================== DATOS ====================== */
+var LAT0=42.7089736, LON0=-5.3710819;            /* origen: baricentro de los cuatro pueblos */
+var KY=111100, KX=111320*Math.cos(LAT0*Math.PI/180);
+function ll2xy(lat,lon){return [(lon-LON0)*KX,(lat-LAT0)*KY]}
+
+var VIL0=[
+ {id:'cer',name:'Cerezales del Condado',short:'Cerezales',pop:72,lat:42.7135986,lon:-5.3582692},
+ {id:'amb',name:'Ambasaguas de Curueño',short:'Ambasaguas',pop:72,lat:42.7117759,lon:-5.3752728},
+ {id:'bns',name:'Barrio de Nuestra Señora',short:'Barrio de N.ª Sra.',pop:74,lat:42.7084139,lon:-5.3790058},
+ {id:'dev',name:'Devesa de Curueño',short:'Devesa',pop:80,lat:42.7021060,lon:-5.3717796}];
+
+/* OpenStreetMap (ODbL), coordenadas locales en metros respecto al origen */
+var PORMA=[[2168,3311],[2231,3124],[2230,2960],[2137,2664],[2028,2472],[1986,2451],[1861,2442],[1680,2518],[1611,2562],[1573,2558],[1306,2462],[1183,2435],[1084,2399],[1064,2381],[1070,2321],[1051,2087],[1076,1968],[1074,1907],[891,1810],[724,1780],[656,1756],[555,1689],[485,1594],[447,1512],[439,1405],[459,1329],[623,1162],[681,1072],[734,988],[758,865],[732,415],[663,149],[679,-23],[795,-184],[789,-312],[808,-349],[877,-397],[887,-468],[893,-767],[857,-859],[790,-955],[791,-1068],[812,-1134],[873,-1176],[948,-1187],[993,-1233],[1033,-1293],[1064,-1411],[1081,-1621],[1097,-1704],[1132,-1759],[1158,-1843],[1156,-1886],[1076,-2011],[1069,-2061],[997,-2105],[985,-2157],[1036,-2213],[1180,-2426],[1269,-2622],[1319,-2675],[1311,-2738],[1269,-2883],[1280,-3076],[1250,-3184],[1148,-3450]];
+var CURUENO=[[-2465,3499],[-2414,3293],[-2162,2871],[-2120,2619],[-2022,2479],[-1895,2269],[-1881,2031],[-1699,1852],[-1690,1688],[-1541,1454],[-1415,1315],[-1163,1067],[-982,910],[-939,781],[-928,538],[-791,366],[-754,151],[-680,82],[-441,-56],[-125,-87],[38,-166],[170,-190],[241,-174],[350,-197],[417,-176],[455,-141],[470,-106],[597,-42],[679,-23]];
+var CANALS=[
+ {n:'Canal de Arriola',p:[[63,-806],[20,-870],[-6,-939],[-168,-1153],[-217,-1305],[-183,-1459],[-211,-1595],[-278,-1725],[-305,-2077],[-346,-2229],[-421,-2341],[-461,-2497],[-704,-2889]]},
+ {n:'Canal de Arriola',p:[[387,808],[365,732],[363,651],[390,569],[353,480],[354,360],[306,258],[292,176],[266,117],[180,87],[92,-26]]},
+ {n:'Acequia',p:[[812,-1134],[853,-1187],[926,-1251],[931,-1288],[919,-1404],[950,-1520],[937,-1602],[920,-1643],[928,-1692],[947,-1723],[945,-1764],[923,-1840],[930,-1963],[999,-1971],[1010,-2036],[997,-2105]]},
+ {n:'Acequia',p:[[-1717,1887],[-1521,1685],[-1408,1507],[-1340,1437],[-1247,1254],[-1217,1216],[-1101,1125],[-1068,1076],[-1019,1028],[-959,992],[-933,948],[-926,915],[-847,855],[-815,815],[-491,610]]},
+ {n:'Acequia',p:[[-705,746],[-762,660],[-725,611],[-697,538],[-551,569],[-497,557],[-335,467]]},
+ {n:'Acequia',p:[[-491,610],[-374,556],[-288,478],[-182,448],[-151,452],[-94,553],[-79,651]]}];
+var BRIDGES=[
+ {n:'Carretera de Ambasaguas a Cerezales',x:717,y:159,len:76},
+ {n:'Carretera de Boñar',x:-534,y:-48,len:71},
+ {n:'Carretera de Puente de Villarente a Boñar',x:-37,y:-81,len:104}];
+var WEIRS=[[43,-332],[459,1329],[-353,-2243],[-648,-2797]];
+
+/* ====================== PARÁMETROS ====================== */
+var DEF={scale:5000,cx:200,cy:-120,interval:5,indexEvery:5,
+ qP:6,wP:26,qC:2.2,wC:18,qK:0.8,wK:4,
+ tickSp:120,exag:40,side:1,unc:true,infl:500,
+ dotVal:2,symStyle:'both',catchOn:false,catchMin:10,
+ crossK:300,canalK:25,speed:4.5,lambda:0.15,nCand:3,netSel:'P1',useBridges:true};
+var P=JSON.parse(JSON.stringify(DEF));
+var NMAN={P:0.045,C:0.045,K:0.025}, SIG0=0.45;
+var VIL=JSON.parse(JSON.stringify(VIL0));
+var SOUND=[]; var SEL=null; var mode='ver';
+var LAY={topo:1,agua:1,pob:1,red:1,reticula:1,puentes:1,edif:1};
+var BUILD=[];
+var DEM=null;
+
+try{var sv=localStorage.getItem('curueno-porma-v1'); if(sv){var o=JSON.parse(sv); if(o.P)Object.assign(P,o.P); if(o.VIL)VIL=o.VIL; if(o.SOUND)SOUND=o.SOUND;}}catch(e){}
+function save(){try{localStorage.setItem('curueno-porma-v1',JSON.stringify({P:P,VIL:VIL,SOUND:SOUND}))}catch(e){}}
+
+/* ====================== UTM 30N ====================== */
+function toUTM(latDeg,lonDeg){
+ var a=6378137,f=1/298.257222101,k0=0.9996,l0=-3*Math.PI/180;
+ var n=f/(2-f),A=a/(1+n)*(1+n*n/4+Math.pow(n,4)/64);
+ var al=[n/2-2*n*n/3+5*Math.pow(n,3)/16,13*n*n/48-3*Math.pow(n,3)/5,61*Math.pow(n,3)/240];
+ var phi=latDeg*Math.PI/180,lam=lonDeg*Math.PI/180-l0,sp=Math.sin(phi),q=2*Math.sqrt(n)/(1+n);
+ var t=Math.sinh(Math.atanh(sp)-q*Math.atanh(q*sp));
+ var xi=Math.atan2(t,Math.cos(lam)),eta=Math.atanh(Math.sin(lam)/Math.sqrt(1+t*t));
+ var E=eta,N=xi;
+ for(var j=1;j<=3;j++){E+=al[j-1]*Math.cos(2*j*xi)*Math.sinh(2*j*eta);N+=al[j-1]*Math.sin(2*j*xi)*Math.cosh(2*j*eta)}
+ return [500000+k0*A*E,k0*A*N];
+}
+function xy2ll(x,y){return [LAT0+y/KY,LON0+x/KX]}
+
+/* ====================== TERRENO ====================== */
+function zProv(x,y){
+ var e=Math.max(0,x-1300),w=Math.max(0,-x-1300);
+ var n=Math.sin(x/410+1.3)*1.6+Math.sin(y/330+0.4)*1.4+Math.sin((x+y)/190)*0.7;
+ return 868+0.0062*y+0.00042*Math.pow(e,1.5)+0.0003*Math.pow(w,1.5)+n;
+}
+function zDem(x,y){
+ var ll=xy2ll(x,y),u=toUTM(ll[0],ll[1]);
+ var fx=(u[0]-DEM.e0)/DEM.rx-0.5, fy=(DEM.n0-u[1])/DEM.ry-0.5;
+ if(fx<0||fy<0||fx>=DEM.w-1||fy>=DEM.h-1)return NaN;
+ var i=Math.floor(fx),j=Math.floor(fy),tx=fx-i,ty=fy-j,d=DEM.data,W=DEM.w;
+ var a=d[j*W+i],b=d[j*W+i+1],c=d[(j+1)*W+i],e=d[(j+1)*W+i+1];
+ if(!(a>-500&&b>-500&&c>-500&&e>-500&&a<5000&&b<5000&&c<5000&&e<5000))return NaN;
+ return a*(1-tx)*(1-ty)+b*tx*(1-ty)+c*(1-tx)*ty+e*tx*ty;
+}
+function zAt(x,y){
+ if(DEM){var z=zDem(x,y); if(!isNaN(z))return z;}
+ return zProv(x,y);
+}
+
+/* ====================== MALLA ====================== */
+var NX=421,NY=288,CM=2; /* 2 mm de lámina por celda, siempre */
+var cell,gx0,gyTop,Z,SL,WET,CAN;
+function setupGrid(){
+ cell=P.scale/500; gx0=P.cx-(NX-1)*cell/2; gyTop=P.cy+(NY-1)*cell/2;
+}
+function mm(x,y){return [(x-gx0)*1000/P.scale,(gyTop-y)*1000/P.scale]}
+function world(X,Y){return [gx0+X*P.scale/1000,gyTop-Y*P.scale/1000]}
+function buildTerrain(){
+ Z=new Float32Array(NX*NY); var zmin=1e9,zmax=-1e9;
+ for(var r=0;r<NY;r++){var y=gyTop-r*cell;for(var c=0;c<NX;c++){var z=zAt(gx0+c*cell,y);Z[r*NX+c]=z;if(z<zmin)zmin=z;if(z>zmax)zmax=z}}
+ SL=new Float32Array(NX*NY);
+ for(var r2=0;r2<NY;r2++)for(var c2=0;c2<NX;c2++){
+  var c0=Math.max(0,c2-1),c1=Math.min(NX-1,c2+1),r0=Math.max(0,r2-1),r1=Math.min(NY-1,r2+1);
+  var dx=(Z[r2*NX+c1]-Z[r2*NX+c0])/((c1-c0)*cell),dy=(Z[r1*NX+c2]-Z[r0*NX+c2])/((r1-r0)*cell);
+  SL[r2*NX+c2]=Math.hypot(dx,dy);
+ }
+ buildTerrain.zmin=zmin;buildTerrain.zmax=zmax;
+}
+
+/* ====================== CAUCES Y ESTACIONES ====================== */
+function resample(pts,ds){
+ var cum=[0],i;for(i=1;i<pts.length;i++)cum.push(cum[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));
+ var tot=cum[cum.length-1],n=Math.max(2,Math.round(tot/ds)+1),out=[],j=1;
+ for(var k=0;k<n;k++){var s=tot*k/(n-1);while(j<cum.length-1&&cum[j]<s)j++;var a=pts[j-1],b=pts[j],L=cum[j]-cum[j-1]||1,f=(s-cum[j-1])/L;out.push({x:a[0]+(b[0]-a[0])*f,y:a[1]+(b[1]-a[1])*f,s:s})}
+ for(var m=0;m<n;m++){var p=out[Math.max(0,m-2)],q=out[Math.min(n-1,m+2)],tx=q.x-p.x,ty=q.y-p.y,l=Math.hypot(tx,ty)||1;out[m].tx=tx/l;out[m].ty=ty/l}
+ return out;
+}
+var FEAT=[];
+(function(){
+ FEAT.push({id:'porma',grp:'P',name:'Río Porma',pts:PORMA});
+ FEAT.push({id:'curueno',grp:'C',name:'Río Curueño',pts:CURUENO});
+ CANALS.forEach(function(c,i){FEAT.push({id:'k'+i,grp:'K',name:c.n,pts:c.p.slice()})});
+ FEAT.forEach(function(F){F.st=resample(F.pts,20)});
+})();
+function grpPar(g){return g==='P'?{Q:P.qP,w:P.wP,n:NMAN.P,smin:0.002}:g==='C'?{Q:P.qC,w:P.wC,n:NMAN.C,smin:0.002}:{Q:P.qK,w:P.wK,n:NMAN.K,smin:0.0008}}
+function widthOf(F){return grpPar(F.grp).w}
+function hydro(){
+ FEAT.forEach(function(F){
+  var st=F.st; st.forEach(function(p){p.z=zAt(p.x,p.y)});
+  if(F.grp==='K'&&st[0].z<st[st.length-1].z){F.pts.reverse();F.st=resample(F.pts,20);st=F.st;st.forEach(function(p){p.z=zAt(p.x,p.y)})}
+  var g=grpPar(F.grp),W=7,n=st.length;
+  st.forEach(function(p,k){var a=st[Math.max(0,k-W)],b=st[Math.min(n-1,k+W)],S=(a.z-b.z)/((b.s-a.s)||1);p.S=Math.max(g.smin,S);p.h0=clamp(Math.pow(g.Q*g.n/(g.w*Math.sqrt(p.S)),0.6),0.05,3.5)});
+ });
+ SOUND.forEach(function(q){var F=FEAT.filter(function(f){return f.id===q.fid})[0];if(!F)return;var best=0,bd=1e18;F.st.forEach(function(p,k){var d=(p.x-q.x)*(p.x-q.x)+(p.y-q.y)*(p.y-q.y);if(d<bd){bd=d;best=k}});q.idx=best;q.s=F.st[best].s;q.h0=F.st[best].h0});
+ FEAT.forEach(function(F){var sd=SOUND.filter(function(q){return q.fid===F.id});
+  F.st.forEach(function(p){var sw=0,sl=0;sd.forEach(function(q){var d=p.s-q.s,w=Math.exp(-d*d/(2*P.infl*P.infl));sw+=w;sl+=w*Math.log(q.h/q.h0)});
+   p.h=clamp(p.h0*Math.exp(sl/(sw+0.02)),0.03,5);p.sig=SIG0/Math.sqrt(1+6*sw)});});
+}
+
+/* ====================== ANÁLISIS: MÁSCARAS, DIJKSTRA, PASARELAS ====================== */
+var FIELDS=[],CAND=[],NET=[],PAIRS=[],NODES=[];
+function inGridBox(x,y,m){return x>gx0-m&&x<gx0+(NX-1)*cell+m&&y<gyTop+m&&y>gyTop-(NY-1)*cell-m}
+function stampSeg(mask,ax,ay,bx,by,rad){
+ var minx=Math.min(ax,bx)-rad,maxx=Math.max(ax,bx)+rad,miny=Math.min(ay,by)-rad,maxy=Math.max(ay,by)+rad;
+ var c0=Math.max(0,Math.floor((minx-gx0)/cell)),c1=Math.min(NX-1,Math.ceil((maxx-gx0)/cell));
+ var r0=Math.max(0,Math.floor((gyTop-maxy)/cell)),r1=Math.min(NY-1,Math.ceil((gyTop-miny)/cell));
+ var dx=bx-ax,dy=by-ay,L2=dx*dx+dy*dy||1;
+ for(var r=r0;r<=r1;r++){var y=gyTop-r*cell;for(var c=c0;c<=c1;c++){var x=gx0+c*cell,t=clamp(((x-ax)*dx+(y-ay)*dy)/L2,0,1),px=ax+t*dx-x,py=ay+t*dy-y;if(px*px+py*py<=rad*rad)mask[r*NX+c]=1}}
+}
+function buildMasks(){
+ WET=new Uint8Array(NX*NY);CAN=new Uint8Array(NX*NY);
+ FEAT.forEach(function(F){var g=grpPar(F.grp),isR=F.grp!=='K',rad=Math.max(g.w/2,cell*0.9),mask=isR?WET:CAN,rr=isR?rad:cell*0.75;
+  for(var k=1;k<F.st.length;k++){var a=F.st[k-1],b=F.st[k];if(!inGridBox(a.x,a.y,200)&&!inGridBox(b.x,b.y,200))continue;stampSeg(mask,a.x,a.y,b.x,b.y,rr)}});
+ if(P.useBridges)BRIDGES.forEach(function(b){var rad=Math.max(26,cell*1.6),c0=Math.floor((b.x-rad-gx0)/cell),c1=Math.ceil((b.x+rad-gx0)/cell),r0=Math.floor((gyTop-b.y-rad)/cell),r1=Math.ceil((gyTop-b.y+rad)/cell);
+  for(var r=Math.max(0,r0);r<=Math.min(NY-1,r1);r++)for(var c=Math.max(0,c0);c<=Math.min(NX-1,c1);c++){var x=gx0+c*cell,y=gyTop-r*cell;if(Math.hypot(x-b.x,y-b.y)<=rad){WET[r*NX+c]=0;CAN[r*NX+c]=0}}});
+}
+function nodeOf(x,y){var c=clamp(Math.round((x-gx0)/cell),0,NX-1),r=clamp(Math.round((gyTop-y)/cell),0,NY-1);return r*NX+c}
+function dijkstra(src){
+ var n=NX*NY,dist=new Float32Array(n).fill(Infinity),pred=new Int32Array(n).fill(-1),hk=[],hv=[];
+ function push(k,v){var i=hk.length;hk.push(k);hv.push(v);while(i>0){var p=(i-1)>>1;if(hk[p]<=k)break;hk[i]=hk[p];hv[i]=hv[p];i=p}hk[i]=k;hv[i]=v}
+ function pop(){var k0=hk[0],v0=hv[0],k=hk.pop(),v=hv.pop(),n2=hk.length;if(n2>0){var i=0;while(true){var l=2*i+1;if(l>=n2)break;var r=l+1,m=(r<n2&&hk[r]<hk[l])?r:l;if(hk[m]>=k)break;hk[i]=hk[m];hv[i]=hv[m];i=m}hk[i]=k;hv[i]=v}return [k0,v0]}
+ var dc=[-1,1,0,0,-1,1,-1,1],dr=[0,0,-1,1,-1,-1,1,1],dl=[1,1,1,1,1.4142,1.4142,1.4142,1.4142];
+ dist[src]=0;push(0,src);
+ while(hk.length){var t=pop(),d=t[0],a=t[1];if(d>dist[a])continue;var ar=(a/NX)|0,ac=a-ar*NX;
+  for(var q=0;q<8;q++){var bc=ac+dc[q],br=ar+dr[q];if(bc<0||br<0||bc>=NX||br>=NY)continue;var b=br*NX+bc,len=dl[q]*cell,s=(SL[a]+SL[b])*0.5,cst=len*(1+(s/0.12)*(s/0.12));
+   if(WET[a]|WET[b])cst+=len*P.crossK; if(CAN[b]&&!CAN[a])cst+=P.canalK;
+   var nd=d+cst;if(nd<dist[b]){dist[b]=nd;pred[b]=a;push(nd,b)}}}
+ return {dist:dist,pred:pred};
+}
+function computeFields(){
+ NODES=VIL.map(function(v){var p=ll2xy(v.lat,v.lon);return {x:p[0],y:p[1],node:nodeOf(p[0],p[1]),inside:inGridBox(p[0],p[1],0)}});
+ FIELDS=NODES.map(function(nd){WET[nd.node]=0;CAN[nd.node]=0;return dijkstra(nd.node)});
+ PAIRS=[];for(var i=0;i<VIL.length;i++)for(var j=i+1;j<VIL.length;j++)PAIRS.push({i:i,j:j,c0:FIELDS[i].dist[NODES[j].node]});
+}
+function minutes(c){return c/(P.speed*1000/60)}
+function scoreCandidates(){
+ CAND=[];var raw=[];
+ var sumW=0;PAIRS.forEach(function(p){sumW+=VIL[p.i].pop*VIL[p.j].pop});
+ ['porma','curueno'].forEach(function(id){
+  var F=FEAT.filter(function(f){return f.id===id})[0],w=widthOf(F),off=w/2+cell*1.6;
+  for(var k=2;k<F.st.length-2;k+=3){var p=F.st[k];if(!inGridBox(p.x,p.y,-cell*3))continue;
+   var nxv=-p.ty,nyv=p.tx,ax=p.x+nxv*off,ay=p.y+nyv*off,bx=p.x-nxv*off,by=p.y-nyv*off;
+   if(!inGridBox(ax,ay,-cell*2)||!inGridBox(bx,by,-cell*2))continue;
+   var A=nodeOf(ax,ay),B=nodeOf(bx,by);if(WET[A]||WET[B])continue;
+   var span=w+4,tot=0,best=null,bestG=-1;
+   PAIRS.forEach(function(pr){var di=FIELDS[pr.i].dist,dj=FIELDS[pr.j].dist,v1=di[A]+span+dj[B],v2=di[B]+span+dj[A],nv=Math.min(pr.c0,v1,v2),g=pr.c0-nv;
+    if(g>0){tot+=VIL[pr.i].pop*VIL[pr.j].pop*g}if(g>bestG){bestG=g;best=pr}});
+   var G=sumW?minutes(tot/sumW):0,score=G-P.lambda*(span/100);
+   raw.push({fid:id,k:k,x:p.x,y:p.y,nx:nxv,ny:nyv,A:A,B:B,span:span,w:w,h:p.h,sig:p.sig,G:G,score:score,best:best,bestG:bestG>0?minutes(bestG):0});
+  }});
+ raw.sort(function(a,b){return b.score-a.score});
+ raw.forEach(function(c){if(CAND.length>=P.nCand||c.G<=0.005)return;if(CAND.every(function(o){return Math.hypot(o.x-c.x,o.y-c.y)>300}))CAND.push(c)});
+ CAND.forEach(function(c,i){c.id='P'+(i+1)});
+}
+function tracePath(fi,node){var pred=FIELDS[fi].pred,path=[],a=node,g=0;while(a>=0&&g++<40000){var r=(a/NX)|0,c=a-r*NX;path.push([gx0+c*cell,gyTop-r*cell]);a=pred[a]}return path}
+function buildNetwork(){
+ var act=[];if(P.netSel==='P1')act=CAND.slice(0,1);else if(P.netSel==='P12')act=CAND.slice(0,2);else if(P.netSel==='P123')act=CAND.slice(0,3);
+ var nV=VIL.length,edges=[];
+ PAIRS.forEach(function(pr){var best={c:pr.c0,via:null};
+  act.forEach(function(c){var di=FIELDS[pr.i].dist,dj=FIELDS[pr.j].dist,v1=di[c.A]+c.span+dj[c.B],v2=di[c.B]+c.span+dj[c.A];if(v1<best.c)best={c:v1,via:c,dir:1};if(v2<best.c)best={c:v2,via:c,dir:2}});
+  edges.push({i:pr.i,j:pr.j,c:best.c,via:best.via,dir:best.dir,c0:pr.c0});pr.cNet=best.c;pr.via=best.via});
+ edges.sort(function(a,b){return a.c-b.c});
+ var par=[];for(var i=0;i<nV;i++)par[i]=i;function fd(x){while(par[x]!==x){par[x]=par[par[x]];x=par[x]}return x}
+ NET=[];
+ edges.forEach(function(e){var a=fd(e.i),b=fd(e.j);if(a===b)return;par[a]=b;
+  var path;
+  if(!e.via)path=tracePath(e.i,NODES[e.j].node).reverse();
+  else{var c=e.via,Ai=e.dir===1?c.A:c.B,Bj=e.dir===1?c.B:c.A;path=tracePath(e.i,Ai).reverse().concat(tracePath(e.j,Bj))}
+  NET.push({i:e.i,j:e.j,c:e.c,via:e.via,path:path,c0:e.c0})});
+}
+
+/* ====================== RENDER ====================== */
+var svg=$('sheet');
+var DEFS='';
+function g(attrs,inner){return '<g '+attrs+'>'+inner+'</g>'}
+function pathFrom(pts,close){var s='';pts.forEach(function(p,i){s+=(i?'L':'M')+f2(p[0])+' '+f2(p[1])});return s+(close?'Z':'')}
+function drawFrame(){
+ var h='<rect x="0" y="0" width="841" height="575" fill="var(--sheet)"/><rect x="8" y="8" width="825" height="559" fill="none" stroke="var(--ink)" stroke-width="0.7"/>';
+ if(LAY.reticula){var step=500,t='';var x0=Math.ceil(gx0/step)*step,y0=Math.ceil((gyTop-(NY-1)*cell)/step)*step;
+  for(var x=x0;x<gx0+(NX-1)*cell;x+=step){var X=mm(x,0)[0];if(X<10||X>831)continue;t+='<path d="M'+f2(X)+' 8v3M'+f2(X)+' 564v3" stroke="var(--ink)" stroke-width="0.35"/><text x="'+f2(X)+'" y="15" font-size="2.6" text-anchor="middle" fill="var(--ink3)">'+(x>=0?'+':'−')+Math.abs(x)+'</text>'}
+  for(var y=y0;y<gyTop;y+=step){var Y=mm(0,y)[1];if(Y<10||Y>565)continue;t+='<path d="M8 '+f2(Y)+'h3M830 '+f2(Y)+'h3" stroke="var(--ink)" stroke-width="0.35"/><text x="13" y="'+f2(Y+0.9)+'" font-size="2.6" fill="var(--ink3)">'+(y>=0?'+':'−')+Math.abs(y)+'</text>'}
+  for(var xx=x0;xx<gx0+(NX-1)*cell;xx+=step)for(var yy=y0;yy<gyTop;yy+=step){var q=mm(xx,yy);if(q[0]<14||q[0]>827||q[1]<18||q[1]>561)continue;t+='<path d="M'+f2(q[0]-2)+' '+f2(q[1])+'h4M'+f2(q[0])+' '+f2(q[1]-2)+'v4" stroke="var(--ink3)" stroke-width="0.25"/>'}
+  h+=t}
+ return h;
+}
+var CONT=null;
+function drawTopo(){
+ if(!LAY.topo)return '';
+ var iv=+P.interval,zmin=buildTerrain.zmin,zmax=buildTerrain.zmax,levels=[];
+ for(var z=Math.ceil(zmin/iv)*iv;z<zmax;z+=iv)levels.push(z);
+ if(!levels.length)return '';
+ var cs=d3.contours().size([NX,NY]).thresholds(levels)(Z),
+  tr=d3.geoTransform({point:function(px,py){this.stream.point((px-0.5)*CM,(py-0.5)*CM)}}),pg=d3.geoPath(tr),
+  every=+P.indexEvery,minor='',major='',labs='';
+ cs.forEach(function(c){var idx=Math.round(c.value/iv),isMaj=idx%every===0,d=pg(c);if(!d)return;
+  if(isMaj){major+='<path d="'+d+'"/>';
+   var rings=[];c.coordinates.forEach(function(poly){poly.forEach(function(ring){var L=0;for(var i=1;i<ring.length;i++)L+=Math.hypot(ring[i][0]-ring[i-1][0],ring[i][1]-ring[i-1][1])*CM;rings.push({ring:ring,L:L})})});
+   rings.sort(function(a,b){return b.L-a.L});
+   rings.slice(0,2).forEach(function(r){if(r.L<110)return;var n=r.ring.length,i=Math.floor(n*0.4),a=r.ring[Math.max(0,i-3)],b=r.ring[Math.min(n-1,i+3)],ang=Math.atan2((b[1]-a[1]),(b[0]-a[0]))*180/Math.PI;if(ang>90)ang-=180;if(ang<-90)ang+=180;
+    var X=(r.ring[i][0]-0.5)*CM,Y=(r.ring[i][1]-0.5)*CM;if(X<16||X>825||Y<16||Y>559)return;
+    labs+='<text transform="translate('+f2(X)+' '+f2(Y)+') rotate('+f2(ang)+')" text-anchor="middle" dy="0.9" class="halo" font-size="2.7" fill="var(--topo)">'+Math.round(c.value)+'</text>'}) }
+  else minor+='<path d="'+d+'"/>';
+ });
+ return g('fill="none" stroke="var(--topo)" stroke-linejoin="round"','<g stroke-width="0.22" opacity="0.8">'+minor+'</g><g stroke-width="0.5">'+major+'</g>')+g('','<g>'+labs+'</g>');
+}
+function offsetPts(F,side,w,step){var out=[];for(var k=0;k<F.st.length;k+=step){var p=F.st[k],m=mm(p.x+(-p.ty)*side*w/2,p.y+(p.tx)*side*w/2);out.push(m)}var l=F.st[F.st.length-1],m2=mm(l.x+(-l.ty)*side*w/2,l.y+(l.tx)*side*w/2);out.push(m2);return out}
+function visibleRun(F){ /* tramo de la línea dentro de la lámina para colocar el nombre */
+ var run=[],best=[];F.st.forEach(function(p,k){var m=mm(p.x,p.y);if(m[0]>20&&m[0]<821&&m[1]>20&&m[1]<555)run.push(m);else{if(run.length>best.length)best=run;run=[]}});if(run.length>best.length)best=run;return best}
+function drawWater(){
+ if(!LAY.agua)return '';
+ var banks='',ticks='',lab='',arrows='',names='',defsN='';
+ var wmm=function(F){return widthOf(F)*1000/P.scale};
+ FEAT.forEach(function(F,fi){
+  var w=widthOf(F),W=w*1000/P.scale,isR=F.grp!=='K';
+  if(W>1.6){banks+='<path d="'+pathFrom(offsetPts(F,1,w,2))+'"/><path d="'+pathFrom(offsetPts(F,-1,w,2))+'"/>'}
+  else banks+='<path d="'+pathFrom(F.st.filter(function(_,k){return k%2===0}).map(function(p){return mm(p.x,p.y)}))+'" stroke-width="'+(isR?0.5:0.4)+'"'+(isR?'':' stroke-dasharray="2.2 0.8"')+'/>';
+  /* flechas de corriente */
+  var sp=isR?450:700;for(var s=sp/2;s<F.st[F.st.length-1].s;s+=sp){var k=Math.round(s/20),p=F.st[k],m=mm(p.x,p.y);if(m[0]<14||m[0]>827||m[1]<14||m[1]>561)continue;var ang=Math.atan2(-p.ty,p.tx)*180/Math.PI;arrows+='<path transform="translate('+f2(m[0])+' '+f2(m[1])+') rotate('+f2(ang)+')" d="M-1.6 -1.1L1.2 0L-1.6 1.1Z"/>'}
+  /* marcas de profundidad */
+  var every=Math.max(1,Math.round((isR?P.tickSp:P.tickSp*2)/20)),lcount=0;
+  for(var k2=0;k2<F.st.length;k2+=every){var q=F.st[k2],m0=mm(q.x,q.y);if(m0[0]<14||m0[0]>827||m0[1]<14||m0[1]>561)continue;
+   var nx2=-q.ty*P.side,ny2=q.tx*P.side,base=mm(q.x+nx2*w/2,q.y+ny2*w/2),dxm=nx2,dym=-ny2,L=q.h*P.exag*(isR?1:1),e=[base[0]+dxm*L,base[1]+dym*L];
+   ticks+='<path d="M'+f2(base[0])+' '+f2(base[1])+'L'+f2(e[0])+' '+f2(e[1])+'"/>';
+   ticks+='<circle cx="'+f2(e[0])+'" cy="'+f2(e[1])+'" r="0.55" class="dot"/>';
+   if(P.unc){var a1=q.h*(1-q.sig)*P.exag,a2=q.h*(1+q.sig)*P.exag;ticks+='<path class="unc" d="M'+f2(base[0]+dxm*a1)+' '+f2(base[1]+dym*a1)+'L'+f2(base[0]+dxm*a2)+' '+f2(base[1]+dym*a2)+'"/>'}
+   if(isR&&((k2/every)%3===1)){lab+='<text x="'+f2(e[0]+dxm*3)+'" y="'+f2(e[1]+dym*3+0.9)+'" text-anchor="middle" class="halo" font-size="2.5" fill="var(--water)">'+fmt(q.h,2)+'</text>'}
+  }
+  /* envolvente */
+  var env=[];for(var k3=0;k3<F.st.length;k3+=every){var r=F.st[k3],mm0=mm(r.x,r.y);if(mm0[0]<-20||mm0[0]>861||mm0[1]<-20||mm0[1]>595){if(env.length>1)ticks+='<path class="env" d="'+pathFrom(env)+'"/>';env=[];continue}
+   var nx3=-r.ty*P.side,ny3=r.tx*P.side,b3=mm(r.x+nx3*w/2,r.y+ny3*w/2);env.push([b3[0]+nx3*r.h*P.exag,b3[1]-ny3*r.h*P.exag])}
+  if(env.length>1)ticks+='<path class="env" d="'+pathFrom(env)+'"/>';
+  /* nombre */
+  if(isR){var run=visibleRun(F);if(run.length>8){var sub=run.filter(function(_,k){return k%2===0});var id='pn'+fi;defsN+='<path id="'+id+'" d="'+pathFrom(sub)+'"/>';names+='<text class="halo" font-size="4" font-style="italic" fill="var(--water)" letter-spacing="1.2"><textPath href="#'+id+'" startOffset="38%">'+esc(F.name.toUpperCase())+'</textPath></text>'}}
+  else if(F.name==='Canal de Arriola'){var run2=visibleRun(F);if(run2.length>6){var id2='pn'+fi;defsN+='<path id="'+id2+'" d="'+pathFrom(run2.filter(function(_,k){return k%2===0}))+'"/>';names+='<text class="halo" font-size="2.9" font-style="italic" fill="var(--water)" letter-spacing="0.5"><textPath href="#'+id2+'" startOffset="30%">Canal de Arriola</textPath></text>'}}
+ });
+ var weirs='';WEIRS.forEach(function(w){var m=mm(w[0],w[1]);if(m[0]<14||m[0]>827||m[1]<14||m[1]>561)return;weirs+='<path d="M'+f2(m[0]-2.2)+' '+f2(m[1])+'h4.4M'+f2(m[0]-2.2)+' '+f2(m[1]-0.9)+'h4.4" stroke="var(--water)" stroke-width="0.5"/>'});
+ return '<defs>'+defsN+'</defs>'+g('fill="none" stroke="var(--water)" stroke-linejoin="round" stroke-linecap="round"','<g stroke-width="0.45">'+banks+'</g>')+
+  g('fill="var(--water)" stroke="none" opacity="0.8"',arrows)+g('class="ticks" fill="none" stroke="var(--water)"',ticks)+weirs+g('',lab+names);
+}
+function drawBridges(){
+ if(!LAY.puentes)return '';var h='';
+ BRIDGES.forEach(function(b){var m=mm(b.x,b.y);if(m[0]<14||m[0]>827||m[1]<14||m[1]>561)return;
+  h+='<g transform="translate('+f2(m[0])+' '+f2(m[1])+')"><rect x="-3" y="-1.1" width="6" height="2.2" fill="var(--sheet)" stroke="var(--ink)" stroke-width="0.4"/><path d="M-3 0h6" stroke="var(--ink)" stroke-width="0.3"/></g>'});
+ return h;
+}
+function drawBuild(){
+ if(!LAY.edif||!BUILD.length)return '';var d='';
+ BUILD.forEach(function(r){var pts=r.map(function(p){return mm(p[0],p[1])});d+=pathFrom(pts,true)});
+ return '<path d="'+d+'" fill="none" stroke="var(--ink)" stroke-width="0.25"/>';
+}
+function drawSounds(){
+ if(!LAY.agua)return '';var h='';
+ SOUND.forEach(function(q,i){var m=mm(q.x,q.y);if(m[0]<14||m[0]>827||m[1]<14||m[1]>561)return;
+  h+='<g transform="translate('+f2(m[0])+' '+f2(m[1])+')"><circle r="1.5" fill="var(--sheet)" stroke="var(--water)" stroke-width="0.6"/><path d="M-1.5 0h3M0 -1.5v3" stroke="var(--water)" stroke-width="0.4"/><text x="2.4" y="-1.8" class="halo" font-size="2.6" fill="var(--water)">M'+(i+1)+' · '+fmt(q.h,2)+' m</text></g>'});
+ return h;
+}
+function drawSelect(){
+ if(!SEL)return '';var F=FEAT.filter(function(f){return f.id===SEL.fid})[0];if(!F)return '';var p=F.st[SEL.idx],w=widthOf(F),e=w/2+45;
+ var a=mm(p.x-p.ty*e,p.y+p.tx*e),b=mm(p.x+p.ty*e,p.y-p.tx*e);
+ return '<path d="M'+f2(a[0])+' '+f2(a[1])+'L'+f2(b[0])+' '+f2(b[1])+'" stroke="var(--ink)" stroke-width="0.5" stroke-dasharray="3 1.2 0.6 1.2"/><text x="'+f2(a[0])+'" y="'+f2(a[1]-1.5)+'" class="halo" font-size="3.4" font-weight="600" fill="var(--ink)">S1</text>';
+}
+function drawPop(){
+ if(!LAY.pob)return '';var h='';
+ VIL.forEach(function(v,i){var p=ll2xy(v.lat,v.lon),m=mm(p[0],p[1]);if(m[0]<-30||m[0]>870||m[1]<-30||m[1]>605)return;
+  var N=Math.max(1,Math.round(v.pop/P.dotVal)),c=2.1,R=c*Math.sqrt(N)+1.9,inner='';
+  if(P.catchOn){var rr=P.catchMin*(P.speed*1000/60)*1000/P.scale;h+='<circle cx="'+f2(m[0])+'" cy="'+f2(m[1])+'" r="'+f2(rr)+'" fill="none" stroke="var(--people)" stroke-width="0.3" stroke-dasharray="1.6 1.2" opacity="0.7"/><text x="'+f2(m[0]+rr*0.707)+'" y="'+f2(m[1]-rr*0.707)+'" font-size="2.6" class="halo" fill="var(--people)">'+P.catchMin+' min</text>'}
+  var RR=R;
+  if(P.symStyle==='circle'){RR=1.45*Math.sqrt(v.pop);inner='<circle r="'+f2(RR)+'" fill="none" stroke="var(--people)" stroke-width="0.6"/><path d="M-1.2 0h2.4M0 -1.2v2.4" stroke="var(--people)" stroke-width="0.4"/>'}
+  else{if(P.symStyle==='both')inner+='<circle r="'+f2(R)+'" fill="color-mix(in srgb,var(--sheet) 70%,transparent)" stroke="var(--people)" stroke-width="0.6"/>';
+   for(var k=0;k<N;k++){var r=c*Math.sqrt(k+0.5),th=k*2.399963;inner+='<circle cx="'+f2(r*Math.cos(th))+'" cy="'+f2(r*Math.sin(th))+'" r="0.78" fill="var(--people)"/>'}}
+  h+='<g transform="translate('+f2(m[0])+' '+f2(m[1])+')">'+inner+'<text y="'+f2(RR+5)+'" text-anchor="middle" class="halo" font-size="4.3" font-weight="600" letter-spacing="0.4" fill="var(--ink)">'+esc(v.short.toUpperCase())+'</text><text y="'+f2(RR+9)+'" text-anchor="middle" class="halo" font-size="3.2" fill="var(--people)">'+v.pop+' hab.</text></g>';
+ });
+ return h;
+}
+function drawNet(){
+ if(!LAY.red)return '';var h='';
+ NET.forEach(function(e){var pts=[],pp=e.path;for(var k=0;k<pp.length;k+=2){var m=mm(pp[k][0],pp[k][1]);pts.push(m)}var l=mm(pp[pp.length-1][0],pp[pp.length-1][1]);pts.push(l);
+  h+='<path d="'+pathFrom(pts)+'" fill="none" stroke="var(--people)" stroke-width="'+(e.via?1.1:0.75)+'" stroke-linejoin="round" stroke-linecap="round"'+(e.via?'':' stroke-dasharray="3.2 1.4"')+'/>';
+  var mid=pts[Math.floor(pts.length/2)];if(mid&&mid[0]>14&&mid[0]<827&&mid[1]>14&&mid[1]<561)h+='<text x="'+f2(mid[0])+'" y="'+f2(mid[1]-1.8)+'" class="halo" font-size="2.9" fill="var(--people)">'+fmt(minutes(e.c),1)+' min</text>'});
+ CAND.forEach(function(c){var m=mm(c.x,c.y);if(m[0]<14||m[0]>827||m[1]<14||m[1]>561)return;var hw=(c.w/2+3)*1000/P.scale;var dx=c.nx*hw,dy=-c.ny*hw;
+  h+='<g><path d="M'+f2(m[0]-dx)+' '+f2(m[1]-dy)+'L'+f2(m[0]+dx)+' '+f2(m[1]+dy)+'" stroke="var(--people)" stroke-width="1.6" stroke-linecap="butt"/><path d="M'+f2(m[0]-dx)+' '+f2(m[1]-dy)+'L'+f2(m[0]+dx)+' '+f2(m[1]+dy)+'" stroke="var(--sheet)" stroke-width="0.5"/>'+
+  '<circle cx="'+f2(m[0]+4.8)+'" cy="'+f2(m[1]-4.8)+'" r="3.1" fill="var(--sheet)" stroke="var(--people)" stroke-width="0.7"/><text x="'+f2(m[0]+4.8)+'" y="'+f2(m[1]-3.7)+'" text-anchor="middle" font-size="3.4" font-weight="600" fill="var(--people)">'+c.id+'</text>'+
+  '<text x="'+f2(m[0]+9)+'" y="'+f2(m[1]-5.5)+'" class="halo" font-size="2.9" fill="var(--people)">luz '+fmt(c.span,0)+' m · h '+fmt(c.h,2)+' m</text><text x="'+f2(m[0]+9)+'" y="'+f2(m[1]-2.3)+'" class="halo" font-size="2.9" fill="var(--people)">−'+fmt(c.G,1)+' min de media</text></g>'});
+ return h;
+}
+function drawCart(){
+ var bar=500*1000/P.scale,h='';
+ h+='<g transform="translate(24 548)"><path d="M0 0h'+f2(bar)+'" stroke="var(--ink)" stroke-width="0.6"/><path d="M0 -1.4v2.8M'+f2(bar/2)+' -1v2M'+f2(bar)+' -1.4v2.8" stroke="var(--ink)" stroke-width="0.5"/><text x="0" y="-3" font-size="3" fill="var(--ink)">0</text><text x="'+f2(bar/2)+'" y="-3" font-size="3" text-anchor="middle" fill="var(--ink)">250</text><text x="'+f2(bar)+'" y="-3" font-size="3" text-anchor="middle" fill="var(--ink)">500 m</text></g>';
+ h+='<g transform="translate(24 520)"><path d="M0 8L3.2 -6L6.4 8L3.2 5Z" fill="var(--ink)"/><text x="3.2" y="-8" font-size="4" text-anchor="middle" font-weight="600" fill="var(--ink)">N</text></g>';
+ var demTxt=DEM?'Terreno: MDT05-cob1 2008-2015 CC-BY 4.0 scne.es':'Terreno: modelo supuesto, sin MDT cargado';
+ h+='<g transform="translate(640 520)"><rect x="0" y="0" width="186" height="42" fill="var(--sheet)" stroke="var(--ink)" stroke-width="0.5"/><path d="M0 12h186" stroke="var(--ink)" stroke-width="0.3"/>'+
+  '<text x="3" y="8.6" font-size="5" font-weight="600" letter-spacing="0.5" fill="var(--ink)">PROYECTO DE LUGAR · PASARELA</text>'+
+  '<text x="3" y="17" font-size="3" fill="var(--ink)">Topografía · profundidad del agua · población</text>'+
+  '<text x="3" y="22" font-size="3" fill="var(--ink)">Escala 1:'+P.scale+' · lámina A1 · Jesús Ortiz Muñoz · Ideación Gráfica D4</text>'+
+  '<text x="3" y="28" font-size="2.6" fill="var(--ink2)">Cauces, puentes y azudes: © OpenStreetMap (ODbL). Población: dato aportado.</text>'+
+  '<text x="3" y="32.5" font-size="2.6" fill="var(--ink2)">'+esc(demTxt)+'. Profundidad: estimación (Manning).</text>'+
+  '<text x="3" y="38" font-size="2.6" fill="var(--ink2)">Equidistancia '+P.interval+' m · exageración de la profundidad '+P.exag+' mm por m</text></g>';
+ return h;
+}
+var VB={x:0,y:0,w:841,h:575};
+function setVB(){svg.setAttribute('viewBox',VB.x+' '+VB.y+' '+VB.w+' '+VB.h)}
+function renderMap(){
+ var style='<style>.halo{paint-order:stroke;stroke:var(--sheet);stroke-width:0.9;stroke-linejoin:round}.ticks path{stroke-width:0.35}.ticks .dot{fill:var(--water);stroke:none}.ticks .env{stroke-width:0.45}.ticks .unc{stroke-width:1.3;opacity:0.28}</style>';
+ var clip='<defs><clipPath id="cl"><rect x="8" y="8" width="825" height="559"/></clipPath></defs>';
+ svg.innerHTML=style+clip+drawFrame()+g('clip-path="url(#cl)"',drawTopo()+drawBuild()+drawWater()+drawBridges()+drawNet()+drawSounds()+drawSelect()+drawPop())+drawCart();
+}
+
+/* ====================== LECTURAS ====================== */
+function selFeature(){return SEL?FEAT.filter(function(f){return f.id===SEL.fid})[0]:null}
+function renderSection(){
+ var box=$('secBox'),F=selFeature();
+ if(!F){box.innerHTML='<p>Pulsa sobre un cauce del plano para fijar la sección S1.</p>';return}
+ var p=F.st[SEL.idx],w=widthOf(F),half=Math.max(70,w*2.4),pts=[],zs=[];
+ for(var u=-half;u<=half;u+=2){var z=zAt(p.x+(-p.ty)*u,p.y+p.tx*u);pts.push([u,z]);zs.push(z)}
+ var chan=pts.filter(function(q){return Math.abs(q[0])<=w/2}).map(function(q){return q[1]}),level=Math.min.apply(null,chan);
+ var zmin=Math.min(level-p.h-0.5,Math.min.apply(null,zs)),zmax=Math.max(Math.max.apply(null,zs),level+1),VE=5;
+ var W=360,H=172,mx=34,my=14,sx=(W-mx-10)/(2*half),sy=Math.min((H-my-26)/((zmax-zmin)*VE),sx*0+99);
+ var X=function(u){return mx+(u+half)*sx},Y=function(z){return H-26-(z-zmin)*VE*((H-my-26)/((zmax-zmin)*VE))};
+ var terr='M'+pts.map(function(q){return f2(X(q[0]))+' '+f2(Y(q[1]))}).join('L');
+ var bed=[];for(var u2=-w/2;u2<=w/2;u2+=1){bed.push([u2,level-p.h*(1-Math.pow(2*u2/w,2))])}
+ var water='M'+f2(X(-w/2))+' '+f2(Y(level))+'L'+bed.map(function(q){return f2(X(q[0]))+' '+f2(Y(q[1]))}).join('L')+'L'+f2(X(w/2))+' '+f2(Y(level))+'Z';
+ box.innerHTML='<svg class="mini" viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Sección transversal del cauce">'+
+  '<path d="'+terr+'" fill="none" stroke="var(--topo)" stroke-width="1.4"/><path d="'+water+'" fill="color-mix(in srgb,var(--water) 28%,transparent)" stroke="var(--water)" stroke-width="1.2"/>'+
+  '<path d="M'+f2(X(-half))+' '+f2(Y(level))+'H'+f2(X(half))+'" stroke="var(--water)" stroke-width="0.6" stroke-dasharray="3 3"/>'+
+  '<path d="M'+f2(X(0))+' '+f2(Y(level))+'V'+f2(Y(level-p.h))+'" stroke="var(--ink)" stroke-width="0.8"/>'+
+  '<text x="'+f2(X(0)+5)+'" y="'+f2(Y(level-p.h/2)+3)+'" style="fill:var(--ink)">h = '+fmt(p.h,2)+' m</text>'+
+  '<text x="'+mx+'" y="'+(H-8)+'">'+fmt(-half,0)+' m</text><text x="'+f2(W-10)+'" y="'+(H-8)+'" text-anchor="end">+'+fmt(half,0)+' m</text><text x="'+f2(W/2)+'" y="'+(H-8)+'" text-anchor="middle">distancia al eje · alturas ×5</text>'+
+  '<text x="4" y="'+f2(Y(zmax)+8)+'">'+fmt(zmax,0)+'</text><text x="4" y="'+f2(Y(zmin)+2)+'">'+fmt(zmin,0)+'</text></svg>'+
+  '<p><b>'+esc(F.name)+'</b> · punto '+fmt(p.s,0)+' m desde el origen del tramo · cota del agua '+fmt(level,1)+' m</p>'+
+  '<p>Pendiente del cauce '+fmt(p.S*1000,1)+' ‰ · profundidad '+fmt(p.h,2)+' m ± '+fmt(p.sig*100,0)+' %</p>';
+}
+function renderProfile(){
+ var box=$('profBox'),F=selFeature()||FEAT[0],W=360,H=172,mx=34,my=12,s1=F.st[F.st.length-1].s;
+ var st=F.st,hmax=Math.max.apply(null,st.map(function(p){return p.h*(1+p.sig)}))*1.08;
+ var X=function(s){return mx+s/s1*(W-mx-8)},Y=function(h){return H-24-h/hmax*(H-24-my)};
+ var up=st.map(function(p){return f2(X(p.s))+' '+f2(Y(p.h*(1+p.sig)))}),dn=st.slice().reverse().map(function(p){return f2(X(p.s))+' '+f2(Y(p.h*(1-p.sig)))}),ln=st.map(function(p){return f2(X(p.s))+' '+f2(Y(p.h))});
+ var sd=SOUND.filter(function(q){return q.fid===F.id}).map(function(q){return '<circle cx="'+f2(X(q.s))+'" cy="'+f2(Y(q.h))+'" r="3.2" fill="var(--sheet)" stroke="var(--water)" stroke-width="1.4"/>'}).join('');
+ var mk=(SEL&&SEL.fid===F.id)?'<path d="M'+f2(X(st[SEL.idx].s))+' '+my+'V'+(H-24)+'" stroke="var(--ink)" stroke-width="0.8" stroke-dasharray="3 2"/><text x="'+f2(X(st[SEL.idx].s)+3)+'" y="'+(my+8)+'" style="fill:var(--ink)">S1</text>':'';
+ var mean=st.reduce(function(a,p){return a+p.sig},0)/st.length;
+ var opts=FEAT.filter(function(f){return f.grp!=='K'||f.id==='k0'||f.id==='k1'}).map(function(f){return '<option value="'+f.id+'"'+(f.id===F.id?' selected':'')+'>'+esc(f.name)+(f.grp==='K'?' ('+f.id+')':'')+'</option>'}).join('');
+ box.innerHTML='<div class="row inline" style="margin-bottom:6px"><label for="profSel">Cauce</label><select id="profSel">'+opts+'</select></div>'+
+ '<svg class="mini" viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Profundidad a lo largo del cauce"><path d="M'+up.join('L')+'L'+dn.join('L')+'Z" fill="color-mix(in srgb,var(--water) 20%,transparent)" stroke="none"/>'+
+ '<path d="M'+ln.join('L')+'" fill="none" stroke="var(--water)" stroke-width="1.5"/>'+sd+mk+
+ '<path d="M'+mx+' '+(H-24)+'H'+(W-8)+'M'+mx+' '+my+'V'+(H-24)+'" stroke="var(--ink3)" stroke-width="0.6" fill="none"/>'+
+ '<text x="4" y="'+f2(Y(hmax)+9)+'">'+fmt(hmax,1)+' m</text><text x="4" y="'+(H-22)+'">0</text><text x="'+mx+'" y="'+(H-8)+'">aguas arriba</text><text x="'+(W-8)+'" y="'+(H-8)+'" text-anchor="end">aguas abajo · '+fmt(s1/1000,1)+' km</text></svg>'+
+ '<p>Banda: ± incertidumbre. Media del tramo ± '+fmt(mean*100,0)+' %. Sondeos en este cauce: '+SOUND.filter(function(q){return q.fid===F.id}).length+'.</p>';
+ var sel=$('profSel');if(sel)sel.onchange=function(){SEL={fid:sel.value,idx:Math.min(SEL&&SEL.fid===sel.value?SEL.idx:Math.floor(FEAT.filter(function(f){return f.id===sel.value})[0].st.length/2),FEAT.filter(function(f){return f.id===sel.value})[0].st.length-1)};renderSection();renderProfile();renderMap()};
+}
+function renderCand(){
+ var h='<table><thead><tr><th>Id</th><th>Cauce</th><th class="n">Luz (m)</th><th class="n">Prof. (m)</th><th class="n">Ahorro medio (min)</th><th>Mayor mejora</th><th class="n">Puntuación</th></tr></thead><tbody>';
+ if(!CAND.length)h+='<tr><td colspan="7">Con estos parámetros ninguna pasarela mejora los recorridos. Prueba a subir el coste de vadear el río o a quitar los puentes existentes.</td></tr>';
+ CAND.forEach(function(c,i){var fn=FEAT.filter(function(f){return f.id===c.fid})[0].name;h+='<tr'+(i===0?' class="best"':'')+'><td>'+c.id+'</td><td>'+esc(fn)+'</td><td class="n">'+fmt(c.span,0)+'</td><td class="n">'+fmt(c.h,2)+' ± '+fmt(c.sig*100,0)+' %</td><td class="n">'+fmt(c.G,2)+'</td><td>'+(c.best?esc(VIL[c.best.i].short)+' ↔ '+esc(VIL[c.best.j].short)+' ('+fmt(c.bestG,1)+' min)':'')+'</td><td class="n">'+fmt(c.score,2)+'</td></tr>'});
+ $('candBox').innerHTML=h+'</tbody></table><p class="note">El ahorro medio pondera cada pareja de pueblos por el producto de sus habitantes. Cada candidata se prueba en todos los puntos de los dos ríos, cada 60 m.</p>';
+}
+function renderPairs(){
+ var h='<table><thead><tr><th>Pareja</th><th class="n">Hoy (min)</th><th class="n">Con red elegida (min)</th><th class="n">Diferencia</th></tr></thead><tbody>';
+ PAIRS.forEach(function(p){var a=minutes(p.c0),b=minutes(p.cNet==null?p.c0:p.cNet);h+='<tr><td>'+esc(VIL[p.i].short)+' ↔ '+esc(VIL[p.j].short)+'</td><td class="n">'+fmt(a,1)+'</td><td class="n">'+fmt(b,1)+'</td><td class="n">'+(a-b>0.05?'−'+fmt(a-b,1):'—')+'</td></tr>'});
+ $('pairBox').innerHTML=h+'</tbody></table><p class="note">Tiempo a pie por el camino de menor coste: distancia más una penalización por pendiente (suave por debajo del 12 %). Los ríos solo se cruzan por los puentes existentes o por una pasarela.</p>';
+}
+function renderProv(){
+ var T=function(k,t){return '<span class="tag t-'+k+'">'+t+'</span>'};
+ var rows=[
+  ['Posición de los cuatro pueblos','Nodos de lugar de OpenStreetMap',T('real','real')],
+  ['Habitantes de cada pueblo','Dato aportado por el autor',T('real','real')],
+  ['Trazado de Porma, Curueño y Canal de Arriola','OpenStreetMap, simplificado a 5 m',T('real','real')],
+  ['Puentes existentes y azudes','OpenStreetMap (3 puentes, 4 azudes en la zona)',T('real','real')],
+  ['Terreno',DEM?'MDT05 del CNIG cargado por ti':'Modelo propio con pendiente norte-sur y laderas. Sustitúyelo cargando el MDT05',DEM?T('real','real'):T('sup','supuesto')],
+  ['Caudal de cada cauce','Valores de estiaje elegidos por criterio. Se sustituyen con aforos',T('sup','supuesto')],
+  ['Ancho de cada cauce','Elegido por criterio sobre el trazado',T('apr','aprox.')],
+  ['Rugosidad de Manning','0,045 ríos con cantos, 0,025 canal de hormigón o tierra',T('sup','supuesto')],
+  ['Profundidad del agua','Fórmula de Manning con caudal, ancho y pendiente del terreno, corregida por tus sondeos',T('sup','estimada')],
+  ['Incertidumbre','45 % sin sondeos, baja con cada medida cercana',T('sup','supuesto')],
+  ['Velocidad y coste de los caminos','4,5 km/h; vadear un río cuesta lo que marca el mando',T('sup','supuesto')]];
+ var h='<table><thead><tr><th>Dato</th><th>Origen</th><th>Etiqueta</th></tr></thead><tbody>';
+ rows.forEach(function(r){h+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>'});
+ $('provBox').innerHTML=h+'</tbody></table>';
+}
+function renderStatus(ms){
+ var sig=0,n=0;FEAT.filter(function(f){return f.grp!=='K'}).forEach(function(F){F.st.forEach(function(p){sig+=p.sig;n++})});
+ $('status').innerHTML='<span>Terreno <b>'+(DEM?'MDT05 cargado':'supuesto')+'</b></span><span>Sondeos <b>'+SOUND.length+'</b></span><span>Incertidumbre media <b>± '+fmt(sig/n*100,0)+' %</b></span><span>Cota '+fmt(buildTerrain.zmin,0)+'–'+fmt(buildTerrain.zmax,0)+' m</span><span>Malla '+fmt(cell,0)+' m</span>'+(ms?'<span>'+Math.round(ms)+' ms</span>':'');
+ var dn=$('demNote');dn.className='note'+(DEM?'':' warn');
+}
+function renderSoundList(){
+ var b=$('sndList');b.innerHTML=SOUND.map(function(q,i){var F=FEAT.filter(function(f){return f.id===q.fid})[0];return '<div class="snd"><span>M'+(i+1)+' · '+esc(F.name)+' · '+fmt(q.h,2)+' m</span><button data-i="'+i+'" aria-label="Quitar sondeo M'+(i+1)+'">×</button></div>'}).join('');
+ b.querySelectorAll('button').forEach(function(bt){bt.onclick=function(){SOUND.splice(+bt.getAttribute('data-i'),1);dirty.hyd=dirty.score=true;save();schedule()}});
+}
+function renderVil(){
+ var tb=$('vilTbl').querySelector('tbody');tb.innerHTML=VIL.map(function(v,i){return '<tr><td>'+esc(v.short)+'</td><td><input type="number" min="0" data-i="'+i+'" data-f="pop" value="'+v.pop+'" aria-label="Habitantes de '+esc(v.short)+'"></td><td><input type="number" step="0.0001" data-i="'+i+'" data-f="lat" value="'+v.lat+'" aria-label="Latitud de '+esc(v.short)+'"></td><td><input type="number" step="0.0001" data-i="'+i+'" data-f="lon" value="'+v.lon+'" aria-label="Longitud de '+esc(v.short)+'"></td></tr>'}).join('');
+ tb.querySelectorAll('input').forEach(function(inp){inp.onchange=function(){var i=+inp.getAttribute('data-i'),f=inp.getAttribute('data-f');VIL[i][f]=parseFloat(inp.value)||0;if(f==='pop'){dirty.score=true}else{dirty.fields=true;dirty.score=true}save();schedule()}});
+}
+
+/* ====================== CICLO ====================== */
+var dirty={grid:true,hyd:true,fields:true,score:true};var timer=null;
+function schedule(){clearTimeout(timer);$('busy').hidden=false;timer=setTimeout(run,40)}
+function run(){
+ var t0=performance.now();
+ if(dirty.grid){setupGrid();buildTerrain();dirty.hyd=dirty.fields=dirty.score=true}
+ if(dirty.hyd){hydro();dirty.score=true}
+ if(dirty.fields){buildMasks();computeFields();dirty.score=true}
+ if(dirty.score){scoreCandidates();buildNetwork()}
+ dirty.grid=dirty.hyd=dirty.fields=dirty.score=false;
+ renderMap();renderSection();renderProfile();renderCand();renderPairs();renderProv();renderSoundList();renderStatus(performance.now()-t0);
+ $('busy').hidden=true;
+}
+
+/* ====================== CONTROLES ====================== */
+document.querySelectorAll('[data-k]').forEach(function(el){
+ var k=el.getAttribute('data-k'),d=el.getAttribute('data-d'),out=$('o_'+k);
+ function show(){if(out)out.textContent=(k==='crossK'||k==='canalK'||k==='tickSp'||k==='exag'||k==='infl'||k==='catchMin'||k==='wP'||k==='wC')?String(P[k]):fmt(P[k],k==='lambda'?2:1)}
+ if(el.type==='checkbox')el.checked=!!P[k];else el.value=P[k];show();
+ el.addEventListener('input',function(){var v=el.type==='checkbox'?el.checked:(el.tagName==='SELECT'&&isNaN(parseFloat(el.value))?el.value:parseFloat(el.value));
+  if(el.tagName==='SELECT'&&el.value==='P1'||el.value==='P12'||el.value==='P123'||el.value==='none'||el.value==='both'||el.value==='dots'||el.value==='circle')v=el.value;
+  if(typeof v==='number'&&isNaN(v))return;P[k]=v;show();
+  if(d==='grid')dirty.grid=true;else if(d==='hyd')dirty.hyd=true;else if(d==='fields')dirty.fields=dirty.hyd=true;else if(d==='score')dirty.score=true;
+  if(k==='wP'||k==='wC'||k==='wK')dirty.hyd=true;save();schedule()});
+});
+document.querySelectorAll('#chips .chip').forEach(function(b){b.addEventListener('click',function(){var c=b.getAttribute('data-c');LAY[c]=LAY[c]?0:1;b.setAttribute('aria-pressed',LAY[c]?'true':'false');renderMap()})});
+function setMode(m){mode=m;$('mVer').setAttribute('aria-pressed',m==='ver');$('mSonda').setAttribute('aria-pressed',m==='sonda');svg.style.cursor=m==='sonda'?'copy':'crosshair'}
+$('mVer').onclick=function(){setMode('ver')};$('mSonda').onclick=function(){setMode('sonda')};
+
+/* pan / zoom / clic */
+var drag=null;
+function svgPt(ev){var r=svg.getBoundingClientRect();return [VB.x+(ev.clientX-r.left)/r.width*VB.w,VB.y+(ev.clientY-r.top)/r.height*VB.h]}
+function zoomAt(f,cx,cy){var nw=clamp(VB.w*f,60,841),nh=nw*575/841;VB.x=clamp(cx-(cx-VB.x)*nw/VB.w,0,841-nw);VB.y=clamp(cy-(cy-VB.y)*nh/VB.h,0,575-nh);VB.w=nw;VB.h=nh;setVB()}
+svg.addEventListener('wheel',function(e){e.preventDefault();var p=svgPt(e);zoomAt(e.deltaY>0?1.15:1/1.15,p[0],p[1])},{passive:false});
+svg.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY,vx:VB.x,vy:VB.y,moved:false};svg.setPointerCapture(e.pointerId)});
+svg.addEventListener('pointermove',function(e){if(!drag)return;var dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;if(drag.moved){var r=svg.getBoundingClientRect();VB.x=clamp(drag.vx-dx/r.width*VB.w,0,841-VB.w);VB.y=clamp(drag.vy-dy/r.height*VB.h,0,575-VB.h);setVB()}});
+svg.addEventListener('pointerup',function(e){var d=drag;drag=null;if(!d||d.moved)return;pick(svgPt(e))});
+$('zIn').onclick=function(){zoomAt(1/1.4,VB.x+VB.w/2,VB.y+VB.h/2)};$('zOut').onclick=function(){zoomAt(1.4,VB.x+VB.w/2,VB.y+VB.h/2)};$('zReset').onclick=function(){VB={x:0,y:0,w:841,h:575};setVB()};
+function nearestStation(w,maxd){var best=null,bd=maxd*maxd;FEAT.forEach(function(F){F.st.forEach(function(p,k){var d=(p.x-w[0])*(p.x-w[0])+(p.y-w[1])*(p.y-w[1]);if(d<bd){bd=d;best={F:F,k:k,p:p}}})});return best}
+function pick(pt){var w=world(pt[0],pt[1]),tol=clamp(5*VB.w/841,1.2,5)*P.scale/1000+10,n=nearestStation(w,tol);
+ if(!n){$('copyMsg').textContent='Ese punto queda lejos de un cauce.';return}$('copyMsg').textContent='';
+ if(mode==='sonda'){var h=parseFloat($('sdDepth').value);if(!(h>0))return;SOUND.push({fid:n.F.id,x:n.p.x,y:n.p.y,h:h});dirty.hyd=dirty.score=true;SEL={fid:n.F.id,idx:n.k};save();schedule()}
+ else{SEL={fid:n.F.id,idx:n.k};renderMap();renderSection();renderProfile()}}
+
+/* MDT */
+$('demFile').addEventListener('change',function(){var f=this.files[0];if(f)loadDem(f)});
+async function loadDem(file){
+ var note=$('demNote');note.className='note';note.textContent='Leyendo el MDT, puede tardar unos segundos…';
+ try{
+  if(!window.GeoTIFF)throw new Error('No se cargó la librería GeoTIFF');
+  var tiff=await GeoTIFF.fromBlob(file),img=await tiff.getImage(),org=img.getOrigin(),res=img.getResolution(),IW=img.getWidth(),IH=img.getHeight(),keys=img.getGeoKeys?img.getGeoKeys():{};
+  var cs=keys.ProjectedCSTypeGeoKey;
+  var xs=[],ys=[],m=150,x0=gx0-m,x1=gx0+(NX-1)*cell+m,yb=gyTop-(NY-1)*cell-m,yt=gyTop+m;
+  [[x0,yb],[x1,yb],[x0,yt],[x1,yt]].forEach(function(c){var ll=xy2ll(c[0],c[1]),u=toUTM(ll[0],ll[1]);xs.push(u[0]);ys.push(u[1])});
+  var Emin=Math.min.apply(null,xs),Emax=Math.max.apply(null,xs),Nmin=Math.min.apply(null,ys),Nmax=Math.max.apply(null,ys);
+  var rx=res[0],ry=Math.abs(res[1]);
+  var wx0=Math.max(0,Math.floor((Emin-org[0])/rx)),wx1=Math.min(IW,Math.ceil((Emax-org[0])/rx)),wy0=Math.max(0,Math.floor((org[1]-Nmax)/ry)),wy1=Math.min(IH,Math.ceil((org[1]-Nmin)/ry));
+  if(wx1<=wx0||wy1<=wy0)throw new Error('El MDT no cubre la zona del plano. Usa la hoja 0130 del MDT05.');
+  var ras=await img.readRasters({window:[wx0,wy0,wx1,wy1],interleave:false});
+  var data=ras[0],nod=img.getGDALNoData?img.getGDALNoData():null;
+  if(nod!=null){for(var i=0;i<data.length;i++)if(data[i]===nod)data[i]=-9999}
+  var arr=Float32Array.from(data);
+  DEM={w:wx1-wx0,h:wy1-wy0,data:arr,e0:org[0]+wx0*rx,n0:org[1]-wy0*ry,rx:rx,ry:ry};
+  note.className='note';note.textContent='MDT05 cargado: ventana de '+DEM.w+' × '+DEM.h+' celdas de '+fmt(rx,0)+' m.'+(cs&&cs!==25830?' Aviso: el sistema del archivo es EPSG:'+cs+' y el plano espera 25830.':'');
+  dirty.grid=true;schedule();
+ }catch(err){DEM=null;note.className='note warn';note.textContent='No se pudo leer el MDT: '+(err&&err.message?err.message:err)}
+}
+/* edificios */
+$('bldFile').addEventListener('change',function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{var gj=JSON.parse(rd.result),fs=gj.features||[gj],rings=[];
+ fs.forEach(function(ft){var gm=ft.geometry||ft;if(!gm)return;var polys=gm.type==='Polygon'?[gm.coordinates]:gm.type==='MultiPolygon'?gm.coordinates:[];polys.forEach(function(pl){rings.push(pl[0].map(function(c){return ll2xy(c[1],c[0])}))})});
+ BUILD=rings;$('copyMsg').textContent=rings.length+' edificios cargados.';renderMap()}catch(e){$('copyMsg').textContent='No se pudo leer el GeoJSON.'}};rd.readAsText(f)});
+
+/* exportar */
+function tokenValues(){var cs=getComputedStyle(document.documentElement),o={};['--sheet','--ink','--ink2','--ink3','--topo','--water','--people'].forEach(function(k){o[k]=cs.getPropertyValue(k).trim()});return o}
+function copyText(txt,msg){var box=$('copyBox');box.hidden=false;box.value=txt;
+ function fb(){box.focus();box.select();$('copyMsg').textContent='Selecciono el texto: pulsa copiar del sistema.'}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){$('copyMsg').textContent=msg},fb)}else fb()}
+$('bSvg').onclick=function(){var tk=tokenValues(),s=svg.outerHTML;Object.keys(tk).forEach(function(k){s=s.split('var('+k+')').join(tk[k])});s=s.replace(/color-mix\(in srgb,([^,]+) (\d+)%,transparent\)/g,'$1');s=s.replace('viewBox="'+VB.x+' '+VB.y+' '+VB.w+' '+VB.h+'"','viewBox="0 0 841 575" width="841mm" height="575mm"');copyText(s,'SVG copiado. Pégalo en un archivo .svg.')};
+$('bJson').onclick=function(){copyText(JSON.stringify({parametros:P,pueblos:VIL,sondeos:SOUND.map(function(q){return {cauce:q.fid,x:Math.round(q.x),y:Math.round(q.y),h:q.h}}),pasarelas:CAND.map(function(c){return {id:c.id,cauce:c.fid,x:Math.round(c.x),y:Math.round(c.y),luz:c.span,ahorro_min:+c.G.toFixed(2)}})},null,1),'Parámetros copiados.')};
+$('bReset').onclick=function(){P=JSON.parse(JSON.stringify(DEF));VIL=JSON.parse(JSON.stringify(VIL0));SOUND=[];SEL=null;try{localStorage.removeItem('curueno-porma-v1')}catch(e){}
+ document.querySelectorAll('[data-k]').forEach(function(el){var k=el.getAttribute('data-k');if(el.type==='checkbox')el.checked=!!P[k];else el.value=P[k];var o=$('o_'+k);if(o)o.textContent=String(P[k])});
+ renderVil();dirty.grid=true;schedule()};
+
+/* ====================== ARRANQUE ====================== */
+renderVil();
+(function(){var F=FEAT[0];SEL={fid:'porma',idx:Math.round(F.st.length*0.52)}})();
+setVB();run();
+window.__m={P:P,run:run,loadDem:loadDem};
+})();
+</script>
+
+</body></html></body></html>

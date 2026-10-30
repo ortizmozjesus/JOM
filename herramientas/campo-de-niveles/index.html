@@ -1,0 +1,1299 @@
+<!doctype html><html lang="es"><head>
+<meta name="description" content="Herramienta de Jesús Ortiz Muñoz: arquitectura y programación."><link rel="icon" href="../../favicon.svg"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body><div class="jom-bar"><a href="../../herramientas.html">Herramientas</a><span>Campo de niveles</span></div><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Hedvig+Letters+Serif:opsz@12..24&display=swap"><title>Campo de niveles de la Ciudad Acuática</title>
+
+
+
+<style>/* Hallmark · shape: Portfolio Index · genre: editorial · theme: Studio (deal 3/3, seed portfolio-arquitectura-estudiante-proyectos-a195·c8a659d1·2026-10-30·r0) · job: hire · draw: custom-by-brief
+ * hero: Ledge, name beside a crop-marked plate · nav: edge-aligned wordmark and four pages · footer: rule, wordmark over links · imagery: the author's own drawings and renders · signature: a drawing sheet with crop marks and a dimension line drawn at its real pixel width
+ * axes: light/roman-serif/warm · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
+:root{--lg-k:#68a4b8;--lg-a:#1e3e46;--lg-b:#52a4b4;--lg-c:#589eac;--lg-d:#e2e7d6;--lg-e:#ecdbb8;--lg-f:#dbb484;--lg-g:#b07a54;--lg-h:#3c2819;--lg-i:#ddd;--lg-j:#58626a;--lit-1:#fff;--lit-2:rgba(0,0,0,.25);--lit-3:rgba(20,40,50,.15);--lit-4:rgba(20,40,50,.18);--lit-5:rgba(0,0,0,.15);--lit-6:rgba(236,150,110,.18);--lit-7:#f1f7f8;--lit-8:#0a1522;--lit-9:#aa4600;--lit-10:#e97219;--lit-11:#f9fcfd;--lit-12:#c4cccf;--lit-13:#58626a;--lit-14:#2f3943;--fam-1:'Geist',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--fam-2:'Geist',ui-sans-serif,system-ui,sans-serif;--fam-3:'Hedvig Letters Serif',ui-serif,Georgia,serif!important;}
+
+:root{
+  box-sizing:border-box;
+  --bg:#EDF1F0; --panel:#FAFBFA; --ink:#1F3440; --ink-2:#526872; --line:#CFD9DA;
+  --accent:#2B59C3; --sheet:#2E5F6A; --ok:#3F7D4E; --warn:#B4532A; --chip:#E7EDEE;
+}
+
+
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+  font-family:var(--fam-1);font-size:14px;line-height:1.45}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 392px;height:100%}
+.map{position:relative;min-height:0;min-width:0;background:var(--sheet);overflow:hidden}
+#cv{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+#cv.placing{cursor:crosshair}
+#cv.dragging{cursor:grabbing}
+aside{border-left:1px solid var(--line);background:var(--panel);overflow-y:auto;padding:22px 22px 48px}
+@media (max-width:880px){
+  body{height:auto}
+  .app{grid-template-columns:minmax(0,1fr);grid-template-rows:66vh auto;height:auto}
+  aside{border-left:0;border-top:1px solid var(--line);overflow:visible}
+}
+h1{font-stretch:72%;font-weight:750;font-size:34px;line-height:1;margin:0 0 6px;letter-spacing:0}
+.lede{color:var(--ink-2);margin:0 0 18px;max-width:44ch}
+h2{font-stretch:80%;font-weight:700;font-size:17px;margin:26px 0 10px}
+h3{font-size:13px;font-weight:650;margin:16px 0 6px;color:var(--ink-2)}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+select{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 8px;max-width:100%}
+.preset{width:100%}
+.result{border:1px solid var(--line);border-radius:10px;padding:14px 14px 10px;margin-top:6px}
+.big{font-stretch:62%;font-weight:700;font-size:52px;line-height:.9;font-variant-numeric:tabular-nums;letter-spacing:0}
+.bigl{color:var(--ink-2);margin:4px 0 10px}
+.kv{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 12px;font-variant-numeric:tabular-nums}
+.kv dt{color:var(--ink-2)} .kv dd{margin:0;text-align:right;font-weight:600}
+.pill{display:inline-block;font-size:12px;border-radius:99px;padding:1px 8px;font-weight:600}
+.pill.ok{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.hint{margin:10px 0 2px;padding-top:10px;border-top:1px dashed var(--line)}
+.hint b{font-weight:650}
+.addbar{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.addbtn{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:7px 9px;text-align:left}
+.addbtn[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.dot{width:12px;height:12px;border-radius:50%;flex:none;border:1.5px solid var(--lit-1);box-shadow:0 0 0 1px var(--lit-2)}
+.tip{font-size:12.5px;color:var(--ink-2);margin:6px 0 0}
+.list{margin-top:10px;max-height:230px;overflow-y:auto;border:1px solid var(--line);border-radius:8px}
+.item{display:flex;align-items:center;gap:8px;width:100%;border:0;border-bottom:1px solid var(--line);background:none;padding:6px 10px;text-align:left}
+.item:last-child{border-bottom:0}
+.item[aria-current="true"]{background:var(--chip)}
+.item .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .pw{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.editor{margin-top:12px;border:1px solid var(--accent);border-radius:10px;padding:12px}
+.editor input.name{width:100%;border:0;border-bottom:1px solid var(--line);background:none;font-weight:650;font-size:16px;padding:2px 0 6px;margin-bottom:8px}
+.pesos{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:8px 0 4px}
+.pesos button{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:5px 0;font-weight:650}
+.pesos button[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.pesocap{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-2);margin-bottom:6px}
+.sl{display:grid;grid-template-columns:128px minmax(0,1fr) 56px;gap:8px;align-items:center;margin:5px 0}
+.sl span{color:var(--ink-2);font-size:13px}
+.sl output{text-align:right;font-variant-numeric:tabular-nums;font-size:13px;font-weight:600}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.btns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:6px 10px}
+.btn.danger{color:var(--warn)}
+.btn.primary{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.btn:disabled{background:var(--lg-i);color:var(--lg-j);border-color:var(--lg-j);cursor:not-allowed}
+.coords{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.chk{display:flex;gap:8px;align-items:center;margin:6px 0}
+.selrow{display:grid;grid-template-columns:128px minmax(0,1fr);gap:8px;align-items:center;margin:5px 0}
+.selrow span{color:var(--ink-2);font-size:13px}
+details{margin-top:24px;border-top:1px solid var(--line);padding-top:12px}
+summary{cursor:pointer;font-weight:650}
+details p,details li{color:var(--ink-2);max-width:60ch}
+.formula{background:var(--chip);border-radius:8px;padding:8px 10px;font-size:13px;overflow-x:auto;white-space:nowrap;color:var(--ink)}
+.views{position:absolute;top:12px;left:12px;display:flex;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:0 2px 10px var(--lit-3)}
+.views button{border:0;background:none;padding:7px 11px;font-weight:600;font-size:13px}
+.views button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.tools{position:absolute;top:56px;left:12px;display:flex;gap:6px}
+.tools button{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 10px;font-weight:600;font-size:13px}
+.tools button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);color:var(--accent)}
+.zoom{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:4px}
+.zoom button{width:34px;height:34px;border:1px solid var(--line);background:var(--panel);border-radius:8px;font-size:17px;font-weight:600;line-height:1}
+.zoom button.fit{font-size:11px}
+.legend{position:absolute;right:12px;bottom:38px;background:color-mix(in srgb,var(--panel) 93%,transparent);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;max-width:min(300px,calc(100% - 24px))}
+.legend .lg{display:flex;align-items:center;gap:7px;margin:2px 0}
+.legend i{width:16px;height:10px;border-radius:2px;flex:none;display:inline-block}
+.legend i.bar{height:5px}
+.status{position:absolute;left:0;right:0;bottom:0;padding:6px 12px;font-size:12.5px;color:var(--ink-2);background:color-mix(in srgb,var(--panel) 92%,transparent);border-top:1px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.secbox{position:absolute;left:12px;bottom:38px;width:min(620px,calc(100% - 340px));min-width:280px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px 6px;box-shadow:0 4px 16px var(--lit-4)}
+.secbox[hidden]{display:none}
+.secbox header{display:flex;justify-content:space-between;align-items:center;font-weight:650;font-size:13px}
+.secbox header button{border:0;background:none;font-size:18px;line-height:1;padding:0 4px;color:var(--ink-2)}
+#sec{display:block;width:100%;height:150px}
+@media (max-width:880px){.secbox{width:calc(100% - 24px);bottom:auto;top:96px}}
+.empty{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.empty[hidden]{display:none}
+.empty p{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px;max-width:30ch;text-align:center}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);max-width:min(560px,92vw);width:100%}
+dialog textarea{width:100%;height:220px;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);padding:8px}
+.toast{position:absolute;top:100px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:6px 12px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:5}
+.toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+table.zt{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+table.zt th{text-align:left;font-weight:600;color:var(--ink-2);border-bottom:1px solid var(--line);padding:2px 4px}
+table.zt td{padding:2px 4px;border-bottom:1px solid var(--line)}
+table.zt td:nth-child(n+2){text-align:right;white-space:nowrap}
+table.zt i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1px solid var(--lit-5)}
+table.zt tr.viv td{font-weight:700;background:var(--lit-6)}
+.tipo{border-top:1px solid var(--line);padding:6px 0}
+.tipo .tn{font-weight:600;font-size:13px;display:flex;align-items:center;gap:6px}
+.tipo .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+/* ---- Studio skin ---- */
+:root{--bg:#f1f7f8;--panel:#f9fcfd;--ink:#0a1522;--ink-2:#58626a;--line:#c4cccf;--accent:#e97219;--sheet:#e5edef;--ok:#3f7d4e;--warn:#b4532a;--chip:#e5edef;color-scheme:light}
+
+html,body{margin:0;background:var(--lit-7)!important;color:var(--lit-8)!important}
+body{font-family:var(--fam-2);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--fam-3);font-weight:400!important;letter-spacing:0!important;text-transform:none!important;font-stretch:100%!important;color:var(--lit-8)}
+h1{line-height:1}
+h2,.eyebrow,[class*=eyebrow]{letter-spacing:0!important;text-transform:none!important;font-size:inherit}
+button,input,select,textarea,.btn,.chip,.b{border-radius:2px!important;font-family:var(--fam-2)}
+button:not(.x):not([class*=lb]){cursor:pointer}
+:focus-visible{outline:2px solid var(--lit-9)!important;outline-offset:2px}
+input[type=range]{accent-color:var(--lit-10)}
+.num,output,td{font-variant-numeric:tabular-nums}
+.jom-bar{position:fixed;inset:0 0 auto 0;z-index:1000;height:34px;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 max(14px,env(safe-area-inset-right,0px)) 0 max(14px,env(safe-area-inset-left,0px));background:var(--lit-11);color:var(--lit-8);font:500 13px 'Geist',ui-sans-serif,system-ui,sans-serif;border-bottom:1px solid var(--lit-12)}
+.jom-bar a{color:var(--lit-8);text-decoration:underline;text-decoration-color:transparent;text-underline-offset:.2em;text-decoration-thickness:1px;transition:text-decoration-color 160ms}
+.jom-bar a:hover{text-decoration-color:var(--lit-10)}.jom-bar span{color:var(--lit-13);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-top:34px!important}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+h1{font-size:36px!important}h2{font-size:22px!important;margin:26px 0 10px!important}.lede,p{color:var(--lit-14)}
+.btn.on,button[aria-pressed="true"]{background:var(--lit-8);color:var(--lit-11)}
+html,body{overflow-x:clip}
+.lg-relief{background:linear-gradient(90deg,var(--lg-a),var(--lg-b))}.lg-water{background:var(--lg-c)}.lg-levels{background:linear-gradient(90deg,var(--lg-d),var(--lg-e),var(--lg-f),var(--lg-g))}.lg-contour{background:var(--lg-h);height:2px}
+.lg-water2{background:var(--lg-k)}
+</style>
+<div class="app">
+  <div class="map">
+    <canvas id="cv" aria-label="Plano del campo de niveles. Arrastra los objetos para moverlos."></canvas>
+    <div class="views" role="group" aria-label="Qué ver en el plano">
+      <button data-view="relieve" aria-pressed="false">Relieve</button>
+      <button data-view="niveles">Niveles</button>
+      <button data-view="usos" aria-pressed="true">Usos</button>
+    </div>
+    <div class="tools"><button id="secTool" aria-pressed="false">Trazar sección</button></div>
+    <div class="zoom">
+      <button id="zin" aria-label="Acercar">+</button>
+      <button id="zout" aria-label="Alejar">−</button>
+      <button id="zfit" class="fit" aria-label="Encuadrar la ciudad">todo</button>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="secbox" id="secbox" hidden>
+      <header><span id="sectitle">Sección A-A'</span><button id="secclose" aria-label="Cerrar sección">×</button></header>
+      <canvas aria-label="Visualización interactiva" id="sec"></canvas>
+    </div>
+    <div class="status" id="status">Pasa el cursor por el plano para leer la cota de cada punto.</div>
+    <div class="empty" id="empty" hidden><p>Elige un tipo de objeto a la derecha y haz clic sobre el plano para dejarlo caer.</p></div>
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <aside>
+    <h1>Campo de niveles</h1>
+    <p class="lede">Cada objeto deja caer una onda con una influencia. Donde se solapan ondas las influencias se suman (o manda la más pesada, según el choque de cada tipo) y esa suma decide la zona: pocas ondas, verde y vivienda; muchas, agua y plazas. La pendiente que pongas crea gradas y terrazas. Te dice cuántos m² de suelo de vivienda salen.</p>
+
+    <div class="row" style="flex-wrap:nowrap"><select class="preset" id="preset" aria-label="Punto de partida" style="flex:1;min-width:0">
+      <option value="">Cargar un punto de partida…</option>
+      <option value="sedes">Ayuntamiento en tres sedes (sin centro)</option>
+      <option value="guion">Guion del 4/10 (ayuntamiento único)</option>
+      <option value="vacio">Lienzo vacío</option>
+    </select><button class="btn" id="programa" title="Coloca 3 ayuntamientos, 4 zonas de trabajo, 5 centros culturales, 14 equipamientos y 10 manantiales">Programa 10.000 hab</button><button class="btn primary" id="random" title="Ciudad al azar: posiciones, pesos, influencias y alturas">Aleatorio</button></div>
+
+    <div class="result" id="result"></div>
+
+    <h2>Objetos</h2>
+    <div class="addbar" id="addbar"></div>
+    <p class="tip" id="tooltip">Pulsa un tipo y haz clic en el plano. Arrastra para mover, Supr para borrar.</p>
+    <div class="list" id="list"></div>
+    <div class="btns"><button class="btn danger" id="clearAll">Borrar todo</button><button class="btn" id="undoClear" hidden>Deshacer</button></div>
+    <div id="editor"></div>
+
+    <h2>Influencia y choque por tipo</h2>
+    <div id="tipos"></div>
+
+    <h2>La pendiente y las zonas</h2>
+    <div id="params"></div>
+
+    <h2>Exportar a AutoCAD y Blender</h2>
+    <label class="selrow"><span>Malla del 3D</span><select id="res3d">
+      <option value="3">3 m, muy fina y pesada</option>
+      <option value="4">4 m, fina</option>
+      <option value="5" selected>5 m, recomendada</option>
+      <option value="6">6 m, ligera</option>
+    </select></label>
+    <div class="btns">
+      <button class="btn primary" id="dl">Descargar AutoCAD y Blender (.zip)</button>
+      <button class="btn" id="dxf">Copiar DXF 2D</button>
+    </div>
+    <p class="tip">Todo se calcula aquí, sin pegar nada en otro programa. El .zip trae <b>ciudad_2D.dxf</b> (curvas de nivel, agua, ríos con sus paseos y fronteras de cada zona como <b>splines reales</b>), <b>ciudad_3D_malla.dxf</b> (superficies de malla suaves, una capa por material) y la carpeta <b>blender</b> (ciudad_arquiviz.dxf con tus colores, ciudad.obj con normales suaves y un script de escena). Tarda unos segundos.</p>
+
+    <h2>Guardar y recuperar</h2>
+    <div class="btns">
+      <button class="btn" id="copy">Copiar configuración</button>
+      <button class="btn" id="paste">Pegar configuración</button>
+      <label class="btn" style="cursor:pointer">Abrir archivo .json<input type="file" id="file" accept=".json,application/json,.txt" hidden></label>
+    </div>
+    <p class="tip">El trabajo se guarda solo en este navegador.</p>
+
+    <details>
+      <summary>Cómo funciona</summary>
+      <p>Cada objeto tiene una onda de relieve (un anillo elevado) y una <b>influencia</b> que baja con la distancia a su centro.</p>
+      <p class="formula">S = Σ influencia<sub>i</sub> × e<sup>−(d<sub>i</sub> / (α·r<sub>i</sub>))²</sup></p>
+      <ul>
+        <li><b>Suma y choque</b>: con choque 0 % las influencias se suman (80 + 80 = 160). Con choque 100 % la onda más pesada sustituye a las más ligeras donde se cruzan. Cada tipo de objeto tiene el suyo (se importa del estanque).</li>
+        <li><b>Zonas</b>: el valor S decide el uso del suelo: borde verde, parque, vivienda, orilla, agua, plaza de barrio y plaza mayor. Los umbrales son editables.</li>
+        <li><b>Pendiente</b>: donde la pendiente local supera el umbral, el parque se hace en terrazas y la plaza en gradas.</li>
+        <li><b>Ríos</b>: unen las zonas de peso 1 y 2 por el camino más barato, son vadeables y llevan paseo a cada lado.</li>
+        <li><b>Vivienda</b>: solo se calcula el suelo. Las plantas las defines tú; el panel estima habitantes con las plantas, la ocupación y los m² por habitante que indiques.</li>
+        <li><b>3D</b>: malla de triángulos cortada por las propias curvas, con una capa por zona, normales analíticas y equipamientos cilíndricos.</li>
+      </ul>
+    </details>
+  </aside>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog">
+    <h2 style="margin-top:0" id="dlgt">Configuración</h2>
+    <textarea id="dlgtxt" spellcheck="false"></textarea>
+    <div class="btns">
+      <button class="btn primary" id="dlgok" value="ok">Cargar</button>
+      <button class="btn" value="cancel">Cerrar</button>
+    </div>
+  </form>
+</dialog>
+<script>
+const DXF_TPL={"head": "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1024\n  9\n$ACADMAINTVER\n 70\n6\n  9\n$DWGCODEPAGE\n  3\nANSI_1252\n  9\n$LASTSAVEDBY\n  1\nezdxf\n  9\n$INSBASE\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$EXTMIN\n 10\n1e+20\n 20\n1e+20\n 30\n1e+20\n  9\n$EXTMAX\n 10\n-1e+20\n 20\n-1e+20\n 30\n-1e+20\n  9\n$LIMMIN\n 10\n0.0\n 20\n0.0\n  9\n$LIMMAX\n 10\n420.0\n 20\n297.0\n  9\n$ORTHOMODE\n 70\n0\n  9\n$REGENMODE\n 70\n1\n  9\n$FILLMODE\n 70\n1\n  9\n$QTEXTMODE\n 70\n0\n  9\n$MIRRTEXT\n 70\n1\n  9\n$LTSCALE\n 40\n1.0\n  9\n$ATTMODE\n 70\n1\n  9\n$TEXTSIZE\n 40\n2.5\n  9\n$TRACEWID\n 40\n1.0\n  9\n$TEXTSTYLE\n  7\nStandard\n  9\n$CLAYER\n  8\n0\n  9\n$CELTYPE\n  6\nByLayer\n  9\n$CECOLOR\n 62\n256\n  9\n$CELTSCALE\n 40\n1.0\n  9\n$DISPSILH\n 70\n0\n  9\n$DIMSCALE\n 40\n1.0\n  9\n$DIMASZ\n 40\n2.5\n  9\n$DIMEXO\n 40\n0.625\n  9\n$DIMDLI\n 40\n3.75\n  9\n$DIMRND\n 40\n0.0\n  9\n$DIMDLE\n 40\n0.0\n  9\n$DIMEXE\n 40\n1.25\n  9\n$DIMTP\n 40\n0.0\n  9\n$DIMTM\n 40\n0.0\n  9\n$DIMTXT\n 40\n2.5\n  9\n$DIMCEN\n 40\n2.5\n  9\n$DIMTSZ\n 40\n0.0\n  9\n$DIMTOL\n 70\n0\n  9\n$DIMLIM\n 70\n0\n  9\n$DIMTIH\n 70\n0\n  9\n$DIMTOH\n 70\n0\n  9\n$DIMSE1\n 70\n0\n  9\n$DIMSE2\n 70\n0\n  9\n$DIMTAD\n 70\n1\n  9\n$DIMZIN\n 70\n8\n  9\n$DIMBLK\n  1\n\n  9\n$DIMASO\n 70\n1\n  9\n$DIMSHO\n 70\n1\n  9\n$DIMPOST\n  1\n\n  9\n$DIMAPOST\n  1\n\n  9\n$DIMALT\n 70\n0\n  9\n$DIMALTD\n 70\n3\n  9\n$DIMALTF\n 40\n0.03937007874\n  9\n$DIMLFAC\n 40\n1.0\n  9\n$DIMTOFL\n 70\n1\n  9\n$DIMTVP\n 40\n0.0\n  9\n$DIMTIX\n 70\n0\n  9\n$DIMSOXD\n 70\n0\n  9\n$DIMSAH\n 70\n0\n  9\n$DIMBLK1\n  1\n\n  9\n$DIMBLK2\n  1\n\n  9\n$DIMSTYLE\n  2\nISO-25\n  9\n$DIMCLRD\n 70\n0\n  9\n$DIMCLRE\n 70\n0\n  9\n$DIMCLRT\n 70\n0\n  9\n$DIMTFAC\n 40\n1.0\n  9\n$DIMGAP\n 40\n0.625\n  9\n$DIMJUST\n 70\n0\n  9\n$DIMSD1\n 70\n0\n  9\n$DIMSD2\n 70\n0\n  9\n$DIMTOLJ\n 70\n0\n  9\n$DIMTZIN\n 70\n8\n  9\n$DIMALTZ\n 70\n0\n  9\n$DIMALTTZ\n 70\n0\n  9\n$DIMUPT\n 70\n0\n  9\n$DIMDEC\n 70\n2\n  9\n$DIMTDEC\n 70\n2\n  9\n$DIMALTU\n 70\n2\n  9\n$DIMALTTD\n 70\n3\n  9\n$DIMTXSTY\n  7\nStandard\n  9\n$DIMAUNIT\n 70\n0\n  9\n$DIMADEC\n 70\n0\n  9\n$DIMALTRND\n 40\n0.0\n  9\n$DIMAZIN\n 70\n0\n  9\n$DIMDSEP\n 70\n44\n  9\n$DIMATFIT\n 70\n3\n  9\n$DIMFRAC\n 70\n0\n  9\n$DIMLDRBLK\n  1\n\n  9\n$DIMLUNIT\n 70\n2\n  9\n$DIMLWD\n 70\n-2\n  9\n$DIMLWE\n 70\n-2\n  9\n$DIMTMOVE\n 70\n0\n  9\n$DIMFXL\n 40\n1.0\n  9\n$DIMFXLON\n 70\n0\n  9\n$DIMJOGANG\n 40\n0.785398163397\n  9\n$DIMTFILL\n 70\n0\n  9\n$DIMTFILLCLR\n 70\n0\n  9\n$DIMARCSYM\n 70\n0\n  9\n$DIMLTYPE\n  6\n\n  9\n$DIMLTEX1\n  6\n\n  9\n$DIMLTEX2\n  6\n\n  9\n$DIMTXTDIRECTION\n 70\n0\n  9\n$LUNITS\n 70\n2\n  9\n$LUPREC\n 70\n4\n  9\n$SKETCHINC\n 40\n1.0\n  9\n$FILLETRAD\n 40\n10.0\n  9\n$AUNITS\n 70\n0\n  9\n$AUPREC\n 70\n2\n  9\n$MENU\n  1\n.\n  9\n$ELEVATION\n 40\n0.0\n  9\n$PELEVATION\n 40\n0.0\n  9\n$THICKNESS\n 40\n0.0\n  9\n$LIMCHECK\n 70\n0\n  9\n$CHAMFERA\n 40\n0.0\n  9\n$CHAMFERB\n 40\n0.0\n  9\n$CHAMFERC\n 40\n0.0\n  9\n$CHAMFERD\n 40\n0.0\n  9\n$SKPOLY\n 70\n0\n  9\n$TDCREATE\n 40\n2461321.9202199075\n  9\n$TDUCREATE\n 40\n2458532.153996898\n  9\n$TDUPDATE\n 40\n2461321.9202199075\n  9\n$TDUUPDATE\n 40\n2458532.1544311\n  9\n$TDINDWG\n 40\n0.0\n  9\n$TDUSRTIMER\n 40\n0.0\n  9\n$USRTIMER\n 70\n1\n  9\n$ANGBASE\n 50\n0.0\n  9\n$ANGDIR\n 70\n0\n  9\n$PDMODE\n 70\n0\n  9\n$PDSIZE\n 40\n0.0\n  9\n$PLINEWID\n 40\n0.0\n  9\n$SPLFRAME\n 70\n0\n  9\n$SPLINETYPE\n 70\n6\n  9\n$SPLINESEGS\n 70\n8\n  9\n$HANDSEED\n  5\n@@SEED@@\n  9\n$SURFTAB1\n 70\n6\n  9\n$SURFTAB2\n 70\n6\n  9\n$SURFTYPE\n 70\n6\n  9\n$SURFU\n 70\n6\n  9\n$SURFV\n 70\n6\n  9\n$UCSBASE\n  2\n\n  9\n$UCSNAME\n  2\n\n  9\n$UCSORG\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSXDIR\n 10\n1.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSYDIR\n 10\n0.0\n 20\n1.0\n 30\n0.0\n  9\n$UCSORTHOREF\n  2\n\n  9\n$UCSORTHOVIEW\n 70\n0\n  9\n$UCSORGTOP\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSORGBOTTOM\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSORGLEFT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSORGRIGHT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSORGFRONT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSORGBACK\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSBASE\n  2\n\n  9\n$PUCSNAME\n  2\n\n  9\n$PUCSORG\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSXDIR\n 10\n1.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSYDIR\n 10\n0.0\n 20\n1.0\n 30\n0.0\n  9\n$PUCSORTHOREF\n  2\n\n  9\n$PUCSORTHOVIEW\n 70\n0\n  9\n$PUCSORGTOP\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSORGBOTTOM\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSORGLEFT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSORGRIGHT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSORGFRONT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSORGBACK\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$USERI1\n 70\n0\n  9\n$USERI2\n 70\n0\n  9\n$USERI3\n 70\n0\n  9\n$USERI4\n 70\n0\n  9\n$USERI5\n 70\n0\n  9\n$USERR1\n 40\n0.0\n  9\n$USERR2\n 40\n0.0\n  9\n$USERR3\n 40\n0.0\n  9\n$USERR4\n 40\n0.0\n  9\n$USERR5\n 40\n0.0\n  9\n$WORLDVIEW\n 70\n1\n  9\n$SHADEDGE\n 70\n3\n  9\n$SHADEDIF\n 70\n70\n  9\n$TILEMODE\n 70\n1\n  9\n$MAXACTVP\n 70\n64\n  9\n$PINSBASE\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PLIMCHECK\n 70\n0\n  9\n$PEXTMIN\n 10\n1e+20\n 20\n1e+20\n 30\n1e+20\n  9\n$PEXTMAX\n 10\n-1e+20\n 20\n-1e+20\n 30\n-1e+20\n  9\n$PLIMMIN\n 10\n0.0\n 20\n0.0\n  9\n$PLIMMAX\n 10\n420.0\n 20\n297.0\n  9\n$UNITMODE\n 70\n0\n  9\n$VISRETAIN\n 70\n1\n  9\n$PLINEGEN\n 70\n0\n  9\n$PSLTSCALE\n 70\n1\n  9\n$TREEDEPTH\n 70\n3020\n  9\n$CMLSTYLE\n  2\nStandard\n  9\n$CMLJUST\n 70\n0\n  9\n$CMLSCALE\n 40\n20.0\n  9\n$PROXYGRAPHICS\n 70\n1\n  9\n$MEASUREMENT\n 70\n1\n  9\n$CELWEIGHT\n370\n-1\n  9\n$ENDCAPS\n280\n0\n  9\n$JOINSTYLE\n280\n0\n  9\n$LWDISPLAY\n290\n0\n  9\n$INSUNITS\n 70\n6\n  9\n$HYPERLINKBASE\n  1\n\n  9\n$STYLESHEET\n  1\n\n  9\n$XEDIT\n290\n1\n  9\n$CEPSNTYPE\n380\n0\n  9\n$PSTYLEMODE\n290\n1\n  9\n$FINGERPRINTGUID\n  2\n{43FF2C9B-C570-4517-A843-4B3BB22845E9}\n  9\n$VERSIONGUID\n  2\n{5A08DB43-6C03-4051-AEAE-9F9A5C9E2FD4}\n  9\n$EXTNAMES\n290\n1\n  9\n$PSVPSCALE\n 40\n0.0\n  9\n$OLESTARTUP\n290\n0\n  9\n$SORTENTS\n280\n127\n  9\n$INDEXCTL\n280\n0\n  9\n$HIDETEXT\n280\n1\n  9\n$XCLIPFRAME\n280\n1\n  9\n$HALOGAP\n280\n0\n  9\n$OBSCOLOR\n 70\n257\n  9\n$OBSLTYPE\n280\n0\n  9\n$INTERSECTIONDISPLAY\n280\n0\n  9\n$INTERSECTIONCOLOR\n 70\n257\n  9\n$DIMASSOC\n280\n2\n  9\n$PROJECTNAME\n  1\n\n  9\n$CAMERADISPLAY\n290\n0\n  9\n$LENSLENGTH\n 40\n50.0\n  9\n$CAMERAHEIGHT\n 40\n0.0\n  9\n$STEPSPERSEC\n 40\n24.0\n  9\n$STEPSIZE\n 40\n100.0\n  9\n$3DDWFPREC\n 40\n2.0\n  9\n$PSOLWIDTH\n 40\n0.005\n  9\n$PSOLHEIGHT\n 40\n0.08\n  9\n$LOFTANG1\n 40\n1.570796326795\n  9\n$LOFTANG2\n 40\n1.570796326795\n  9\n$LOFTMAG1\n 40\n0.0\n  9\n$LOFTMAG2\n 40\n0.0\n  9\n$LOFTPARAM\n 70\n7\n  9\n$LOFTNORMALS\n280\n1\n  9\n$LATITUDE\n 40\n37.795\n  9\n$LONGITUDE\n 40\n-122.394\n  9\n$NORTHDIRECTION\n 40\n0.0\n  9\n$TIMEZONE\n 70\n-8000\n  9\n$LIGHTGLYPHDISPLAY\n280\n1\n  9\n$TILEMODELIGHTSYNCH\n280\n1\n  9\n$CMATERIAL\n347\n20\n  9\n$SOLIDHIST\n280\n0\n  9\n$SHOWHIST\n280\n1\n  9\n$DWFFRAME\n280\n2\n  9\n$DGNFRAME\n280\n2\n  9\n$REALWORLDSCALE\n290\n1\n  9\n$INTERFERECOLOR\n 62\n256\n  9\n$CSHADOW\n280\n0\n  9\n$SHADOWPLANELOCATION\n 40\n0.0\n  0\nENDSEC\n  0\nSECTION\n  2\nCLASSES\n  0\nCLASS\n  1\nACDBDICTIONARYWDFLT\n  2\nAcDbDictionaryWithDefault\n  3\nObjectDBX Classes\n 90\n0\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nSUN\n  2\nAcDbSun\n  3\nSCENEOE\n 90\n1153\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nVISUALSTYLE\n  2\nAcDbVisualStyle\n  3\nObjectDBX Classes\n 90\n4095\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nMATERIAL\n  2\nAcDbMaterial\n  3\nObjectDBX Classes\n 90\n1153\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nSCALE\n  2\nAcDbScale\n  3\nObjectDBX Classes\n 90\n1153\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nTABLESTYLE\n  2\nAcDbTableStyle\n  3\nObjectDBX Classes\n 90\n4095\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nMLEADERSTYLE\n  2\nAcDbMLeaderStyle\n  3\nACDB_MLEADERSTYLE_CLASS\n 90\n4095\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nDICTIONARYVAR\n  2\nAcDbDictionaryVar\n  3\nObjectDBX Classes\n 90\n0\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nCELLSTYLEMAP\n  2\nAcDbCellStyleMap\n  3\nObjectDBX Classes\n 90\n1152\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nMENTALRAYRENDERSETTINGS\n  2\nAcDbMentalRayRenderSettings\n  3\nSCENEOE\n 90\n1024\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nACDBDETAILVIEWSTYLE\n  2\nAcDbDetailViewStyle\n  3\nObjectDBX Classes\n 90\n1025\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nACDBSECTIONVIEWSTYLE\n  2\nAcDbSectionViewStyle\n  3\nObjectDBX Classes\n 90\n1025\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nRASTERVARIABLES\n  2\nAcDbRasterVariables\n  3\nISM\n 90\n0\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nACDBPLACEHOLDER\n  2\nAcDbPlaceHolder\n  3\nObjectDBX Classes\n 90\n0\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nLAYOUT\n  2\nAcDbLayout\n  3\nObjectDBX Classes\n 90\n0\n 91\n0\n280\n0\n281\n0\n  0\nENDSEC\n  0\nSECTION\n  2\nTABLES\n  0\nTABLE\n  2\nVPORT\n  5\n8\n330\n0\n100\nAcDbSymbolTable\n 70\n1\n  0\nVPORT\n  5\n23\n330\n8\n100\nAcDbSymbolTableRecord\n100\nAcDbViewportTableRecord\n  2\n*Active\n 70\n0\n 10\n0.0\n 20\n0.0\n 11\n1.0\n 21\n1.0\n 12\n0.0\n 22\n0.0\n 13\n0.0\n 23\n0.0\n 14\n0.5\n 24\n0.5\n 15\n0.5\n 25\n0.5\n 16\n0.0\n 26\n0.0\n 36\n1.0\n 17\n0.0\n 27\n0.0\n 37\n0.0\n 40\n1000.0\n 41\n1.34\n 42\n50.0\n 43\n0.0\n 44\n0.0\n 50\n0.0\n 51\n0.0\n 71\n0\n 72\n1000\n 73\n1\n 74\n3\n 75\n0\n 76\n0\n 77\n0\n 78\n0\n281\n0\n 65\n0\n146\n0.0\n  0\nENDTAB\n  0\nTABLE\n  2\nLTYPE\n  5\n2\n330\n0\n100\nAcDbSymbolTable\n 70\n3\n  0\nLTYPE\n  5\n24\n330\n2\n100\nAcDbSymbolTableRecord\n100\nAcDbLinetypeTableRecord\n  2\nByBlock\n 70\n0\n  3\n\n 72\n65\n 73\n0\n 40\n0.0\n  0\nLTYPE\n  5\n25\n330\n2\n100\nAcDbSymbolTableRecord\n100\nAcDbLinetypeTableRecord\n  2\nByLayer\n 70\n0\n  3\n\n 72\n65\n 73\n0\n 40\n0.0\n  0\nLTYPE\n  5\n26\n330\n2\n100\nAcDbSymbolTableRecord\n100\nAcDbLinetypeTableRecord\n  2\nContinuous\n 70\n0\n  3\n\n 72\n65\n 73\n0\n 40\n0.0\n  0\nENDTAB\n  0\nTABLE\n  2\nLAYER\n  5\n1\n330\n0\n100\nAcDbSymbolTable\n 70\n@@NLAY@@\n  0\nLAYER\n  5\n27\n330\n1\n100\nAcDbSymbolTableRecord\n100\nAcDbLayerTableRecord\n  2\n0\n 70\n0\n 62\n7\n  6\nContinuous\n370\n-3\n390\n13\n347\n21\n  0\nLAYER\n  5\n28\n330\n1\n100\nAcDbSymbolTableRecord\n100\nAcDbLayerTableRecord\n  2\nDefpoints\n 70\n0\n 62\n7\n  6\nContinuous\n290\n0\n370\n-3\n390\n13\n347\n21\n", "tail": "  0\nENDTAB\n  0\nTABLE\n  2\nSTYLE\n  5\n5\n330\n0\n100\nAcDbSymbolTable\n 70\n1\n  0\nSTYLE\n  5\n29\n330\n5\n100\nAcDbSymbolTableRecord\n100\nAcDbTextStyleTableRecord\n  2\nStandard\n 70\n0\n 40\n0.0\n 41\n1.0\n 50\n0.0\n 71\n0\n 42\n2.5\n  3\ntxt\n  4\n\n  0\nENDTAB\n  0\nTABLE\n  2\nVIEW\n  5\n7\n330\n0\n100\nAcDbSymbolTable\n 70\n0\n  0\nENDTAB\n  0\nTABLE\n  2\nUCS\n  5\n6\n330\n0\n100\nAcDbSymbolTable\n 70\n0\n  0\nENDTAB\n  0\nTABLE\n  2\nAPPID\n  5\n3\n330\n0\n100\nAcDbSymbolTable\n 70\n3\n  0\nAPPID\n  5\n2A\n330\n3\n100\nAcDbSymbolTableRecord\n100\nAcDbRegAppTableRecord\n  2\nACAD\n 70\n0\n  0\nAPPID\n  5\n37\n330\n3\n100\nAcDbSymbolTableRecord\n100\nAcDbRegAppTableRecord\n  2\nHATCHBACKGROUNDCOLOR\n 70\n0\n  0\nAPPID\n  5\n38\n330\n3\n100\nAcDbSymbolTableRecord\n100\nAcDbRegAppTableRecord\n  2\nEZDXF\n 70\n0\n  0\nENDTAB\n  0\nTABLE\n  2\nDIMSTYLE\n  5\n4\n330\n0\n100\nAcDbSymbolTable\n 70\n1\n100\nAcDbDimStyleTable\n  0\nDIMSTYLE\n105\n2B\n330\n4\n100\nAcDbSymbolTableRecord\n100\nAcDbDimStyleTableRecord\n  2\nStandard\n 70\n0\n 40\n1.0\n 41\n2.5\n 42\n0.625\n 43\n3.75\n 44\n1.25\n 45\n0.0\n 46\n0.0\n 47\n0.0\n 48\n0.0\n 49\n2.5\n140\n2.5\n141\n2.5\n142\n0.0\n143\n0.03937007874\n144\n1.0\n145\n0.0\n146\n1.0\n147\n0.625\n148\n0.0\n 69\n0\n 70\n0\n 71\n0\n 72\n0\n 73\n0\n 74\n0\n 75\n0\n 76\n0\n 77\n1\n 78\n8\n 79\n3\n170\n0\n171\n3\n172\n1\n173\n0\n174\n0\n175\n0\n176\n0\n177\n0\n178\n0\n179\n2\n271\n2\n272\n2\n273\n2\n274\n3\n275\n0\n276\n0\n277\n2\n278\n44\n279\n0\n280\n0\n281\n0\n282\n0\n283\n0\n284\n8\n285\n0\n286\n0\n288\n0\n289\n3\n290\n0\n371\n-2\n372\n-2\n  0\nENDTAB\n  0\nTABLE\n  2\nBLOCK_RECORD\n  5\n9\n330\n0\n100\nAcDbSymbolTable\n 70\n2\n  0\nBLOCK_RECORD\n  5\n17\n330\n9\n100\nAcDbSymbolTableRecord\n100\nAcDbBlockTableRecord\n  2\n*Model_Space\n340\n1A\n 70\n0\n280\n1\n281\n0\n  0\nBLOCK_RECORD\n  5\n1B\n330\n9\n100\nAcDbSymbolTableRecord\n100\nAcDbBlockTableRecord\n  2\n*Paper_Space\n340\n1E\n 70\n0\n280\n1\n281\n0\n  0\nENDTAB\n  0\nENDSEC\n  0\nSECTION\n  2\nBLOCKS\n  0\nBLOCK\n  5\n18\n330\n17\n100\nAcDbEntity\n  8\n0\n100\nAcDbBlockBegin\n  2\n*Model_Space\n 70\n0\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  3\n*Model_Space\n  1\n\n  0\nENDBLK\n  5\n19\n330\n17\n100\nAcDbEntity\n  8\n0\n100\nAcDbBlockEnd\n  0\nBLOCK\n  5\n1C\n330\n1B\n100\nAcDbEntity\n  8\n0\n100\nAcDbBlockBegin\n  2\n*Paper_Space\n 70\n0\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  3\n*Paper_Space\n  1\n\n  0\nENDBLK\n  5\n1D\n330\n1B\n100\nAcDbEntity\n  8\n0\n100\nAcDbBlockEnd\n  0\nENDSEC\n  0\nSECTION\n  2\nENTITIES\n", "foot": "  0\nENDSEC\n  0\nSECTION\n  2\nOBJECTS\n  0\nDICTIONARY\n  5\nA\n330\n0\n100\nAcDbDictionary\n281\n1\n  3\nACAD_COLOR\n350\nB\n  3\nACAD_GROUP\n350\nC\n  3\nACAD_LAYOUT\n350\nD\n  3\nACAD_MATERIAL\n350\nE\n  3\nACAD_MLEADERSTYLE\n350\nF\n  3\nACAD_MLINESTYLE\n350\n10\n  3\nACAD_PLOTSETTINGS\n350\n11\n  3\nACAD_PLOTSTYLENAME\n350\n12\n  3\nACAD_SCALELIST\n350\n14\n  3\nACAD_TABLESTYLE\n350\n15\n  3\nACAD_VISUALSTYLE\n350\n16\n  3\nEZDXF_META\n350\n2D\n  0\nDICTIONARY\n  5\nB\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nDICTIONARY\n  5\nC\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nDICTIONARY\n  5\nD\n330\nA\n100\nAcDbDictionary\n281\n1\n  3\nModel\n350\n1A\n  3\nLayout1\n350\n1E\n  0\nDICTIONARY\n  5\nE\n330\nA\n100\nAcDbDictionary\n281\n1\n  3\nByBlock\n350\n1F\n  3\nByLayer\n350\n20\n  3\nGlobal\n350\n21\n  0\nDICTIONARY\n  5\nF\n330\nA\n100\nAcDbDictionary\n281\n1\n  3\nStandard\n350\n2C\n  0\nDICTIONARY\n  5\n10\n330\nA\n100\nAcDbDictionary\n281\n1\n  3\nStandard\n350\n22\n  0\nDICTIONARY\n  5\n11\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nACDBDICTIONARYWDFLT\n  5\n12\n330\nA\n100\nAcDbDictionary\n281\n1\n  3\nNormal\n350\n13\n100\nAcDbDictionaryWithDefault\n340\n13\n  0\nACDBPLACEHOLDER\n  5\n13\n330\n12\n  0\nDICTIONARY\n  5\n14\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nDICTIONARY\n  5\n15\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nDICTIONARY\n  5\n16\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nLAYOUT\n  5\n1A\n330\nD\n100\nAcDbPlotSettings\n  1\n\n  4\nA3\n  6\n\n 40\n7.5\n 41\n20.0\n 42\n7.5\n 43\n20.0\n 44\n420.0\n 45\n297.0\n 46\n0.0\n 47\n0.0\n 48\n0.0\n 49\n0.0\n140\n0.0\n141\n0.0\n142\n1.0\n143\n1.0\n 70\n1024\n 72\n1\n 73\n0\n 74\n5\n  7\n\n 75\n16\n 76\n0\n 77\n2\n 78\n300\n147\n1.0\n148\n0.0\n149\n0.0\n100\nAcDbLayout\n  1\nModel\n 70\n1\n 71\n0\n 10\n0.0\n 20\n0.0\n 11\n420.0\n 21\n297.0\n 12\n0.0\n 22\n0.0\n 32\n0.0\n 14\n1e+20\n 24\n1e+20\n 34\n1e+20\n 15\n-1e+20\n 25\n-1e+20\n 35\n-1e+20\n146\n0.0\n 13\n0.0\n 23\n0.0\n 33\n0.0\n 16\n1.0\n 26\n0.0\n 36\n0.0\n 17\n0.0\n 27\n1.0\n 37\n0.0\n 76\n1\n330\n17\n  0\nLAYOUT\n  5\n1E\n330\nD\n100\nAcDbPlotSettings\n  1\n\n  4\nA3\n  6\n\n 40\n7.5\n 41\n20.0\n 42\n7.5\n 43\n20.0\n 44\n420.0\n 45\n297.0\n 46\n0.0\n 47\n0.0\n 48\n0.0\n 49\n0.0\n140\n0.0\n141\n0.0\n142\n1.0\n143\n1.0\n 70\n0\n 72\n1\n 73\n0\n 74\n5\n  7\n\n 75\n16\n 76\n0\n 77\n2\n 78\n300\n147\n1.0\n148\n0.0\n149\n0.0\n100\nAcDbLayout\n  1\nLayout1\n 70\n1\n 71\n1\n 10\n0.0\n 20\n0.0\n 11\n420.0\n 21\n297.0\n 12\n0.0\n 22\n0.0\n 32\n0.0\n 14\n1e+20\n 24\n1e+20\n 34\n1e+20\n 15\n-1e+20\n 25\n-1e+20\n 35\n-1e+20\n146\n0.0\n 13\n0.0\n 23\n0.0\n 33\n0.0\n 16\n1.0\n 26\n0.0\n 36\n0.0\n 17\n0.0\n 27\n1.0\n 37\n0.0\n 76\n1\n330\n1B\n  0\nMATERIAL\n  5\n1F\n102\n{ACAD_REACTORS\n330\nE\n102\n}\n330\nE\n100\nAcDbMaterial\n  1\nByBlock\n  2\n\n 70\n0\n 40\n1.0\n 71\n1\n 41\n1.0\n 91\n-1023410177\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 44\n0.5\n 73\n0\n 45\n1.0\n 46\n1.0\n 77\n1\n  4\n\n 78\n1\n 79\n1\n170\n1\n 48\n1.0\n171\n1\n  6\n\n172\n1\n173\n1\n174\n1\n140\n1.0\n141\n1.0\n175\n1\n  7\n\n176\n1\n177\n1\n178\n1\n143\n1.0\n179\n1\n  8\n\n270\n1\n271\n1\n272\n1\n145\n1.0\n146\n1.0\n273\n1\n  9\n\n274\n1\n275\n1\n276\n1\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 94\n63\n  0\nMATERIAL\n  5\n20\n102\n{ACAD_REACTORS\n330\nE\n102\n}\n330\nE\n100\nAcDbMaterial\n  1\nByLayer\n  2\n\n 70\n0\n 40\n1.0\n 71\n1\n 41\n1.0\n 91\n-1023410177\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 44\n0.5\n 73\n0\n 45\n1.0\n 46\n1.0\n 77\n1\n  4\n\n 78\n1\n 79\n1\n170\n1\n 48\n1.0\n171\n1\n  6\n\n172\n1\n173\n1\n174\n1\n140\n1.0\n141\n1.0\n175\n1\n  7\n\n176\n1\n177\n1\n178\n1\n143\n1.0\n179\n1\n  8\n\n270\n1\n271\n1\n272\n1\n145\n1.0\n146\n1.0\n273\n1\n  9\n\n274\n1\n275\n1\n276\n1\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 94\n63\n  0\nMATERIAL\n  5\n21\n102\n{ACAD_REACTORS\n330\nE\n102\n}\n330\nE\n100\nAcDbMaterial\n  1\nGlobal\n  2\n\n 70\n0\n 40\n1.0\n 71\n1\n 41\n1.0\n 91\n-1023410177\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 44\n0.5\n 73\n0\n 45\n1.0\n 46\n1.0\n 77\n1\n  4\n\n 78\n1\n 79\n1\n170\n1\n 48\n1.0\n171\n1\n  6\n\n172\n1\n173\n1\n174\n1\n140\n1.0\n141\n1.0\n175\n1\n  7\n\n176\n1\n177\n1\n178\n1\n143\n1.0\n179\n1\n  8\n\n270\n1\n271\n1\n272\n1\n145\n1.0\n146\n1.0\n273\n1\n  9\n\n274\n1\n275\n1\n276\n1\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 94\n63\n  0\nMLINESTYLE\n  5\n22\n102\n{ACAD_REACTORS\n330\n10\n102\n}\n330\n10\n100\nAcDbMlineStyle\n  2\nStandard\n 70\n0\n  3\n\n 62\n256\n 51\n90.0\n 52\n90.0\n 71\n2\n 49\n0.5\n 62\n256\n  6\nBYLAYER\n 49\n-0.5\n 62\n256\n  6\nBYLAYER\n  0\nMLEADERSTYLE\n  5\n2C\n102\n{ACAD_REACTORS\n330\nF\n102\n}\n330\nF\n100\nAcDbMLeaderStyle\n179\n2\n170\n2\n171\n1\n172\n0\n 90\n2\n 40\n0.0\n 41\n0.0\n173\n1\n 91\n-1056964608\n 92\n-2\n290\n1\n 42\n2.0\n291\n1\n 43\n8.0\n  3\nStandard\n 44\n4.0\n300\n\n342\n29\n174\n1\n175\n1\n176\n0\n178\n1\n 93\n-1056964608\n 45\n4.0\n292\n0\n297\n0\n 46\n4.0\n 94\n-1056964608\n 47\n1.0\n 49\n1.0\n140\n1.0\n294\n1\n141\n0.0\n177\n0\n142\n1.0\n295\n0\n296\n0\n143\n3.75\n271\n0\n272\n9\n273\n9\n  0\nDICTIONARY\n  5\n2D\n330\nA\n100\nAcDbDictionary\n280\n1\n281\n1\n  3\nCREATED_BY_EZDXF\n350\n2E\n  3\nWRITTEN_BY_EZDXF\n350\n39\n  0\nDICTIONARYVAR\n  5\n2E\n330\n2D\n100\nDictionaryVariables\n280\n0\n  1\n1.4.4 @ 2026-10-07T20:05:07.423817+00:00\n  0\nDICTIONARYVAR\n  5\n39\n330\n2D\n100\nDictionaryVariables\n280\n0\n  1\n1.4.4 @ 2026-10-07T20:05:07.428944+00:00\n  0\nENDSEC\n  0\nEOF\n"};
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s);
+const XMIN=-320,XMAX=1380,YMIN=-380,YMAX=1680;
+const H_FINE=4,H_DRAG=10,H_EXPORT=3,H_RIV=12;
+const RAMP=8,FLOOR_H=3.2,OBJ_CX=560,OBJ_CY=650;
+const FORM={1:{r:150,w:60,a:6,c:4,fp:45},2:{r:115,w:50,a:4.5,c:2.6,fp:38},3:{r:85,w:40,a:3.2,c:1.6,fp:28},4:{r:55,w:28,a:2.2,c:.9,fp:18},5:{r:28,w:16,a:1.3,c:.7,fp:9}};
+const OBJH3={1:14,2:11,3:9,4:6,5:1.2};
+const TYPES={
+  ayto:{label:'Ayuntamiento',peso:1,col:'#2B59C3'},
+  trabajo:{label:'Zona de trabajo',peso:2,col:'#9A5530'},
+  cultura:{label:'Centro cultural',peso:3,col:'#7B4FA0'},
+  equip:{label:'Equipamiento de barrio',peso:4,col:'#3F7D4E'},
+  manantial:{label:'Manantial',peso:5,col:'#2390A8'}
+};
+const USOS=[
+  {name:'Fuera de la ciudad',rgb:null},
+  {name:'Laguna / lámina de agua',rgb:[96,160,180]},
+  {name:'Río transitable (vadeable)',rgb:[124,184,200]},
+  {name:'Paseo de orilla',rgb:[214,205,170]},
+  {name:'Parque / zona verde',rgb:[150,190,120]},
+  {name:'VIVIENDA (suelo residencial)',rgb:[236,150,110]},
+  {name:'Equipamiento',rgb:[190,196,210]},
+  {name:'Plaza de barrio',rgb:[232,224,206]},
+  {name:'Plaza mayor',rgb:[250,244,226]},
+  {name:'Prado / bosque de borde',rgb:[190,208,160]},
+  {name:'Gradas / anfiteatro',rgb:[205,172,128]},
+  {name:'Terrazas ajardinadas',rgb:[120,170,104]},
+  {name:'Paseo del río',rgb:[196,222,204]},
+  {name:'Patio / espacio libre entre viviendas',rgb:[206,222,176]}
+];
+const ZN={out:0,lag:1,rio:2,orilla:3,parque:4,viv:5,equip:6,plaza:7,mayor:8,prado:9,gradas:10,terr:11,ribera:12,patio:13};
+const INF={1:100,2:90,3:75,4:55,5:130};
+const PARAMS=[
+  {g:'Pendiente y forma'},
+  {k:'slope',l:'Pendiente general',min:0,max:6,st:.1,d:1,u:' %',help:'Inclina todo el terreno hacia el norte. Con ella aparecen gradas y terrazas'},
+  {k:'fuse',l:'Fusión entre ondas (relieve)',min:.4,max:4,st:.05,d:2},
+  {k:'alc',l:'Alcance de la influencia',min:.6,max:2,st:.05,d:2,u:' × r',help:'Hasta dónde llega la influencia de cada onda, en múltiplos de su radio'},
+  {g:'Deformación (opcional)'},
+  {k:'refr',l:'Refracción',min:0,max:2,st:.05,d:2},
+  {k:'stretch',l:'Ondas estiradas al sur',min:0,max:2,st:.05,d:2},
+  {g:'Zonas según la influencia sumada'},
+  {k:'sMin',l:'Límite de la ciudad',min:2,max:40,st:1,d:0,help:'Por debajo, fuera de la ciudad'},
+  {k:'sVerde',l:'Empieza el parque',min:10,max:80,st:1,d:0},
+  {k:'sViv',l:'Empieza la vivienda',min:20,max:120,st:1,d:0},
+  {k:'sLinea',l:'Línea de vivienda (influencia)',min:20,max:200,st:1,d:0,help:'La vivienda sigue la curva donde la influencia vale esto. Rodea a los núcleos'},
+  {k:'anchoViv',l:'Profundidad de la vivienda',min:4,max:30,st:.5,d:1,u:' m'},
+  {k:'sAgua',l:'Empieza el agua',min:60,max:200,st:1,d:0},
+  {k:'sPlaza',l:'Empiezan las plazas',min:90,max:300,st:1,d:0},
+  {k:'sMayor',l:'Empieza la plaza mayor',min:120,max:420,st:1,d:0},
+  {k:'pendT',l:'Pendiente para terrazas',min:1,max:15,st:.5,d:1,u:' %',help:'En parques con más pendiente que esto se hacen terrazas ajardinadas'},
+  {k:'pendG',l:'Pendiente para gradas',min:2,max:25,st:.5,d:1,u:' %',help:'En plazas con más pendiente que esto se hacen gradas'},
+  {k:'paseoW',l:'Paseo a cada lado del río',min:0,max:30,st:1,d:0,u:' m'},
+  {g:'Niveles y agua'},
+  {k:'step',l:'Salto entre niveles',min:.5,max:4,st:.25,d:2,u:' m'},
+  {k:'terr',l:'Terrazas en el relieve',chk:true},
+  {k:'wl',l:'Nivel del agua',min:-4,max:1,st:.1,d:1,u:' m'},
+  {k:'riverW',l:'Ancho del río',min:0,max:50,st:1,d:0,u:' m'},
+  {k:'extra',l:'Ramas extra de río',min:0,max:4,st:1,d:0},
+  {k:'valley',l:'Río busca la zona de agua',min:0,max:6,st:.25,d:2},
+  {g:'Estimación de habitantes'},
+  {k:'plantas',l:'Plantas supuestas (las defines tú)',min:1,max:12,st:1,d:0},
+  {k:'ocup',l:'Ocupación de la franja',min:.5,max:1,st:.01,d:2},
+  {k:'m2hab',l:'m² construidos por habitante',min:20,max:60,st:1,d:0,u:' m²'}
+];
+const DEF_PARAMS={fuse:1.4,alc:1.5,refr:0,stretch:0,slope:1,step:1.5,terr:true,wl:-.8,riverW:22,extra:1,valley:3,
+  sMin:12,sVerde:30,sViv:55,sLinea:82,anchoViv:10,sAgua:125,sPlaza:150,sMayor:205,pendT:3,pendG:6,paseoW:10,plantas:5,ocup:1,m2hab:34};
+
+/* ---------- estado ---------- */
+const DEF_CHOQUE={ayto:0,trabajo:0,cultura:0,equip:0,manantial:0};
+let S={objects:[],params:{...DEF_PARAMS},choque:{...DEF_CHOQUE},view:'usos',sel:null,tool:null,section:null,res3d:5};
+let uid=1;
+function mkObj(type,x,y,name,peso){const t=TYPES[type],p=peso||t.peso,f=FORM[p];return {id:uid++,type,name:name||t.label,peso:p,x,y,z0:0,r:f.r,w:f.w,a:f.a,c:0,inf:INF[p]};}
+const gridCache=new Map();
+function getGrid(h,x0,y0,x1,y1){const key=h+'|'+(x0??'')+(y0??'');if(!gridCache.has(key)){
+  const ox=x0??XMIN,oy=y1??YMAX,nx=Math.ceil(((x1??XMAX)-ox)/h),ny=Math.ceil((oy-(y0??YMIN))/h),N=nx*ny,xs=new Float64Array(N),ys=new Float64Array(N);
+  for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){xs[j*nx+i]=ox+(i+.5)*h;ys[j*nx+i]=oy-(j+.5)*h;}
+  gridCache.set(key,{h,nx,ny,N,xs,ys,ox,oy});}return gridCache.get(key);}
+
+const MAN=[[110,1000],[380,1260],[640,1270],[940,1180],[200,820],[520,880],[760,720],[1000,800],[150,240],[600,520],[700,330],[930,170]];
+const EQ=[['Escuela norte',420,1060],['Escuela sur',820,330],['Centro de salud',290,720],['Mercado norte',700,840],['Mercado sur',520,200],['Baños',960,980],['Polideportivo',120,430],['Escuela este',990,520]];
+function preset(name){
+  const o=[];const addEqMan=()=>{EQ.forEach(([n,x,y])=>o.push(mkObj('equip',x,y,n)));MAN.forEach(([x,y],i)=>o.push(mkObj('manantial',x,y,'Manantial M'+(i+1))));};
+  if(name==='guion'){
+    o.push(mkObj('ayto',392,640,'Ayuntamiento'));
+    [[250,1180],[860,640],[330,230]].forEach(([x,y],i)=>o.push(mkObj('trabajo',x,y,'Zona de trabajo T'+(i+1))));
+    [['Biblioteca-teatro',640,1010],['Museo del agua',430,470],['Escuela de artes',790,1210],['Auditorio del lago',660,60]].forEach(([n,x,y])=>o.push(mkObj('cultura',x,y,n)));
+    addEqMan();
+  }else if(name==='sedes'){
+    [['Ayuntamiento, sede norte',610,1120],['Ayuntamiento, sede del río',392,640],['Ayuntamiento, sede sur',600,150]].forEach(([n,x,y])=>{const a=mkObj('ayto',x,y,n,1);a.r=125;a.w=52;o.push(a);});
+    [[200,1000],[930,860],[230,300]].forEach(([x,y],i)=>o.push(mkObj('trabajo',x,y,'Zona de trabajo T'+(i+1))));
+    [['Biblioteca-teatro',820,1240],['Museo del agua',780,470],['Escuela de artes',150,700],['Auditorio del lago',940,90]].forEach(([n,x,y])=>o.push(mkObj('cultura',x,y,n)));
+    addEqMan();
+  }
+  return o;
+}
+
+/* ---------- utilidades numéricas ---------- */
+const sm=t=>{t=t<0?0:t>1?1:t;return t*t*(3-2*t);};
+function stair(z,S_,h=.08){const u=z/S_,r=Math.round(u),e=u-r;return S_*(r-1+sm((e+h)/(2*h)));}
+const newOut=n=>({n,Hl:new Float64Array(n),Hb:new Float64Array(n),Ha:new Float64Array(n),rho:new Float64Array(n),mg:new Float64Array(n),t:new Float64Array(n),dom:new Int16Array(n),near:new Int16Array(n),S:new Float64Array(n),nw:new Int16Array(n),Z:new Float64Array(n),WS:new Float64Array(n)});
+function mkHash(px,py,pv,cell){const m=new Map();for(let i=0;i<px.length;i++){const k=Math.floor(px[i]/cell)*100003+Math.floor(py[i]/cell);const l=m.get(k);if(l)l.push(i);else m.set(k,[i]);}return {m,cell,px,py,pv,d:1e9};}
+function hashNear(H,x,y){const cx=Math.floor(x/H.cell),cy=Math.floor(y/H.cell);let best=-1,bd=1e18;
+  for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const l=H.m.get((cx+a)*100003+cy+b);if(!l)continue;for(let q=0;q<l.length;q++){const i=l[q],dx=H.px[i]-x,dy=H.py[i]-y,d=dx*dx+dy*dy;if(d<bd){bd=d;best=i;}}}
+  H.d=best<0?1e9:Math.sqrt(bd);return best;}
+function resampleLine(pts,ds,closed){
+  const P=closed?pts.concat([pts[0]]):pts,n=P.length,s=[0];for(let i=1;i<n;i++)s.push(s[i-1]+Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]));
+  const L=s[n-1];if(L<1e-6)return {pts:[pts[0]],s:[0]};
+  const m=Math.max(Math.round(L/ds),closed?4:1),out=[],ss=[];let k=0;const cnt=closed?m:m+1;
+  for(let q=0;q<cnt;q++){const t=q*L/m;while(k<n-2&&s[k+1]<t)k++;const seg=s[k+1]-s[k],u=seg>1e-9?(t-s[k])/seg:0;out.push([P[k][0]+(P[k+1][0]-P[k][0])*u,P[k][1]+(P[k+1][1]-P[k][1])*u]);ss.push(t);}
+  return {pts:out,s:ss};}
+function gauss(P,sigma,closed){const n=P.length;if(n<5||sigma<=0)return P;const r=Math.ceil(3*sigma),w=[];let sw=0;for(let i=-r;i<=r;i++){const v=Math.exp(-i*i/(2*sigma*sigma));w.push(v);sw+=v;}
+  const out=new Array(n);for(let i=0;i<n;i++){let x=0,y=0;for(let j=-r;j<=r;j++){let q=i+j;if(closed)q=((q%n)+n)%n;else q=q<0?0:q>=n?n-1:q;x+=P[q][0]*w[j+r];y+=P[q][1]*w[j+r];}out[i]=[x/sw,y/sw];}return out;}
+function normals2(P,closed){const n=P.length;return P.map((p,i)=>{let a,b;if(closed){a=P[(i+n-1)%n];b=P[(i+1)%n];}else{a=P[Math.max(0,i-1)];b=P[Math.min(n-1,i+1)];}const dx=b[0]-a[0],dy=b[1]-a[1],m=Math.hypot(dx,dy)||1;return [-dy/m,dx/m];});}
+function offsetLine(P,closed,d){const N=normals2(P,closed);return P.map((p,i)=>[p[0]+N[i][0]*d,p[1]+N[i][1]*d]);}
+function runsOf(mask){const out=[];let i=0;const n=mask.length;while(i<n){if(mask[i]){let j=i;while(j<n&&mask[j])j++;out.push([i,j]);i=j;}else i++;}return out;}
+const lineLen=(P,closed)=>{let l=0;for(let i=1;i<P.length;i++)l+=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);if(closed&&P.length>1)l+=Math.hypot(P[0][0]-P[P.length-1][0],P[0][1]-P[P.length-1][1]);return l;};
+
+/* ---------- modelo continuo: el terreno es una función z(x,y) ---------- */
+function mkCity(){
+  const P=S.params,O=S.objects,n=O.length,f64=()=>new Float64Array(n);
+  const C={P,O,n,ord:[],INF:f64(),CH:f64(),IR2:f64(),X:f64(),Y:f64(),R2:f64(),A:f64(),Cc:f64(),Z0:f64(),FP:f64(),WN:f64(),RCN:f64(),WCN:f64(),RC:f64(),WC:f64(),down:1/(1+.35*P.stretch),up:1+.2*P.stretch,rv:null,rivers:[]};
+  O.forEach((o,i)=>{const fp=FORM[o.peso].fp,Rr=Math.max(10,o.r-fp),rc=fp+.32*Rr,wc=.26*Rr+6;
+    C.INF[i]=Number.isFinite(+o.inf)?+o.inf:INF[o.peso];C.CH[i]=Math.max(0,Math.min(1,S.choque[o.type]||0));C.IR2[i]=1/(o.r*o.r);C.X[i]=o.x;C.Y[i]=o.y;C.R2[i]=o.r*o.r;C.A[i]=o.a;C.Cc[i]=0;C.Z0[i]=o.z0||0;C.FP[i]=fp;C.WN[i]=o.w/o.r;C.RCN[i]=rc/o.r;C.WCN[i]=wc/o.r;C.RC[i]=rc;C.WC[i]=wc;});
+  C.ord=O.map((_,i)=>i).sort((a,b)=>O[b].peso-O[a].peso||a-b);
+  return C;}
+function relPts(C,xa,ya,n,o){
+  const P=C.P,kap=P.fuse,sl=P.slope/100,m=C.n,warp=P.refr>0,k_=P.refr,str=P.stretch;
+  for(let k=0;k<n;k++){
+    const x=xa[k],y=ya[k];let wx=x,wy=y;
+    if(warp){wx=x+k_*(22*Math.sin(y/95+1.3)+13*Math.sin((x+y)/57));wy=y+k_*(18*Math.sin(x/115)+11*Math.cos((x-y)/72));}
+    let u=0,wa=0,wc=0,ww=0,wr=0,wv=0,wb=0,best=0,bi=-1,mg=1e9,nr=-1;
+    for(let i=0;i<m;i++){
+      const ex=x-C.X[i],ey=y-C.Y[i],d=Math.sqrt(ex*ex+ey*ey)-C.FP[i];if(d<mg){mg=d;nr=i;}
+      const dx=wx-C.X[i];let dy=wy-C.Y[i];if(str)dy*=dy<0?C.down:C.up;
+      const t=kap*(dx*dx+dy*dy)/C.R2[i];if(t>16)continue;
+      const e=Math.exp(-t);u+=e;wb+=e*C.Z0[i];wa+=e*C.A[i];wc+=e*C.Cc[i];ww+=e*C.WN[i];wr+=e*C.RCN[i];wv+=e*C.WCN[i];const sc=e*C.A[i];if(sc>best){best=sc;bi=i;}
+    }
+    let z=0,rho=99,base=0;
+    if(u>1e-12){const r2=-Math.log(u)/kap;rho=r2>0?Math.sqrt(r2):0;const v1=(rho-1)/(ww/u),v2=(rho-wr/u)/(wv/u);z=(wa/u)*Math.exp(-v1*v1)-(wc/u)*Math.exp(-v2*v2);base=wb/u;}
+    let Ss=0,nwv=0,bv=0,bdm=-1;const ia=1/(P.alc*P.alc);
+    for(let q=0;q<m;q++){const i=C.ord[q],dx=wx-C.X[i];let dy=wy-C.Y[i];if(str)dy*=dy<0?C.down:C.up;
+      const t=(dx*dx+dy*dy)*C.IR2[i]*ia;if(t>13)continue;const g=Math.exp(-t),v=C.INF[i]*g,c=C.CH[i];
+      Ss=Ss*(1-c*g)+v*((1-c)+c*g);if(g>.2)nwv++;if(v>bv){bv=v;bdm=i;}}
+    o.S[k]=Ss;o.nw[k]=nwv;
+    let tt=0;
+    if(m){tt=sm((RAMP-mg)/RAMP);z+=(Math.max(z,.6)-z)*tt;base+=(C.Z0[nr]-base)*tt;}
+    o.Hl[k]=z;o.Hb[k]=base;o.Ha[k]=base+z+sl*(y-650);o.rho[k]=rho;o.mg[k]=mg;o.t[k]=tt;o.dom[k]=bdm>=0?bdm:bi;o.near[k]=nr;
+  }
+}
+function surfPts(C,xa,ya,n,o){
+  o=o||newOut(n);relPts(C,xa,ya,n,o);
+  const P=C.P,sl=P.slope/100,S_=P.step,wl=P.wl,rv=C.rv;
+  for(let k=0;k<n;k++){
+    const ws=o.Hb[k]+wl+sl*(ya[k]-650),ha=o.Ha[k];let z=ha;
+    if(P.terr){const d=ha-ws,w=sm(d/S_)*(1-o.t[k]);z=(1-w)*ha+w*stair(ha,S_);if(d>0)z=Math.max(z,ws+Math.min(d,.02));}
+    {const Sk=o.S[k],wm=sm((Sk-P.sAgua+6)/10)*(1-sm((Sk-P.sPlaza)/10))*(1-o.t[k]);if(wm>0){const bed=ws-1.2;z+=(Math.min(z,bed)-z)*wm;}}
+    if(rv){const i=hashNear(rv,xa[k],ya[k]);if(i>=0){const dist=rv.d,hw=rv.pv[i],bank=8,D=.5;let zr;
+      if(dist>hw){zr=Math.min(z,ws+(z-ws)*sm((dist-hw)/bank));}else{zr=Math.min(z,ws-D*sm((hw-dist)/(.7*hw)));}
+      z=z+(zr-z)*(1-o.t[k]);}}
+    o.WS[k]=ws;o.Z[k]=z;
+  }
+  return o;
+}
+function onePt(C,x,y){const o=surfPts(C,[x],[y],1);return o;}
+function slopePts(C,xa,ya,n,e=2.5){ // pendiente local en % (relieve sin terrazas)
+  const mk=(dx,dy)=>{const x=new Float64Array(n),y=new Float64Array(n);for(let k=0;k<n;k++){x[k]=xa[k]+dx;y[k]=ya[k]+dy;}const o=newOut(n);relPts(C,x,y,n,o);return o.Ha;};
+  const a=mk(e,0),b=mk(-e,0),c=mk(0,e),d=mk(0,-e),out=new Float64Array(n);
+  for(let k=0;k<n;k++)out[k]=100*Math.hypot(a[k]-b[k],c[k]-d[k])/(2*e);
+  return out;}
+function sGradPts(C,xa,ya,n,e=2){const mk=(dx,dy)=>{const x=new Float64Array(n),y=new Float64Array(n);for(let k=0;k<n;k++){x[k]=xa[k]+dx;y[k]=ya[k]+dy;}const o=newOut(n);relPts(C,x,y,n,o);return o.S;};
+  const a=mk(e,0),b=mk(-e,0),c=mk(0,e),d=mk(0,-e),out=new Float64Array(n);for(let k=0;k<n;k++)out[k]=Math.hypot(a[k]-b[k],c[k]-d[k])/(2*e);return out;}
+const distLinea=(P,Sv,g)=>Math.abs(Sv-P.sLinea)/Math.max(g,.25);
+function zoneOf(P,Sv,mg,slp,wat,rb,dl){
+  if(Sv<P.sMin)return 0;if(wat)return rb<1?2:1;if(mg<=0)return 6;
+  if(Sv>=P.sPlaza)return Sv>=P.sMayor?8:(slp>P.pendG?10:7);
+  if(Sv>=.88*P.sAgua)return 3;if(rb<P.paseoW)return 12;
+  if(Sv>=P.sViv)return dl<=P.anchoViv/2?5:13;if(Sv>=P.sVerde)return slp>P.pendT?11:4;return 9;}
+function setRivers(C,riv){C.rivers=riv;if(!riv.length){C.rv=null;return;}const px=[],py=[],hw=[];riv.forEach(r=>r.pts.forEach((p,i)=>{px.push(p[0]);py.push(p[1]);hw.push(r.hw[i]);}));C.rv=mkHash(px,py,hw,40);}
+
+/* ---------- ríos: unión mínima + camino de mínimo coste, luego curva suave ---------- */
+const MOVES=[];for(let dj=-2;dj<=2;dj++)for(let di=-2;di<=2;di++){if(!di&&!dj)continue;if(Math.abs(di)===2&&Math.abs(dj)===2)continue;if((Math.abs(di)===2||Math.abs(dj)===2)&&(di===0||dj===0))continue;MOVES.push([di,dj,Math.hypot(di,dj)]);}
+function routeRivers(C,G,o){
+  const P=C.P,O=C.O,nodes=[];O.forEach((ob,i)=>{if(ob.peso<=2)nodes.push(i);});
+  if(!nodes.some(i=>O[i].peso===1)||nodes.length<2||P.riverW<=0)return [];
+  const {nx,ny,N,h,xs,ys}=G;
+  const ed=[];for(let a=0;a<nodes.length;a++)for(let b=a+1;b<nodes.length;b++){const A=nodes[a],B=nodes[b],both2=O[A].peso===2&&O[B].peso===2;ed.push({a:A,b:B,w:Math.hypot(O[A].x-O[B].x,O[A].y-O[B].y)*(both2?1.6:1),has1:!both2});}
+  ed.sort((p,q)=>p.w-q.w);const par=new Map(nodes.map(n=>[n,n]));const fnd=x=>{while(par.get(x)!==x){par.set(x,par.get(par.get(x)));x=par.get(x);}return x;};
+  const chosen=[],rest=[];ed.forEach(e=>{const ra=fnd(e.a),rb=fnd(e.b);if(ra!==rb){par.set(ra,rb);chosen.push(e);}else rest.push(e);});
+  rest.filter(e=>e.has1).slice(0,P.extra).forEach(e=>chosen.push(e));
+  const base=new Float32Array(N);
+  for(let k=0;k<N;k++){base[k]=o.S[k]<P.sMin?6:1+P.valley*Math.min(1,Math.abs(o.S[k]-(P.sAgua+P.sPlaza)/2)/P.sAgua);}
+  const riv=new Uint8Array(N),out=[],dist=new Float32Array(N),prev=new Int32Array(N),done=new Uint8Array(N);
+  const isEnd=(q,k)=>{const ex=xs[k]-C.X[q],ey=ys[k]-C.Y[q],d2=ex*ex+ey*ey;return d2<(C.FP[q]+14)**2;};
+  for(const e of chosen){let A=e.a,B=e.b;if(O[A].peso!==1&&O[B].peso===1){const t=A;A=B;B=t;}
+    dist.fill(Infinity);prev.fill(-1);done.fill(0);const heap=[],tgt=new Uint8Array(N);
+    const push=(k,d)=>{heap.push([d,k]);let c=heap.length-1;while(c>0){const p=(c-1)>>1;if(heap[p][0]<=heap[c][0])break;[heap[p],heap[c]]=[heap[c],heap[p]];c=p;}};
+    const pop=()=>{const top=heap[0],last=heap.pop();if(heap.length){heap[0]=last;let c=0;for(;;){const l=2*c+1,r=l+1;let m=c;if(l<heap.length&&heap[l][0]<heap[m][0])m=l;if(r<heap.length&&heap[r][0]<heap[m][0])m=r;if(m===c)break;[heap[m],heap[c]]=[heap[c],heap[m]];c=m;}}return top;};
+    for(let k=0;k<N;k++){if(isEnd(A,k)){dist[k]=0;push(k,0);}else if(isEnd(B,k))tgt[k]=1;}
+    let hit=-1;
+    while(heap.length){const [d,k]=pop();if(done[k])continue;done[k]=1;if(tgt[k]){hit=k;break;}const i=k%nx,j=(k-i)/nx;
+      for(const [di,dj,ml] of MOVES){const ii=i+di,jj=j+dj;if(ii<0||jj<0||ii>=nx||jj>=ny)continue;const q=jj*nx+ii;if(done[q])continue;
+        let c=base[q];if(riv[q])c=Math.min(c,.5);const f=o.mg[q]<0?o.near[q]:-1;if(f>=0&&f!==A&&f!==B)c+=80;const nd=d+c*ml;if(nd<dist[q]){dist[q]=nd;prev[q]=k;push(q,nd);}}}
+    if(hit<0)continue;
+    let pts=[];for(let k=hit;k>=0;k=prev[k]){riv[k]=1;pts.push([xs[k],ys[k]]);}
+    pts.reverse();
+    if(pts.length>6){const dec=[pts[0]];for(let p=3;p<pts.length-3;p+=3)dec.push(pts[p]);dec.push(pts[pts.length-1]);pts=dec;}
+    for(let it=0;it<4&&pts.length>2;it++){const np=[pts[0]];for(let p=0;p<pts.length-1;p++){const a=pts[p],b=pts[p+1];np.push([.75*a[0]+.25*b[0],.75*a[1]+.25*b[1]],[.25*a[0]+.75*b[0],.25*a[1]+.75*b[1]]);}np.push(pts[pts.length-1]);pts=np;}
+    const f0=pts[0],f1=pts[pts.length-1];let dense=resampleLine(pts,1.5,false).pts;dense=gauss(dense,6,false);dense[0]=f0;dense[dense.length-1]=f1;
+    const w0=P.riverW,w1=O[B].peso===1?w0:w0*.6,hw=dense.map((_,i)=>(w0+(w1-w0)*i/Math.max(1,dense.length-1))/2);
+    out.push({pts:dense,hw});
+  }
+  return out;
+}
+
+/* ---------- curvas (marching squares) y suavizado ---------- */
+function contour(G,val,level,ok){
+  const {nx,ny,N,h}=G,segs=[],ox=G.ox,oy=G.oy;
+  for(let j=0;j<ny-1;j++)for(let i=0;i<nx-1;i++){
+    const a=j*nx+i,b=a+1,d=a+nx,c=d+1;
+    if(!ok[a]||!ok[b]||!ok[c]||!ok[d])continue;
+    const va=val[a],vb=val[b],vc=val[c],vd=val[d];
+    const idx=((va>=level)<<3)|((vb>=level)<<2)|((vc>=level)<<1)|(vd>=level?1:0);
+    if(idx===0||idx===15)continue;
+    const x0=ox+(i+.5)*h,y0=oy-(j+.5)*h;
+    const T=()=>[j*nx+i,x0+h*(level-va)/(vb-va),y0];
+    const R=()=>[N+j*nx+i+1,x0+h,y0-h*(level-vb)/(vc-vb)];
+    const B=()=>[(j+1)*nx+i,x0+h*(level-vd)/(vc-vd),y0-h];
+    const L=()=>[N+j*nx+i,x0,y0-h*(level-va)/(vd-va)];
+    const add=(p,q)=>segs.push(p[0],q[0],p[1],p[2],q[1],q[2]);
+    switch(idx){
+      case 1:case 14:add(L(),B());break;
+      case 2:case 13:add(B(),R());break;
+      case 4:case 11:add(T(),R());break;
+      case 8:case 7:add(T(),L());break;
+      case 3:case 12:add(L(),R());break;
+      case 6:case 9:add(T(),B());break;
+      case 5:case 10:{const ctr=(va+vb+vc+vd)/4>=level,ac=idx===10;if(ac===ctr){add(T(),R());add(B(),L());}else{add(T(),L());add(R(),B());}break;}
+    }
+  }
+  const ns=segs.length/6,map=new Map();
+  for(let s=0;s<ns;s++)for(let e=0;e<2;e++){const k=segs[s*6+e];const l=map.get(k);if(l)l.push(s);else map.set(k,[s]);}
+  const used=new Uint8Array(ns),lines=[];
+  const walk=(k,out)=>{for(;;){const l=map.get(k);let nx_=-1;for(const t of l)if(!used[t]){nx_=t;break;}if(nx_<0)return k;used[nx_]=1;const other=segs[nx_*6]===k?1:0;out.push([segs[nx_*6+2+other*2],segs[nx_*6+3+other*2]]);k=segs[nx_*6+other];}};
+  for(let s0=0;s0<ns;s0++){if(used[s0])continue;used[s0]=1;
+    const fwd=[[segs[s0*6+2],segs[s0*6+3]],[segs[s0*6+4],segs[s0*6+5]]];const kEnd=walk(segs[s0*6+1],fwd);const back=[];const kStart=walk(segs[s0*6],back);
+    let pts=back.reverse().concat(fwd);const closed=kStart===kEnd&&pts.length>3;
+    if(closed&&Math.hypot(pts[0][0]-pts[pts.length-1][0],pts[0][1]-pts[pts.length-1][1])<1e-6)pts=pts.slice(0,-1);
+    lines.push({pts,len:lineLen(pts,closed),closed});}
+  return lines;
+}
+function polish(lines,ds,sigma,minLen){const out=[];for(const l of lines){if(l.len<minLen)continue;const R=resampleLine(l.pts,ds,l.closed).pts;if(R.length<4)continue;out.push({pts:gauss(R,sigma,l.closed),closed:l.closed});}return out;}
+
+/* ---------- cálculo completo ---------- */
+let RES=null,imgDirty=true;
+const ZORDER=[5,13,7,8,10,4,11,9,3,12,6,1,2];
+function compute(h){
+  const C=mkCity(),P=C.P;
+  const Gr=getGrid(H_RIV),orv=newOut(Gr.N);relPts(C,Gr.xs,Gr.ys,Gr.N,orv);
+  setRivers(C,routeRivers(C,Gr,orv));
+  const G=getGrid(h),N=G.N,nx=G.nx,ny=G.ny,o=surfPts(C,G.xs,G.ys,N);
+  const cityM=new Uint8Array(N),water=new Uint8Array(N),land=new Uint8Array(N),rb=new Float32Array(N).fill(1e3),slp=new Float32Array(N),gS=new Float32Array(N),cls=new Uint8Array(N);
+  if(C.rv)for(let k=0;k<N;k++){const i=hashNear(C.rv,G.xs[k],G.ys[k]);if(i>=0)rb[k]=C.rv.d-C.rv.pv[i];}
+  for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const k=j*nx+i,i0=Math.max(0,i-1),i1=Math.min(nx-1,i+1),j0=Math.max(0,j-1),j1=Math.min(ny-1,j+1);
+    const gx=(o.Ha[j*nx+i1]-o.Ha[j*nx+i0])/((i1-i0)*h),gy=(o.Ha[j1*nx+i]-o.Ha[j0*nx+i])/((j1-j0)*h);slp[k]=100*Math.hypot(gx,gy);
+    const sx=(o.S[j*nx+i1]-o.S[j*nx+i0])/((i1-i0)*h),sy=(o.S[j1*nx+i]-o.S[j0*nx+i])/((j1-j0)*h);gS[k]=Math.hypot(sx,sy);}
+  const cnt=new Float64Array(14),vivDom=new Float64Array(Math.max(C.n,1)),share=new Float64Array(Math.max(C.n,1));
+  let cityN=0,landN=0,minA=1e9,maxA=-1e9,infl=0;const lv=new Set();let nwSum=0;
+  for(let k=0;k<N;k++){
+    const wat=o.S[k]>=P.sMin&&o.Z[k]<o.WS[k],u=zoneOf(P,o.S[k],o.mg[k],slp[k],wat,rb[k],distLinea(P,o.S[k],gS[k]));cls[k]=u;cnt[u]++;
+    if(u===0)continue;cityM[k]=1;cityN++;
+    if(wat){water[k]=1;continue;}
+    land[k]=1;landN++;const a=o.Ha[k];if(a<minA)minA=a;if(a>maxA)maxA=a;lv.add(Math.floor(a/P.step));
+    if(o.dom[k]>=0){share[o.dom[k]]++;infl++;if(u===5)vivDom[o.dom[k]]++;}
+    nwSum+=o.nw[k];
+  }
+  const a2=h*h,area={};for(let u=0;u<14;u++)area[u]=cnt[u]*a2;
+  const viv=area[5],areaLand=landN*a2/1e6,cityA=cityN*a2/1e6;
+  const edif=viv*P.ocup*P.plantas,hab=edif/P.m2hab;
+  const platHab10k=viv>0?10000*P.m2hab/(viv*P.ocup):0;
+  let sumsq=0,maxS=0,maxI=-1;for(let i=0;i<C.n;i++){const s=infl?share[i]/infl:0;sumsq+=s*s;if(s>maxS){maxS=s;maxI=i;}}
+  const barrios=[];for(let i=0;i<C.n;i++)if(vivDom[i]>0)barrios.push({name:C.O[i].name,m2:vivDom[i]*a2});barrios.sort((p,q)=>q.m2-p.m2);
+  let rivLen=0;C.rivers.forEach(r=>{rivLen+=lineLen(r.pts,false);});
+  if(minA>maxA){minA=0;maxA=0;}
+  RES={C,G,h,o,cityM,water,land,rb,slp,gS,cls,rivers:C.rivers,levels:null,wedge:null,zl:null,vl:null,minA,maxA,
+    stats:{lenViv:viv/Math.max(P.anchoViv,1),cityA,areaLand,waterHa:(area[1]+area[2])/1e4,nLevels:lv.size,minA,maxA,area,viv,edif,hab,platHab10k,dens:areaLand?hab/areaLand:0,eff:sumsq?1/sumsq:0,maxS,maxI,rivers:C.rivers.length,rivLen,barrios,nwMean:landN?nwSum/landN:0}};
+  imgDirty=true;
+}
+function getLevels(){
+  if(RES.levels)return RES.levels;const P=S.params,G=RES.G,out=[];
+  for(let L=Math.ceil(RES.minA/P.step);L*P.step<=RES.maxA;L++){const z=L*P.step;polish(contour(G,RES.o.Ha,z,RES.land),3,1,12).forEach(l=>out.push({z,L,pts:l.pts,closed:l.closed}));}
+  return RES.levels=out;
+}
+function getWaterEdge(){if(RES.wedge)return RES.wedge;const G=RES.G,val=new Float32Array(G.N);for(let k=0;k<G.N;k++)val[k]=RES.o.Z[k]-RES.o.WS[k];return RES.wedge=polish(contour(G,val,0,RES.cityM),3,1,10);}
+/* fronteras entre zonas = curvas de nivel de la influencia sumada */
+function getVivLines(){if(RES.vl)return RES.vl;const P=S.params,G=RES.G,ok=new Uint8Array(G.N).fill(1);return RES.vl=polish(contour(G,RES.o.S,P.sLinea,ok),3,1,25);}
+function getZoneLines(){if(RES.zl)return RES.zl;const P=S.params,G=RES.G,ok=new Uint8Array(G.N).fill(1),out=[];
+  [['LIM_CIUDAD',P.sMin],['LIM_PARQUE',P.sVerde],['LIM_VIVIENDA',P.sViv],['LIM_ORILLA',.88*P.sAgua],['LIM_PLAZA',P.sPlaza],['LIM_PLAZA_MAYOR',P.sMayor]].forEach(([name,thr])=>{
+    polish(contour(G,RES.o.S,thr,ok),4,1.2,20).forEach(l=>out.push({name,pts:l.pts,closed:l.closed}));});
+  return RES.zl=out;}
+/* uso del suelo en un punto (barra de estado) */
+function usoAt(x,y){const C=RES.C,P=S.params,o=surfPts(C,[x],[y],1),slp=slopePts(C,[x],[y],1)[0];let rb=1e3;
+  if(C.rv){const i=hashNear(C.rv,x,y);if(i>=0)rb=C.rv.d-C.rv.pv[i];}
+  const wat=o.S[0]>=P.sMin&&o.Z[0]<o.WS[0],g=sGradPts(C,[x],[y],1)[0];return {u:zoneOf(P,o.S[0],o.mg[0],slp,wat,rb,distLinea(P,o.S[0],g)),o,slp};}
+
+/* ---------- dibujo ---------- */
+const cv=$('#cv'),ctx=cv.getContext('2d');
+let V={s:1,ox:0,oy:0},cssW=0,cssH=0;
+const imgC=document.createElement('canvas'),imgX=imgC.getContext('2d');
+const wx2s=(x,y)=>[V.ox+(x-XMIN)*V.s,V.oy+(YMAX-y)*V.s];
+const s2w=(sx,sy)=>[XMIN+(sx-V.ox)/V.s,YMAX-(sy-V.oy)/V.s];
+function fit(){const pad=14,fx=(cssW-2*pad)/1350,fy=(cssH-2*pad-40)/1650;V.s=Math.max(.05,Math.min(fx,fy));V.ox=cssW/2-(560-XMIN)*V.s;V.oy=(cssH-20)/2-(YMAX-640)*V.s;}
+function resize(){const r=cv.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);const first=!cssW;cssW=r.width;cssH=r.height;cv.width=Math.round(cssW*d);cv.height=Math.round(cssH*d);ctx.setTransform(d,0,0,d,0,0);if(first)fit();render();}
+const lerp=(a,b,t)=>a+(b-a)*t;
+function ramp(stops,t){t=Math.max(0,Math.min(1,t));for(let i=1;i<stops.length;i++){if(t<=stops[i][0]){const a=stops[i-1],b=stops[i],u=(t-a[0])/(b[0]-a[0]);return [lerp(a[1][0],b[1][0],u),lerp(a[1][1],b[1][1],u),lerp(a[1][2],b[1][2],u)];}}return stops[stops.length-1][1];}
+const HRAMP=[[0,[222,170,112]],[.5,[166,96,56]],[1,[96,44,24]]],HRAMP_R=[[0,[246,238,220]],[.5,[236,214,176]],[1,[214,176,128]]];
+const HYPSO=[[0,[226,231,214]],[.45,[236,219,184]],[.75,[219,180,132]],[1,[176,122,84]]];
+function buildImage(){
+  const R=RES,G=R.G,{nx,ny,h}=G,P=S.params,o=R.o,U=Math.max(2,Math.round(h/2.2)),W2=nx*U,H2=ny*U,hs=h/U,M=W2*H2;imgC.width=W2;imgC.height=H2;
+  const Z=new Float32Array(M),HA=new Float32Array(M),cls=new Uint8Array(M);
+  for(let J=0;J<H2;J++){let fy=(J+.5)/U-.5;fy=Math.max(0,Math.min(ny-1,fy));const j0=Math.min(ny-2,Math.floor(fy)),ty=fy-j0;
+    for(let I=0;I<W2;I++){let fx=(I+.5)/U-.5;fx=Math.max(0,Math.min(nx-1,fx));const i0=Math.min(nx-2,Math.floor(fx)),tx=fx-i0,K=J*W2+I;
+      const a=j0*nx+i0,b=a+1,c=a+nx,d=c+1,w00=(1-tx)*(1-ty),w10=tx*(1-ty),w01=(1-tx)*ty,w11=tx*ty;
+      const bl=A=>A[a]*w00+A[b]*w10+A[c]*w01+A[d]*w11;
+      const z=bl(o.Z),ws=bl(o.WS),ha=bl(o.Ha),Sv=bl(o.S),mg=bl(o.mg),sl=bl(R.slp),rbv=bl(R.rb),gsv=bl(R.gS);
+      const wat=Sv>=P.sMin&&z<ws,u=zoneOf(P,Sv,mg,sl,wat,rbv,distLinea(P,Sv,gsv));
+      cls[K]=u;HA[K]=ha;Z[K]=(u===1||u===2)?ws:z;}}
+  const im=imgX.createImageData(W2,H2),dd=im.data;
+  const ex=S.view==='relieve'?3.2:2,Lx=-.55,Ly=.62,Lz=.56,ln=Math.hypot(Lx,Ly,Lz),span=Math.max(.01,R.maxA-R.minA);
+  for(let J=0;J<H2;J++)for(let I=0;I<W2;I++){const K=J*W2+I;
+    const zl=Z[I>0?K-1:K],zr=Z[I<W2-1?K+1:K],zu=Z[J>0?K-W2:K],zd=Z[J<H2-1?K+W2:K];
+    const gx=(zr-zl)/(2*hs)*ex,gy=(zu-zd)/(2*hs)*ex,nn=Math.hypot(gx,gy,1);const sh=Math.max(0,((-gx)*Lx+(-gy)*Ly+Lz)/(nn*ln));
+    const u=cls[K];let c;
+    if(S.view==='relieve'){if(u===1||u===2)c=[78+14*sh,150+14*sh,164+12*sh];else{const m=.48+.78*sh;if(u){const q=USOS[u].rgb,k=u===5?.85:.3;c=[(k*q[0]+(1-k)*150)*m,(k*q[1]+(1-k)*168)*m,(k*q[2]+(1-k)*160)*m];}else c=[50*m,104*m,116*m];}}
+    else if(S.view==='niveles'){if(u===1||u===2)c=[104,164,184];else if(!u){const m=.48+.78*sh;c=[50*m,104*m,116*m];}else if(u===6)c=[230,233,236];else if(u===5){const m=.9+.15*sh;c=[236*m,150*m,110*m];}
+      else{const t=(Math.floor(HA[K]/P.step)*P.step-R.minA)/span,b=ramp(HYPSO,t),m=.86+.2*sh;c=[b[0]*m,b[1]*m,b[2]*m];}}
+    else{if(!u){const m=.55+.6*sh;c=[50*m,104*m,116*m];}else{const b=USOS[u].rgb,m=.9+.14*sh;c=[b[0]*m,b[1]*m,b[2]*m];}}
+    dd[K*4]=c[0];dd[K*4+1]=c[1];dd[K*4+2]=c[2];dd[K*4+3]=255;}
+  imgX.putImageData(im,0,0);imgDirty=false;
+}
+let hoverObj=null,ghost=null,ripples=[],secA=null;
+const line=(pts,closed)=>{ctx.beginPath();pts.forEach((p,i)=>{const q=wx2s(p[0],p[1]);i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);});if(closed)ctx.closePath();};
+function render(){
+  if(!cssW)return;ctx.clearRect(0,0,cssW,cssH);if(!RES)return;
+  if(imgDirty)buildImage();
+  const G=RES.G,s=V.s,[ix,iy]=wx2s(XMIN,YMAX);ctx.imageSmoothingEnabled=true;ctx.drawImage(imgC,ix,iy,G.nx*G.h*s,G.ny*G.h*s);
+  ctx.lineJoin='round';ctx.lineCap='round';
+  if(S.view==='niveles'){const lv=getLevels();ctx.save();lv.forEach(l=>{const master=l.L%5===0;ctx.strokeStyle=master?'rgba(60,40,25,.75)':'rgba(60,40,25,.38)';ctx.lineWidth=master?1.3:.7;line(l.pts,l.closed);ctx.stroke();});ctx.restore();}
+  if(S.view!=='relieve'){ctx.save();ctx.strokeStyle='rgba(30,70,85,.7)';ctx.lineWidth=1;getWaterEdge().forEach(l=>{line(l.pts,l.closed);ctx.stroke();});ctx.restore();}
+  const sec=S.section||null;
+  if(sec||secA){ctx.save();ctx.strokeStyle='#D2452F';ctx.fillStyle='#D2452F';ctx.lineWidth=2;ctx.setLineDash([8,5]);
+    const a=sec?sec.a:secA,b=sec?sec.b:ghost;const pa=wx2s(a[0],a[1]);ctx.beginPath();ctx.arc(pa[0],pa[1],4,0,7);ctx.fill();
+    if(b){const pb=wx2s(b[0],b[1]);ctx.beginPath();ctx.moveTo(pa[0],pa[1]);ctx.lineTo(pb[0],pb[1]);ctx.stroke();ctx.beginPath();ctx.arc(pb[0],pb[1],4,0,7);ctx.fill();
+      if(sec){ctx.font='700 13px Archivo, system-ui, sans-serif';ctx.setLineDash([]);ctx.lineWidth=3;ctx.strokeStyle='#fff';ctx.strokeText('A',pa[0]+7,pa[1]-7);ctx.fillText('A',pa[0]+7,pa[1]-7);ctx.strokeText("A'",pb[0]+7,pb[1]-7);ctx.fillText("A'",pb[0]+7,pb[1]-7);}}
+    ctx.restore();}
+  const sel=S.objects.find(o=>o.id===S.sel);
+  if(sel){const [cx,cy]=wx2s(sel.x,sel.y);ctx.save();ctx.strokeStyle='#fff';ctx.globalAlpha=.8;ctx.setLineDash([5,4]);ctx.lineWidth=1.3;ctx.beginPath();ctx.arc(cx,cy,sel.r*s,0,7);ctx.stroke();ctx.restore();}
+  S.objects.forEach(o=>{const [cx,cy]=wx2s(o.x,o.y),r=Math.max(FORM[o.peso].fp*s,4.5);
+    ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.fillStyle=TYPES[o.type].col;ctx.fill();ctx.lineWidth=o.id===S.sel?3:1.5;ctx.strokeStyle='rgba(255,255,255,.95)';ctx.stroke();
+    if(o.id===S.sel){ctx.beginPath();ctx.arc(cx,cy,r+3,0,7);ctx.strokeStyle='#1F3440';ctx.lineWidth=1.5;ctx.stroke();}
+    if(o.peso<=3||o.id===S.sel||o===hoverObj||s>1.2){ctx.font=`600 ${o.peso<=2?12.5:11.5}px Archivo, system-ui, sans-serif`;ctx.lineWidth=3;ctx.strokeStyle='rgba(250,251,250,.92)';ctx.fillStyle='#1F3440';const lab=o.name+'  '+sgn(o.z0||0);ctx.strokeText(lab,cx+r+5,cy+4);ctx.fillText(lab,cx+r+5,cy+4);}
+  });
+  if(ghost&&S.tool&&S.tool!=='sec'){const [cx,cy]=wx2s(ghost[0],ghost[1]),f=FORM[TYPES[S.tool].peso];ctx.save();ctx.globalAlpha=.6;ctx.fillStyle=TYPES[S.tool].col;ctx.beginPath();ctx.arc(cx,cy,Math.max(f.fp*s,4.5),0,7);ctx.fill();ctx.setLineDash([4,4]);ctx.strokeStyle='#fff';ctx.beginPath();ctx.arc(cx,cy,f.r*s,0,7);ctx.stroke();ctx.restore();}
+  const now=performance.now();ripples=ripples.filter(r=>now-r.t0<1100);
+  ripples.forEach(r=>{const t=(now-r.t0)/1100,[cx,cy]=wx2s(r.x,r.y);ctx.save();ctx.strokeStyle='#fff';ctx.globalAlpha=(1-t)*.9;ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,t*r.r*s,0,7);ctx.stroke();ctx.restore();});
+  if(ripples.length)requestAnimationFrame(render);
+}
+
+/* ---------- sección ---------- */
+const sc=$('#sec'),sctx=sc.getContext('2d');
+function renderSection(){
+  const box=$('#secbox');if(!S.section||!RES){box.hidden=true;return;}box.hidden=false;
+  const r=sc.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);sc.width=Math.round(r.width*dpr);sc.height=Math.round(r.height*dpr);sctx.setTransform(dpr,0,0,dpr,0,0);
+  const W_=r.width,H_=r.height,P=S.params,[a,b]=[S.section.a,S.section.b],L=Math.hypot(b[0]-a[0],b[1]-a[1]);if(L<10){box.hidden=true;return;}
+  const n=Math.max(2,Math.round(L/3)),xa=[],ya=[];for(let q=0;q<=n;q++){const t=q/n;xa.push(a[0]+(b[0]-a[0])*t);ya.push(a[1]+(b[1]-a[1])*t);}
+  const so=surfPts(RES.C,xa,ya,n+1),pts=[];
+  for(let q=0;q<=n;q++){const city=so.S[q]>=P.sMin,wat=city&&so.Z[q]<so.WS[q];
+    pts.push({s:q/n*L,z:so.Z[q],ws:wat?so.WS[q]:null,city,fp:so.mg[q]<=0?1:-1,zl:so.Hl[q],o:S.objects[so.dom[q]]});}
+  let zmin=Math.min(...pts.map(p=>p.z))-2,zmax=Math.max(...pts.map(p=>Math.max(p.z,p.ws||-1e9)))+14;
+  const pad={l:34,r:8,t:8,b:16},sx=(W_-pad.l-pad.r)/L;let sy=(H_-pad.t-pad.b)/(zmax-zmin);const exag=Math.min(sy/sx,40);sy=sx*exag;
+  const X=s=>pad.l+s*sx,Y=z=>H_-pad.b-(z-zmin)*sy;
+  const cs=getComputedStyle(document.documentElement);const ink=cs.getPropertyValue('--ink').trim()||'#1F3440',ink2=cs.getPropertyValue('--ink-2').trim()||'#526872';
+  sctx.clearRect(0,0,W_,H_);
+  sctx.font='11px Archivo, system-ui, sans-serif';sctx.fillStyle=ink2;sctx.strokeStyle='rgba(120,140,150,.25)';sctx.lineWidth=1;
+  const st=Math.max(P.step,Math.ceil((zmax-zmin)/5/P.step)*P.step);for(let z=Math.ceil(zmin/st)*st;z<=zmax;z+=st){sctx.beginPath();sctx.moveTo(pad.l,Y(z));sctx.lineTo(W_-pad.r,Y(z));sctx.stroke();sctx.fillText((z>=0?'+':'')+z.toFixed(1).replace('.',','),2,Y(z)+4);}
+  sctx.fillStyle='rgba(96,160,180,.75)';for(let q=0;q<pts.length-1;q++){const p=pts[q],p2=pts[q+1];if(!p.ws)continue;sctx.fillRect(X(p.s),Y(p.ws),X(p2.s)-X(p.s)+.6,Y(p.z)-Y(p.ws));}
+  sctx.beginPath();pts.forEach((p,i)=>{i?sctx.lineTo(X(p.s),Y(p.z)):sctx.moveTo(X(p.s),Y(p.z));});
+  sctx.lineTo(X(pts[pts.length-1].s),H_);sctx.lineTo(X(pts[0].s),H_);sctx.closePath();sctx.fillStyle='rgba(176,160,132,.55)';sctx.fill();
+  sctx.beginPath();pts.forEach((p,i)=>{i?sctx.lineTo(X(p.s),Y(p.z)):sctx.moveTo(X(p.s),Y(p.z));});sctx.strokeStyle=ink;sctx.lineWidth=1.4;sctx.stroke();
+  sctx.fillStyle='rgba(43,89,195,.6)';for(let q=0;q<pts.length-1;q++){const p=pts[q];if(p.fp>=0){sctx.fillRect(X(p.s),Y(p.z)-9*sy,Math.max(1,3*sx),9*sy);}}
+  sctx.fillStyle=ink;sctx.font='600 11px Archivo, system-ui, sans-serif';sctx.fillText('A',pad.l,H_-2);sctx.fillText("A'",W_-pad.r-12,H_-2);
+  $('#sectitle').textContent=`Sección A–A', ${Math.round(L)} m, vertical ×${exag.toFixed(0)}`;
+}
+$('#secclose').onclick=()=>{S.section=null;secA=null;renderSection();render();};
+$('#secTool').onclick=()=>setTool(S.tool==='sec'?null:'sec');
+
+/* ---------- interacción ---------- */
+let raf=0,coarse=false,drag=null,pan=null;
+function schedule(c){coarse=c;if(raf)return;raf=requestAnimationFrame(()=>{raf=0;compute(coarse?H_DRAG:H_FINE);render();renderResult();renderSection();});}
+function full(){schedule(false);save();}
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function hit(sx,sy){for(let i=S.objects.length-1;i>=0;i--){const o=S.objects[i],[cx,cy]=wx2s(o.x,o.y),r=Math.max(FORM[o.peso].fp*V.s,6)+4;if((sx-cx)**2+(sy-cy)**2<=r*r)return o;}return null;}
+function pos(e){const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];}
+cv.addEventListener('pointerdown',e=>{
+  const [sx,sy]=pos(e);cv.setPointerCapture(e.pointerId);const w=s2w(sx,sy);
+  if(S.tool==='sec'){if(!secA){secA=w;S.section=null;render();}else{S.section={a:secA,b:w};secA=null;setTool(null);renderSection();render();save();}return;}
+  if(S.tool){const o=mkObj(S.tool,w[0],w[1]);const n=S.objects.filter(q=>q.type===S.tool).length+1;if(S.tool!=='ayto')o.name=TYPES[S.tool].label+' '+n;
+    markEdit();S.objects.push(o);S.sel=o.id;if(!reduced)ripples.push({x:o.x,y:o.y,r:o.r+o.w,t0:performance.now()});if(!e.shiftKey)setTool(null);renderObjUI();full();return;}
+  const o=hit(sx,sy);
+  if(o){S.sel=o.id;drag={o,moved:false};cv.classList.add('dragging');renderObjUI();render();}
+  else{pan={sx,sy,ox:V.ox,oy:V.oy,moved:false};cv.classList.add('dragging');}
+});
+cv.addEventListener('pointermove',e=>{
+  const [sx,sy]=pos(e);
+  if(drag){const [x,y]=s2w(sx,sy);drag.o.x=x;drag.o.y=y;drag.moved=true;schedule(true);renderEditorCoords();return;}
+  if(pan){V.ox=pan.ox+sx-pan.sx;V.oy=pan.oy+sy-pan.sy;if(Math.abs(sx-pan.sx)+Math.abs(sy-pan.sy)>3)pan.moved=true;render();return;}
+  if(S.tool){ghost=s2w(sx,sy);render();}
+  const h=hit(sx,sy);if(h!==hoverObj){hoverObj=h;render();}
+  status(sx,sy,h);
+});
+function endPointer(){
+  if(drag){if(drag.moved){markEdit();full();}drag=null;}
+  if(pan){if(!pan.moved){S.sel=null;renderObjUI();render();}pan=null;}
+  cv.classList.remove('dragging');
+}
+cv.addEventListener('pointerup',endPointer);cv.addEventListener('pointercancel',endPointer);
+cv.addEventListener('pointerleave',()=>{ghost=null;if(S.tool)render();});
+cv.addEventListener('wheel',e=>{e.preventDefault();const [sx,sy]=pos(e);zoomAt(sx,sy,Math.exp(-e.deltaY*.0015));},{passive:false});
+function zoomAt(sx,sy,f){const [x,y]=s2w(sx,sy);V.s=Math.max(.08,Math.min(12,V.s*f));V.ox=sx-(x-XMIN)*V.s;V.oy=sy-(YMAX-y)*V.s;render();}
+$('#zin').onclick=()=>zoomAt(cssW/2,cssH/2,1.4);$('#zout').onclick=()=>zoomAt(cssW/2,cssH/2,1/1.4);$('#zfit').onclick=()=>{fit();render();};
+const sgn=z=>(z>=0?'+':'−')+Math.abs(z).toFixed(1).replace('.',',');
+function status(sx,sy,h){
+  if(!RES)return;const el=$('#status');
+  if(h){el.textContent=`${h.name}: peso ${h.peso}, influencia ${Math.round(h.inf)}, choque ${Math.round((S.choque[h.type]||0)*100)} %, onda de ${Math.round(h.r)} m, altura ${h.a.toFixed(1).replace('.',',')} m. Arrastra para moverlo.`;return;}
+  const [x,y]=s2w(sx,sy);if(x<XMIN||x>XMAX||y<YMIN||y>YMAX){el.textContent='';return;}
+  const {u,o,slp}=usoAt(x,y);
+  if(u===0){el.textContent=`Fuera de la ciudad: influencia ${Math.round(o.S[0])}, no llega al mínimo (${S.params.sMin}).`;return;}
+  const wat=u===1||u===2,ob=S.objects[o.dom[0]];
+  el.textContent=`${USOS[u].name}. Influencia sumada ${Math.round(o.S[0])} (${o.nw[0]} ondas), pendiente ${dec(slp)} %. Cota ${sgn(wat?o.WS[0]:o.Z[0])} m${ob?'. Manda '+ob.name:''}.`;
+}
+document.addEventListener('keydown',e=>{
+  const tag=(e.target.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea'||tag==='select')return;
+  if(e.key==='Escape'){if(S.tool){secA=null;setTool(null);}else{S.sel=null;renderObjUI();render();}}
+  if((e.key==='Delete'||e.key==='Backspace')&&S.sel!=null){removeSel();e.preventDefault();}
+  const o=S.objects.find(q=>q.id===S.sel);
+  if(o&&e.key.startsWith('Arrow')){const st=e.shiftKey?25:5;if(e.key==='ArrowLeft')o.x-=st;if(e.key==='ArrowRight')o.x+=st;if(e.key==='ArrowUp')o.y+=st;if(e.key==='ArrowDown')o.y-=st;e.preventDefault();full();renderEditorCoords();}
+});
+
+/* ---------- vistas ---------- */
+document.querySelectorAll('.views button').forEach(b=>b.onclick=()=>{S.view=b.dataset.view;syncViews();imgDirty=true;renderLegend();render();save();});
+function syncViews(){document.querySelectorAll('.views button').forEach(q=>q.setAttribute('aria-pressed',q.dataset.view===S.view));}
+function renderLegend(){
+  let h='';const sw=c=>`background:rgb(${c})`;
+  if(S.view==='relieve')h=`<div class="lg"><i class="lg-relief"></i>Relieve iluminado desde el noroeste</div><div class="lg"><i class="lg-water"></i>Agua y ríos</div><div class="lg"><i style="${sw(USOS[5].rgb)}"></i>Vivienda (tinte suave)</div>`;
+  else if(S.view==='niveles')h=`<div class="lg"><i class="lg-levels"></i>De la cota más baja a la más alta</div><div class="lg"><i class="bar lg-contour"></i>Curva cada ${String(S.params.step).replace('.',',')} m, maestra cada 5</div><div class="lg"><i class="lg-water2"></i>Agua</div>`;
+  else h=[5,13,4,11,9,3,12,7,10,8,6,1,2].map(u=>`<div class="lg"><i style="${sw(USOS[u].rgb)}"></i>${USOS[u].name}</div>`).join('');
+  $('#legend').innerHTML=h;
+}
+
+/* ---------- panel ---------- */
+const fmt=n=>Math.round(n).toLocaleString('es-ES');
+const pct=n=>(n*100).toLocaleString('es-ES',{maximumFractionDigits:0})+' %';
+const dec=(n,d=1)=>n.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d});
+function renderResult(){
+  if(!RES)return;const st=RES.stats,d=st.dens,P=S.params;
+  const pill=d<7000?`<span class="pill warn">por debajo de 7.000</span>`:d>15000?`<span class="pill warn">por encima de 15.000</span>`:`<span class="pill ok">dentro de 7.000–15.000</span>`;
+  const mo=S.objects[st.maxI];let hint;
+  if(!S.objects.length)hint='Sin objetos no hay ondas: deja caer el primero.';
+  else if(st.maxS>.25)hint=`<b>Se lee un centro.</b> ${mo.name} manda en el ${pct(st.maxS)} de la ciudad. Bájale la influencia o reparte su papel en varias piezas.`;
+  else hint=`<b>Sin centro.</b> ${dec(st.eff)} focos efectivos; el que más manda (${mo?mo.name:'-'}) solo llega al ${pct(st.maxS)}.`;
+  const rows=ZORDER.map(u=>{const a=st.area[u];return `<tr class="${u===5?'viv':''}"><td><i style="background:rgb(${USOS[u].rgb})"></i>${USOS[u].name}</td><td>${fmt(a)} m²</td><td>${st.cityA?pct(a/1e6/st.cityA):'-'}</td></tr>`;}).join('');
+  const bar=st.barrios.slice(0,5).map(b=>`${esc(b.name)}: ${fmt(b.m2)} m²`).join(' · ');
+  $('#result').innerHTML=`
+    <div class="big">${fmt(st.viv)} m²</div><div class="bigl">de suelo de VIVIENDA: franja de ${dec(P.anchoViv)} m de profundidad, ${fmt(st.lenViv)} m de línea, siguiendo la curva de influencia ${P.sLinea} (rodea a los núcleos)</div>
+    <dl class="kv">
+      <dt>Superficie de la ciudad</dt><dd>${dec(st.cityA,3)} km²</dd>
+      <dt>Vivienda sobre la ciudad</dt><dd>${st.cityA?pct(st.viv/1e6/st.cityA):'-'}</dd>
+      <dt>Con ${P.plantas} plantas</dt><dd>${fmt(st.edif)} m² construidos</dd>
+      <dt>Habitantes aprox.</dt><dd>${fmt(st.hab)}</dd>
+      <dt>Densidad</dt><dd>${fmt(d)} hab/km²</dd>
+      <dt></dt><dd>${pill}</dd>
+      <dt>Para 10.000 hab</dt><dd>${st.platHab10k?dec(st.platHab10k)+' plantas medias':'-'}</dd>
+      <dt>Agua</dt><dd>${dec(st.waterHa)} ha · ${st.rivers} ríos, ${fmt(st.rivLen)} m</dd>
+      <dt>Niveles</dt><dd>${st.nLevels} (${sgn(st.minA)} a ${sgn(st.maxA)} m)</dd>
+      <dt>Ondas solapadas</dt><dd>${dec(st.nwMean)} de media</dd>
+    </dl>
+    <table class="zt"><thead><tr><th>Zona</th><th>Superficie</th><th>%</th></tr></thead><tbody>${rows}</tbody></table>
+    ${bar?`<p class="hint"><b>Vivienda por onda dominante:</b> ${bar}</p>`:''}
+    <p class="hint">${hint}</p>`;
+  $('#empty').hidden=S.objects.length>0;
+}
+function setTool(t){S.tool=t;cv.classList.toggle('placing',!!t);ghost=null;if(t!=='sec')secA=null;renderAdd();$('#secTool').setAttribute('aria-pressed',t==='sec');render();
+  $('#tooltip').textContent=t==='sec'?'Haz clic en dos puntos del plano para trazar la sección A–A\'.':t?`Haz clic en el plano para dejar caer: ${TYPES[t].label.toLowerCase()} (peso ${TYPES[t].peso}). Mayúsculas para soltar varios. Esc para salir.`:'Pulsa un tipo y haz clic en el plano. Arrastra para mover, Supr para borrar.';}
+function renderAdd(){$('#addbar').innerHTML=Object.entries(TYPES).map(([k,t])=>`<button class="addbtn" data-add="${k}" aria-pressed="${S.tool===k}"><span class="dot" style="background:${t.col}"></span>${t.label}</button>`).join('');}
+$('#addbar').onclick=e=>{const b=e.target.closest('[data-add]');if(!b)return;setTool(S.tool===b.dataset.add?null:b.dataset.add);};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const OBJF={inf:{l:'Influencia (suma de ondas)',min:0,max:250,st:1,d:0,u:''},z0:{l:'Cota del objeto',min:-8,max:10,st:.5,d:1,u:' m'},r:{l:'Radio de la onda',min:15,max:300,st:1,d:0,u:' m'},w:{l:'Ancho de la onda',min:8,max:140,st:1,d:0,u:' m'},a:{l:'Altura de la onda',min:0,max:12,st:.1,d:1,u:' m'}};
+function renderObjUI(){
+  const sorted=[...S.objects].sort((a,b)=>a.peso-b.peso||a.name.localeCompare(b.name,'es'));
+  $('#list').innerHTML=sorted.length?sorted.map(o=>`<button class="item" data-sel="${o.id}" aria-current="${o.id===S.sel}"><span class="dot" style="background:${TYPES[o.type].col}"></span><span class="nm">${esc(o.name)}</span><span class="pw">${sgn(o.z0||0)}, peso ${o.peso}</span></button>`).join(''):`<div class="item" style="color:var(--ink-2)">Aún no hay objetos.</div>`;
+  const o=S.objects.find(q=>q.id===S.sel);if(!o){$('#editor').innerHTML='';return;}
+  $('#editor').innerHTML=`<div class="editor">
+    <input class="name" data-f="name" value="${esc(o.name)}" aria-label="Nombre del objeto">
+    <div class="row"><select data-f="type" aria-label="Tipo">${Object.entries(TYPES).map(([k,t])=>`<option value="${k}" ${k===o.type?'selected':''}>${t.label}</option>`).join('')}</select><span class="coords" id="coords"></span></div>
+    <div class="pesos" role="group" aria-label="Peso">${[1,2,3,4,5].map(p=>`<button data-peso="${p}" aria-pressed="${o.peso===p}">${p}</button>`).join('')}</div>
+    <div class="pesocap"><span>más pesado</span><span>más ligero</span></div>
+    ${Object.entries(OBJF).map(([f,c])=>`<label class="sl"><span>${c.l}</span><input type="range" data-f="${f}" min="${c.min}" max="${c.max}" step="${c.st}" value="${o[f]}"><output>${dec(+o[f],c.d)}${c.u||''}</output></label>`).join('')}
+    <div class="btns"><button class="btn" data-act="dup">Duplicar</button><button class="btn danger" data-act="del">Borrar</button></div>
+  </div>`;
+  renderEditorCoords();
+}
+function renderEditorCoords(){const o=S.objects.find(q=>q.id===S.sel),el=$('#coords');if(o&&el)el.textContent=`x ${Math.round(o.x)} m, y ${Math.round(o.y)} m`;}
+$('#list').onclick=e=>{const b=e.target.closest('[data-sel]');if(!b)return;S.sel=+b.dataset.sel;renderObjUI();render();};
+$('#editor').addEventListener('input',e=>{const o=S.objects.find(q=>q.id===S.sel);if(!o)return;const f=e.target.dataset.f;if(!f)return;
+  if(f==='name'){o.name=e.target.value;render();save();return;}if(f==='type')return;
+  o[f]=+e.target.value;const c=OBJF[f];e.target.nextElementSibling.textContent=dec(o[f],c.d)+(c.u||'');schedule(true);});
+$('#editor').addEventListener('change',e=>{const o=S.objects.find(q=>q.id===S.sel);if(!o)return;const f=e.target.dataset.f;markEdit();if(f==='type'||f==='name'){if(f==='type')o.type=e.target.value;renderObjUI();}full();});
+$('#editor').addEventListener('click',e=>{const o=S.objects.find(q=>q.id===S.sel);if(!o)return;
+  const p=e.target.closest('[data-peso]');if(p){const n=+p.dataset.peso,f=FORM[n];Object.assign(o,{peso:n,r:f.r,w:f.w,a:f.a,c:0,inf:INF[n]});renderObjUI();full();return;}
+  const a=e.target.closest('[data-act]');if(!a)return;
+  if(a.dataset.act==='del')removeSel();
+  if(a.dataset.act==='dup'){const n={...o,id:uid++,name:o.name+' (copia)',x:o.x+80,y:o.y-50};S.objects.push(n);S.sel=n.id;renderObjUI();full();}
+});
+function removeSel(){markEdit();S.objects=S.objects.filter(o=>o.id!==S.sel);S.sel=null;renderObjUI();full();}
+function renderTipos(){
+  const el=$('#tipos');if(!el)return;
+  el.innerHTML=Object.entries(TYPES).map(([k,t])=>{const os=S.objects.filter(o=>o.type===k),inf=os.length?Math.round(os.reduce((a,o)=>a+o.inf,0)/os.length):INF[t.peso],ch=Math.round((S.choque[k]||0)*100);
+    return `<div class="tipo"><div class="tn"><span class="dot" style="background:${t.col}"></span>${t.label} <small>(${os.length})</small></div>
+      <label class="sl"><span>Influencia de todos</span><input type="range" data-ti="${k}" min="0" max="250" step="1" value="${inf}"><output>${inf}</output></label>
+      <label class="sl"><span>Choque</span><input type="range" data-tc="${k}" min="0" max="100" step="1" value="${ch}"><output>${ch} %</output></label></div>`;}).join('')+
+    `<p class="tip">Choque 0 %: las influencias se suman (80 + 80 = 160). Choque 100 %: manda la onda más pesada. Se importa desde el estanque.</p>`;
+}
+function renderParams(){
+  $('#params').innerHTML=PARAMS.map(p=>{
+    if(p.g)return `<h3>${p.g}</h3>`;
+    if(p.chk)return `<label class="chk"><input type="checkbox" data-p="${p.k}" ${S.params[p.k]?'checked':''}> ${p.l}</label>`;
+    return `<label class="sl" title="${p.help||''}"><span>${p.l}</span><input type="range" data-p="${p.k}" min="${p.min}" max="${p.max}" step="${p.st}" value="${S.params[p.k]}"><output>${dec(+S.params[p.k],p.d)}${p.u||''}</output></label>`;}).join('')+
+  `<div class="btns"><button class="btn" id="resetp">Volver a los valores iniciales</button></div>`;
+  renderTipos();
+}
+$('#params').addEventListener('input',e=>{const k=e.target.dataset.p;if(!k)return;const p=PARAMS.find(q=>q.k===k);
+  if(p.chk){S.params[k]=e.target.checked;imgDirty=true;full();return;}
+  S.params[k]=+e.target.value;e.target.nextElementSibling.textContent=dec(S.params[k],p.d)+(p.u||'');if(k==='step')renderLegend();schedule(true);});
+$('#params').addEventListener('change',e=>{const k=e.target.dataset.p;if(!k)return;const p=PARAMS.find(q=>q.k===k);if(!p.chk)full();});
+$('#params').addEventListener('click',e=>{if(e.target.id==='resetp'){S.params={...DEF_PARAMS};S.choque={...DEF_CHOQUE};S.objects.forEach(o=>o.inf=INF[o.peso]);renderParams();renderObjUI();renderLegend();full();}});
+$('#preset').onchange=e=>{const v=e.target.value;if(!v)return;S.objects=preset(v);S.sel=null;e.target.value='';renderObjUI();full();toast('Punto de partida cargado');};
+
+/* ---------- borrar todo ---------- */
+let clearArm=0,lastCleared=null;
+function snapshot(){return {objects:S.objects.map(o=>({...o})),section:S.section,params:{...S.params},choque:{...S.choque}};}
+function markEdit(){if(lastCleared){lastCleared=null;$('#undoClear').hidden=true;}}
+$('#clearAll').onclick=()=>{
+  const b=$('#clearAll');
+  if(!S.objects.length&&!S.section){toast('No hay nada que borrar');return;}
+  if(!clearArm){clearArm=setTimeout(()=>{clearArm=0;b.textContent='Borrar todo';},3000);b.textContent='Pulsa otra vez para borrar';return;}
+  clearTimeout(clearArm);clearArm=0;b.textContent='Borrar todo';
+  lastCleared=snapshot();
+  S.objects=[];S.sel=null;S.section=null;secA=null;setTool(null);renderObjUI();renderSection();full();
+  $('#undoClear').hidden=false;toast('Todo borrado');
+};
+$('#undoClear').onclick=()=>{if(!lastCleared)return;S.objects=lastCleared.objects;S.section=lastCleared.section;S.params=lastCleared.params;S.choque=lastCleared.choque||{...DEF_CHOQUE};lastCleared=null;$('#undoClear').hidden=true;S.sel=null;renderParams();renderLegend();renderObjUI();full();toast('Recuperado');};
+function randomCity(ov){
+  const rnd=(a,b)=>a+Math.random()*(b-a),ri=(a,b)=>Math.floor(rnd(a,b+1)),pick=a=>a[Math.floor(Math.random()*a.length)];
+  const CUL=['Biblioteca-teatro','Museo del agua','Escuela de artes','Auditorio','Centro de música','Mediateca','Casa de la ciencia'];
+  const EQN=['Escuela','Centro de salud','Mercado','Baños','Polideportivo','Guardería','Centro de mayores','Lavadero'];
+  const plan=ov||[['ayto',1,ri(2,4)],['trabajo',2,ri(2,4)],['cultura',3,ri(3,5)],['equip',4,ri(5,9)],['manantial',5,ri(8,14)]];
+  const objs=[],cx=560,cy=650,RX=540,RY=700,cnt={};
+  plan.forEach(([type,peso,n])=>{for(let c=0;c<n;c++){const f=FORM[peso],k=rnd(.8,1.25),r=f.r*k;
+    for(let t=0;t<400;t++){const ang=rnd(0,2*Math.PI),rad=Math.sqrt(Math.random()),x=cx+Math.cos(ang)*rad*RX*(.75+.25*Math.sin(3*ang+1)),y=cy+Math.sin(ang)*rad*RY;
+      const ok=objs.every(o=>{const d=Math.hypot(o.x-x,o.y-y);return o.peso<=2&&peso<=2?d>=.85*(o.r+r):d>=FORM[o.peso].fp+f.fp+.3*Math.min(o.r,r)+18;});
+      if(!ok)continue;
+      cnt[type]=(cnt[type]||0)+1;const num=cnt[type];
+      const name=type==='ayto'?'Ayuntamiento, sede '+num:type==='trabajo'?'Zona de trabajo T'+num:type==='cultura'?(CUL[num-1]||'Centro cultural '+num):type==='equip'?pick(EQN)+' '+num:'Manantial M'+num;
+      const o=mkObj(type,x,y,name,peso);
+      Object.assign(o,{z0:Math.round(rnd(-4,6)*2)/2,r,w:f.w*rnd(.8,1.25),a:f.a*rnd(.75,1.3),inf:Math.round(INF[peso]*rnd(.85,1.15))});
+      objs.push(o);break;}}});
+  return objs;
+}
+function genCity(ov,msg){
+  const prev=snapshot();const rnd=(a,b)=>a+Math.random()*(b-a);let best=null,bd=1e18;
+  for(let t=0;t<8;t++){S.objects=randomCity(ov);
+    Object.assign(S.params,{fuse:+rnd(.9,2).toFixed(2),slope:+rnd(.5,3).toFixed(1)});
+    compute(H_DRAG);const d=RES.stats.dens,hb=RES.stats.hab,err=(d<7000?7000-d:d>15000?d-15000:0)/1000+Math.abs(hb-10000)/1000;if(err<bd){bd=err;best={objects:S.objects,params:{...S.params}};}if(err<.8)break;}
+  S.objects=best.objects;S.params=best.params;S.sel=null;S.section=null;secA=null;
+  lastCleared=prev;$('#undoClear').hidden=false;renderParams();renderLegend();renderObjUI();full();toast(msg);
+}
+$('#random').onclick=()=>genCity(null,'Ciudad aleatoria');
+$('#programa').onclick=()=>genCity([['ayto',1,3],['trabajo',2,4],['cultura',3,5],['equip',4,14],['manantial',5,10]],'36 puntos colocados: 3 ayuntamientos, 4 trabajo, 5 cultura, 14 equipamientos y 10 manantiales');
+
+$('#tipos').addEventListener('input',e=>{const ti=e.target.dataset.ti,tc=e.target.dataset.tc;
+  if(ti){const v=+e.target.value;S.objects.forEach(o=>{if(o.type===ti)o.inf=v;});e.target.nextElementSibling.textContent=v;schedule(true);}
+  else if(tc){const v=+e.target.value;S.choque[tc]=v/100;e.target.nextElementSibling.textContent=v+' %';schedule(true);}});
+$('#tipos').addEventListener('change',e=>{if(e.target.dataset.ti||e.target.dataset.tc){markEdit();renderObjUI();full();}});
+
+/* ======================================================================
+   3D: malla de triángulos cortada por las propias curvas (agua, calle, patio, límite)
+   ====================================================================== */
+const gauss1=(a,sigma,closed)=>{const n=a.length;if(n<3)return a;const r=Math.ceil(3*sigma),w=[];let sw=0;for(let i=-r;i<=r;i++){const v=Math.exp(-i*i/(2*sigma*sigma));w.push(v);sw+=v;}
+  return a.map((_,i)=>{let s=0;for(let j=-r;j<=r;j++){let q=i+j;if(closed)q=((q%n)+n)%n;else q=q<0?0:q>=n?n-1:q;s+=a[q]*w[j+r];}return s/sw;});};
+function cutPoints(ax,ay,bx,by,va,vb,f,m){
+  const x0=new Float64Array(m),y0=new Float64Array(m),x1=new Float64Array(m),y1=new Float64Array(m),flo=new Float64Array(m),fhi=new Float64Array(m),lo=new Float64Array(m),hi=new Float64Array(m).fill(1),t=new Float64Array(m);
+  for(let i=0;i<m;i++){const sw=ax[i]>bx[i]||(ax[i]===bx[i]&&ay[i]>by[i]);
+    if(sw){x0[i]=bx[i];y0[i]=by[i];x1[i]=ax[i];y1[i]=ay[i];flo[i]=vb[i];fhi[i]=va[i];}else{x0[i]=ax[i];y0[i]=ay[i];x1[i]=bx[i];y1[i]=by[i];flo[i]=va[i];fhi[i]=vb[i];}
+    t[i]=flo[i]/(flo[i]-fhi[i]);}
+  const px=new Float64Array(m),py=new Float64Array(m);
+  for(let it=0;it<3;it++){
+    for(let i=0;i<m;i++){px[i]=x0[i]+t[i]*(x1[i]-x0[i]);py[i]=y0[i]+t[i]*(y1[i]-y0[i]);}
+    const fp=f(px,py,m);
+    for(let i=0;i<m;i++){const same=(fp[i]>0)===(flo[i]>0);if(same){lo[i]=t[i];flo[i]=fp[i];}else{hi[i]=t[i];fhi[i]=fp[i];}
+      let den=flo[i]-fhi[i];if(den===0)den=1e-12;t[i]=lo[i]+(hi[i]-lo[i])*flo[i]/den;}
+  }
+  for(let i=0;i<m;i++){px[i]=x0[i]+t[i]*(x1[i]-x0[i]);py[i]=y0[i]+t[i]*(y1[i]-y0[i]);}
+  return [px,py];
+}
+function splitTris(T,f){
+  const N=T.length/6,posA=[],negA=[];
+  if(!N)return {pos:new Float64Array(0),neg:new Float64Array(0)};
+  const xs=new Float64Array(3*N),ys=new Float64Array(3*N);
+  for(let t=0;t<N;t++)for(let v=0;v<3;v++){xs[3*t+v]=T[6*t+2*v];ys[3*t+v]=T[6*t+2*v+1];}
+  const val=f(xs,ys,3*N),mixed=[];
+  for(let t=0;t<N;t++){const p0=val[3*t]>0,p1=val[3*t+1]>0,p2=val[3*t+2]>0,np=p0+p1+p2;
+    if(np===3)for(let q=0;q<6;q++)posA.push(T[6*t+q]);else if(np===0)for(let q=0;q<6;q++)negA.push(T[6*t+q]);else mixed.push(t,np,np===1?(p0?0:p1?1:2):(!p0?0:!p1?1:2));}
+  const m=(mixed.length/3)*2,ax=new Float64Array(m),ay=new Float64Array(m),bx=new Float64Array(m),by=new Float64Array(m),va=new Float64Array(m),vb=new Float64Array(m);
+  for(let q=0,c=0;q<mixed.length;q+=3){const t=mixed[q],L=mixed[q+2];
+    for(let e=1;e<=2;e++){const i0=L,i1=(L+e)%3;ax[c]=T[6*t+2*i0];ay[c]=T[6*t+2*i0+1];bx[c]=T[6*t+2*i1];by[c]=T[6*t+2*i1+1];va[c]=val[3*t+i0];vb[c]=val[3*t+i1];c++;}}
+  const [cx,cy]=m?cutPoints(ax,ay,bx,by,va,vb,f,m):[[],[]];
+  const push=(arr,...p)=>{for(const v of p)arr.push(v);};
+  for(let q=0,c=0;q<mixed.length;q+=3){const t=mixed[q],np=mixed[q+1],L=mixed[q+2];
+    const A=[0,1,2].map(e=>{const i=(L+e)%3;return [T[6*t+2*i],T[6*t+2*i+1]];});
+    const c1=[cx[c],cy[c]],c2=[cx[c+1],cy[c+1]];c+=2;
+    const tri=(arr,P,Q,R)=>push(arr,P[0],P[1],Q[0],Q[1],R[0],R[1]);
+    if(np===1){tri(posA,A[0],c1,c2);tri(negA,A[1],A[2],c2);tri(negA,A[1],c2,c1);}
+    else{tri(negA,A[0],c1,c2);tri(posA,A[1],A[2],c2);tri(posA,A[1],c2,c1);}}
+  return {pos:Float64Array.from(posA),neg:Float64Array.from(negA)};
+}
+function dropDeg(T,amin=1e-4){const out=[];for(let t=0;t<T.length/6;t++){const x0=T[6*t],y0=T[6*t+1],ax=T[6*t+2]-x0,ay=T[6*t+3]-y0,bx=T[6*t+4]-x0,by=T[6*t+5]-y0;if(.5*Math.abs(ax*by-ay*bx)>amin)for(let q=0;q<6;q++)out.push(T[6*t+q]);}return Float64Array.from(out);}
+function terrainTris(C,h3){
+  const P=C.P,nx=Math.floor((XMAX-XMIN)/h3)+1,ny=Math.floor((YMAX-YMIN)/h3)+1,N=nx*ny,xs=new Float64Array(N),ys=new Float64Array(N);
+  for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){xs[j*nx+i]=XMIN+i*h3;ys[j*nx+i]=YMIN+j*h3;}
+  const o=newOut(N);relPts(C,xs,ys,N,o);const lim=P.sMin*.4,out=[];
+  for(let j=0;j<ny-1;j++)for(let i=0;i<nx-1;i++){const a=j*nx+i,b=a+1,d=a+nx,c=d+1;
+    if(o.S[a]<lim&&o.S[b]<lim&&o.S[c]<lim&&o.S[d]<lim)continue;
+    if((i+j)%2===0)out.push(xs[a],ys[a],xs[b],ys[b],xs[c],ys[c],xs[a],ys[a],xs[c],ys[c],xs[d],ys[d]);
+    else out.push(xs[a],ys[a],xs[b],ys[b],xs[d],ys[d],xs[b],ys[b],xs[c],ys[c],xs[d],ys[d]);}
+  return Float64Array.from(out);
+}
+function weldTris(T){const map=new Map(),vx=[],vy=[],F=new Int32Array(T.length/2);
+  for(let q=0;q<T.length/2;q++){const x=T[2*q],y=T[2*q+1],key=Math.round((x-XMIN)*1000)*10000000+Math.round((y-YMIN)*1000);let id=map.get(key);if(id===undefined){id=vx.length;map.set(key,id);vx.push(x);vy.push(y);}F[q]=id;}
+  return {vx:Float64Array.from(vx),vy:Float64Array.from(vy),F};}
+function normalPts(C,xa,ya,n,e=.75){const xp=new Float64Array(n),xm=new Float64Array(n),yp=new Float64Array(n),ym=new Float64Array(n);
+  for(let k=0;k<n;k++){xp[k]=xa[k]+e;xm[k]=xa[k]-e;yp[k]=ya[k]+e;ym[k]=ya[k]-e;}
+  const a=surfPts(C,xp,ya,n),b=surfPts(C,xm,ya,n),c=surfPts(C,xa,yp,n),d=surfPts(C,xa,ym,n),out=new Float64Array(3*n);
+  for(let k=0;k<n;k++){const zx=(a.Z[k]-b.Z[k])/(2*e),zy=(c.Z[k]-d.Z[k])/(2*e),m=Math.sqrt(zx*zx+zy*zy+1);out[3*k]=-zx/m;out[3*k+1]=-zy/m;out[3*k+2]=1/m;}
+  return out;}
+function newMeshes(){
+  const L=new Map(),get=l=>{let d=L.get(l);if(!d){d={V:[],N:[],F:[],n:0};L.set(l,d);}return d;};
+  const orient=(d,a,b,c,e)=>{const V=d.V,N=d.N,ux=V[3*b]-V[3*a],uy=V[3*b+1]-V[3*a+1],uz=V[3*b+2]-V[3*a+2],vx=V[3*c]-V[3*a],vy=V[3*c+1]-V[3*a+1],vz=V[3*c+2]-V[3*a+2];
+    const nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx,mx=N[3*a]+N[3*b]+N[3*c],my=N[3*a+1]+N[3*b+1]+N[3*c+1],mz=N[3*a+2]+N[3*b+2]+N[3*c+2];
+    if(nx*mx+ny*my+nz*mz<0){if(e===c)d.F.push(a,c,b,b);else d.F.push(a,e,c,b);}else d.F.push(a,b,c,e);};
+  return {L,
+    add(layer,V,N,F){const d=get(layer),off=d.n;for(let i=0;i<V.length;i++){d.V.push(V[i][0],V[i][1],V[i][2]);d.N.push(N[i][0],N[i][1],N[i][2]);}
+      for(const f of F){const e=f.length>3?f[3]:f[2];orient(d,f[0]+off,f[1]+off,f[2]+off,e+off);}d.n+=V.length;},
+    addIdx(layer,vx,vy,vz,nn,F,f0,f1){const d=get(layer),remap=new Int32Array(vx.length).fill(-1);
+      for(let q=f0;q<f1;q+=3){const ids=[F[q],F[q+1],F[q+2]];for(const i of ids)if(remap[i]<0){remap[i]=d.n++;d.V.push(vx[i],vy[i],vz[i]);d.N.push(nn[3*i],nn[3*i+1],nn[3*i+2]);}
+        orient(d,remap[ids[0]],remap[ids[1]],remap[ids[2]],remap[ids[2]]);}},
+    count(){let n=0;L.forEach(d=>n+=d.F.length/4);return n;}};
+}
+const EQN={ayto:'AYUNTAMIENTO',trabajo:'TRABAJO',cultura:'CULTURAL',equip:'BARRIO',manantial:'MANANTIAL'};
+function build3D(R,h3){
+  const C=R.C,P=C.P,M=newMeshes();
+  let T=terrainTris(C,h3);
+  const rel1=(x,y,n)=>{const o=newOut(n);relPts(C,x,y,n,o);return o;};
+  const fS=thr=>(x,y,n)=>{const o=rel1(x,y,n),v=new Float64Array(n);for(let k=0;k<n;k++)v[k]=o.S[k]-thr;return v;};
+  const fSl=thr=>(x,y,n)=>{const sl=slopePts(C,x,y,n),v=new Float64Array(n);for(let k=0;k<n;k++)v[k]=sl[k]-thr;return v;};
+  const fDl=(x,y,n)=>{const o=rel1(x,y,n),g=sGradPts(C,x,y,n),v=new Float64Array(n);for(let k=0;k<n;k++)v[k]=P.anchoViv/2-distLinea(P,o.S[k],g[k]);return v;};
+  const cls=[];let r;
+  r=splitTris(T,fS(P.sMin));T=dropDeg(r.pos);
+  r=splitTris(T,(x,y,n)=>{const o=surfPts(C,x,y,n),v=new Float64Array(n);for(let k=0;k<n;k++)v[k]=o.WS[k]-o.Z[k];return v;});let water=dropDeg(r.pos);T=dropDeg(r.neg);
+  r=splitTris(T,(x,y,n)=>{const o=rel1(x,y,n),v=new Float64Array(n);for(let k=0;k<n;k++)v[k]=-o.mg[k];return v;});cls.push(['TERRENO_PLAZA_EQUIPAMIENTO',dropDeg(r.pos)]);T=dropDeg(r.neg);
+  r=splitTris(T,fS(P.sPlaza));let Pz=dropDeg(r.pos);T=dropDeg(r.neg);
+  r=splitTris(Pz,fS(P.sMayor));cls.push(['TERRENO_PLAZA_MAYOR',dropDeg(r.pos)]);Pz=dropDeg(r.neg);
+  r=splitTris(Pz,fSl(P.pendG));cls.push(['TERRENO_GRADAS',dropDeg(r.pos)],['TERRENO_PLAZA_BARRIO',dropDeg(r.neg)]);
+  r=splitTris(T,fS(.88*P.sAgua));cls.push(['TERRENO_PASEO_ORILLA',dropDeg(r.pos)]);T=dropDeg(r.neg);
+  if(C.rv&&P.paseoW>0){const H=C.rv;
+    r=splitTris(T,(x,y,n)=>{const v=new Float64Array(n);for(let k=0;k<n;k++){const i=hashNear(H,x[k],y[k]);v[k]=i>=0?H.pv[i]+P.paseoW-H.d:-1e3;}return v;});cls.push(['TERRENO_PASEO_RIBERA',dropDeg(r.pos)]);T=dropDeg(r.neg);}
+  r=splitTris(T,fS(P.sViv));{const Vz=dropDeg(r.pos);T=dropDeg(r.neg);const q=splitTris(Vz,fDl);cls.push(['TERRENO_VIVIENDA',dropDeg(q.pos)],['TERRENO_PATIO',dropDeg(q.neg)]);}
+  r=splitTris(T,fS(P.sVerde));let Pk=dropDeg(r.pos);cls.push(['TERRENO_PRADO',dropDeg(r.neg)]);
+  r=splitTris(Pk,fSl(P.pendT));cls.push(['TERRENO_TERRAZAS',dropDeg(r.pos)],['TERRENO_PARQUE',dropDeg(r.neg)]);
+  cls.push(['TERRENO_FONDO_AGUA',water]);
+  const wcl=[];
+  if(C.rv&&water.length){const rv=C.rv;r=splitTris(water,(x,y,n)=>{const v=new Float64Array(n);for(let k=0;k<n;k++){const i=hashNear(rv,x[k],y[k]);v[k]=i>=0?rv.pv[i]+1-rv.d:-1e3;}return v;});wcl.push(['AGUA_RIO',dropDeg(r.pos)],['AGUA_LAGUNA',dropDeg(r.neg)]);}
+  else wcl.push(['AGUA_LAGUNA',water]);
+  let tot=0;cls.forEach(c=>tot+=c[1].length);const all=new Float64Array(tot);let off=0;const offs=[];cls.forEach(c=>{offs.push(off/2);all.set(c[1],off);off+=c[1].length;});
+  const W=weldTris(all),nv=W.vx.length,so=surfPts(C,W.vx,W.vy,nv),nn=normalPts(C,W.vx,W.vy,nv);
+  cls.forEach((c,i)=>{if(c[1].length)M.addIdx(c[0],W.vx,W.vy,so.Z,nn,W.F,offs[i],offs[i]+c[1].length/2);});
+  const upN=n=>{const a=new Float64Array(3*n);for(let k=0;k<n;k++)a[3*k+2]=1;return a;};
+  for(const [name,TT] of wcl){if(!TT.length)continue;const w=weldTris(TT),ws=surfPts(C,w.vx,w.vy,w.vx.length);M.addIdx(name,w.vx,w.vy,ws.WS,upN(w.vx.length),w.F,0,w.F.length);}
+  const sl=P.slope/100;
+  for(const o of S.objects){const pre='EQ_'+EQN[o.type],r_=FORM[o.peso].fp,H=OBJH3[o.peso],z=(o.z0||0)+.6+sl*(o.y-650),k=72,ring=[];
+    for(let i=0;i<k;i++){const t=2*Math.PI*i/k;ring.push([o.x+r_*Math.cos(t),o.y+r_*Math.sin(t)]);}
+    const zr_=surfPts(C,ring.map(p=>p[0]),ring.map(p=>p[1]),k).Z,V=[],N=[];
+    ring.forEach((p,i)=>{V.push([p[0],p[1],Math.min(zr_[i],z)-.3]);N.push([Math.cos(2*Math.PI*i/k),Math.sin(2*Math.PI*i/k),0]);});
+    ring.forEach((p,i)=>{V.push([p[0],p[1],z+H]);N.push([Math.cos(2*Math.PI*i/k),Math.sin(2*Math.PI*i/k),0]);});
+    M.add(pre+'_FACHADA',V,N,ring.map((_,i)=>[i,(i+1)%k,(i+1)%k+k,i+k]));
+    const Vc=[[o.x,o.y,z+H]].concat(ring.map(p=>[p[0],p[1],z+H])),Nc=Vc.map(()=>[0,0,1]);
+    M.add(pre+'_CUBIERTA',Vc,Nc,ring.map((_,i)=>[0,1+i,1+(i+1)%k]));}
+  return M;
+}
+
+/* ======================================================================
+   Splines reales (B-splines cúbicas) y escritura de DXF
+   ====================================================================== */
+function solveDense(A,B,n,m){ // A n*n (fila), B n*m (fila); resuelve en sitio
+  for(let c=0;c<n;c++){let p=c,mx=Math.abs(A[c*n+c]);for(let r=c+1;r<n;r++){const v=Math.abs(A[r*n+c]);if(v>mx){mx=v;p=r;}}
+    if(p!==c){for(let k=0;k<n;k++){const t=A[c*n+k];A[c*n+k]=A[p*n+k];A[p*n+k]=t;}for(let k=0;k<m;k++){const t=B[c*m+k];B[c*m+k]=B[p*m+k];B[p*m+k]=t;}}
+    const d=A[c*n+c]||1e-12;
+    for(let r=c+1;r<n;r++){const f=A[r*n+c]/d;if(!f)continue;for(let k=c;k<n;k++)A[r*n+k]-=f*A[c*n+k];for(let k=0;k<m;k++)B[r*m+k]-=f*B[c*m+k];}}
+  for(let c=n-1;c>=0;c--){for(let k=0;k<m;k++){let s=B[c*m+k];for(let q=c+1;q<n;q++)s-=A[c*n+q]*B[q*m+k];B[c*m+k]=s/(A[c*n+c]||1e-12);}}
+  return B;}
+function openSpline(F){ // interpolación global, grado 3, parametrización por cuerda
+  const n=F.length-1,p=3,t=[0];let tot=0;const d=[0];
+  for(let i=1;i<=n;i++){d.push(Math.hypot(F[i][0]-F[i-1][0],F[i][1]-F[i-1][1],F[i][2]-F[i-1][2]));tot+=d[i];}
+  let acc=0;for(let i=1;i<=n;i++){acc+=d[i];t.push(tot>0?acc/tot:i/n);}
+  const U=new Array(n+p+2).fill(0);for(let i=n+1;i<=n+p+1;i++)U[i]=1;
+  for(let j=1;j<=n-p;j++){let s=0;for(let i=j;i<=j+p-1;i++)s+=t[i];U[j+p]=s/p;}
+  const A=new Float64Array((n+1)*(n+1)),B=new Float64Array((n+1)*3);
+  for(let k=0;k<=n;k++){const u=t[k];let span=p;if(u>=U[n+1])span=n;else{while(span<n&&u>=U[span+1])span++;}
+    const Nn=[1,0,0,0],left=[0,0,0,0],right=[0,0,0,0];
+    for(let j=1;j<=p;j++){left[j]=u-U[span+1-j];right[j]=U[span+j]-u;let saved=0;for(let r=0;r<j;r++){const den=right[r+1]+left[j-r],tmp=den?Nn[r]/den:0;Nn[r]=saved+right[r+1]*tmp;saved=left[j-r]*tmp;}Nn[j]=saved;}
+    for(let j=0;j<=p;j++)A[k*(n+1)+span-p+j]=Nn[j];
+    B[k*3]=F[k][0];B[k*3+1]=F[k][1];B[k*3+2]=F[k][2];}
+  solveDense(A,B,n+1,3);
+  const ctrl=[];for(let i=0;i<=n;i++)ctrl.push([B[i*3],B[i*3+1],B[i*3+2]]);
+  return {ctrl,knots:U};}
+function closedSpline(F){ // B-spline uniforme periódica que pasa por los puntos
+  const n=F.length,A=new Float64Array(n*n),B=new Float64Array(n*3);
+  for(let i=0;i<n;i++){A[i*n+(i+n-1)%n]+=1;A[i*n+i]+=4;A[i*n+(i+1)%n]+=1;B[i*3]=6*F[i][0];B[i*3+1]=6*F[i][1];B[i*3+2]=6*F[i][2];}
+  solveDense(A,B,n,3);const c=[];for(let i=0;i<n;i++)c.push([B[i*3],B[i*3+1],B[i*3+2]]);
+  const ctrl=c.concat([c[0],c[1],c[2]]),knots=[];for(let i=0;i<ctrl.length+4;i++)knots.push(i);
+  return {ctrl,knots};}
+function decimate(P,closed,step){const n=P.length;if(n<2)return P;let L=0;const m=closed?n:n-1;for(let i=0;i<m;i++){const a=P[i],b=P[(i+1)%n];L+=Math.hypot(b[0]-a[0],b[1]-a[1]);}
+  const mean=Math.max(L/m,1e-6),k=Math.max(1,Math.round(step/mean));
+  if(closed){let idx=[];for(let i=0;i<n;i+=k)idx.push(i);if(idx.length<8){idx=[];for(let q=0;q<8;q++)idx.push(Math.floor(q*n/8));}return idx.map(i=>P[i]);}
+  const idx=[];for(let i=0;i<n;i+=k)idx.push(i);
+  if(idx[idx.length-1]!==n-1){if(n-1-idx[idx.length-1]<k*.4&&idx.length>2)idx[idx.length-1]=n-1;else idx.push(n-1);}
+  return idx.map(i=>P[i]);}
+
+/* ---- escritor de DXF (plantilla R2010 completa + entidades) ---- */
+function DXF(){
+  let HND=0x10000;const H=()=>(HND++).toString(16).toUpperCase(),E=[],layers=new Map();
+  const fx=v=>{const r=Math.round(v*1000)/1000;return String(Object.is(r,-0)?0:r);};
+  const lay=(name,col)=>{if(!layers.has(name))layers.set(name,col??aciOf(name));return name;};
+  const ent=(type,layer,sub,body,col)=>{lay(layer);E.push(`  0\n${type}\n  5\n${H()}\n330\n17\n100\nAcDbEntity\n  8\n${layer}\n${col!=null?' 62\n'+col+'\n':''}100\n${sub}\n${body}`);};
+  const api={
+    spline(layer,P,closed,z,step){const Q=P.map(p=>[p[0],p[1],p.length>2?p[2]:(z||0)]),F=decimate(Q,closed,step||9);
+      if(F.length<4){for(let i=0;i<F.length-1;i++)api.line(layer,F[i],F[i+1]);return;}
+      const sp=closed?closedSpline(F):openSpline(F);
+      ent('SPLINE',layer,'AcDbSpline',` 70\n${closed?3:0}\n 71\n3\n 72\n${sp.knots.length}\n 73\n${sp.ctrl.length}\n 74\n0\n`+sp.knots.map(k=>' 40\n'+(Math.round(k*1e6)/1e6)).join('\n')+'\n'+sp.ctrl.map(p=>` 10\n${fx(p[0])}\n 20\n${fx(p[1])}\n 30\n${fx(p[2])}`).join('\n'));},
+    line(layer,a,b){ent('LINE',layer,'AcDbLine',` 10\n${fx(a[0])}\n 20\n${fx(a[1])}\n 30\n${fx(a[2]||0)}\n 11\n${fx(b[0])}\n 21\n${fx(b[1])}\n 31\n${fx(b[2]||0)}`);},
+    circle(layer,x,y,r){ent('CIRCLE',layer,'AcDbCircle',` 10\n${fx(x)}\n 20\n${fx(y)}\n 30\n0\n 40\n${fx(r)}`);},
+    text(layer,x,y,z,h,s){ent('TEXT',layer,'AcDbText',` 10\n${fx(x)}\n 20\n${fx(y)}\n 30\n${fx(z)}\n 40\n${h}\n  1\n${ascii(s)}\n100\nAcDbText`);},
+    mesh(layer,V,F,col){ // V: x,y,z intercalados; F: 4 por cara (triángulo si d==c)
+      const nv=V.length/3;let tot=0;const fl=[];
+      for(let q=0;q<F.length;q+=4){const tri=F[q+3]===F[q+2],c=tri?3:4;tot+=c+1;fl.push(' 90\n'+c+'\n 90\n'+(tri?[F[q],F[q+1],F[q+2]]:[F[q],F[q+1],F[q+2],F[q+3]]).join('\n 90\n'));}
+      const vs=new Array(nv);for(let i=0;i<nv;i++)vs[i]=` 10\n${fx(V[3*i])}\n 20\n${fx(V[3*i+1])}\n 30\n${fx(V[3*i+2])}`;
+      ent('MESH',layer,'AcDbSubDMesh',` 71\n2\n 72\n0\n 91\n0\n 92\n${nv}\n`+vs.join('\n')+`\n 93\n${tot}\n`+fl.join('\n')+'\n 94\n0\n 95\n0\n 90\n0',col);},
+    face(layer,col,a,b,c,d){E.push(`  0\n3DFACE\n  5\n${H()}\n330\n17\n100\nAcDbEntity\n  8\n${layer}\n 62\n${col}\n100\nAcDbFace\n 10\n${fx(a[0])}\n 20\n${fx(a[1])}\n 30\n${fx(a[2])}\n 11\n${fx(b[0])}\n 21\n${fx(b[1])}\n 31\n${fx(b[2])}\n 12\n${fx(c[0])}\n 22\n${fx(c[1])}\n 32\n${fx(c[2])}\n 13\n${fx(d[0])}\n 23\n${fx(d[1])}\n 33\n${fx(d[2])}`);},
+    layer:lay,
+    done(colFn){let recs='';layers.forEach((col,name)=>{recs+=`  0\nLAYER\n  5\n${H()}\n330\n1\n100\nAcDbSymbolTableRecord\n100\nAcDbLayerTableRecord\n  2\n${name}\n 70\n0\n 62\n${col}\n  6\nContinuous\n370\n-3\n390\n13\n347\n21\n`;});
+      return DXF_TPL.head.replace('@@NLAY@@',String(layers.size+2)).replace('@@SEED@@',(HND+64).toString(16).toUpperCase())+recs+DXF_TPL.tail+E.join('\n')+'\n'+DXF_TPL.foot;}
+  };
+  return api;
+}
+const ascii=t=>String(t).replace(/[^\x20-\x7E]/g,c=>({'á':'a','é':'e','í':'i','ó':'o','ú':'u','ñ':'n','Á':'A','É':'E','Í':'I','Ó':'O','Ú':'U','Ñ':'N','−':'-'}[c]||'_'));
+const ACI=[[/^TERRENO_PLAZA_MAYOR/,253],[/^TERRENO_PLAZA_EQUIP/,8],[/^TERRENO_PLAZA/,9],[/^TERRENO_GRADAS/,32],[/^TERRENO_PASEO_RIBERA/,122],[/^TERRENO_PASEO/,42],[/^TERRENO_VIVIENDA/,20],[/^TERRENO_PATIO/,62],[/^TERRENO_PARQUE/,94],[/^TERRENO_TERRAZAS/,74],[/^TERRENO_PRADO/,82],[/^TERRENO_FONDO/,143],
+  [/^AGUA_RIO|^RIO/,141],[/^AGUA/,151],
+  [/^EQ_AYUNTAMIENTO.*CUBIERTA/,174],[/^EQ_AYUNTAMIENTO/,170],[/^EQ_TRABAJO.*CUBIERTA/,24],[/^EQ_TRABAJO/,20],[/^EQ_CULTURAL.*CUBIERTA/,224],[/^EQ_CULTURAL/,220],
+  [/^EQ_BARRIO.*CUBIERTA/,114],[/^EQ_BARRIO/,110],[/^EQ_MANANTIAL.*CUBIERTA/,134],[/^EQ_MANANTIAL/,130],
+  [/^VIV_/,20],[/^LIM_CIUDAD/,8],[/^LIM_PARQUE/,94],[/^LIM_VIVIENDA/,20],[/^LIM_ORILLA/,42],[/^LIM_PLAZA_MAYOR/,253],[/^LIM_PLAZA/,9],[/^PASEO_RIBERA/,122],
+  [/^CURVAS_MAESTRAS/,250],[/^CURVAS/,8],[/^SECCION/,1],[/^TEXTOS/,7]];
+const aciOf=n=>{for(const [re,c] of ACI)if(re.test(n))return c;return 7;};
+const ARQ={TERRENO_PLAZA_MAYOR:254,TERRENO_PLAZA_BARRIO:9,TERRENO_PLAZA_EQUIPAMIENTO:9,TERRENO_GRADAS:42,TERRENO_PASEO_ORILLA:62,TERRENO_PASEO_RIBERA:42,TERRENO_VIVIENDA:7,TERRENO_PATIO:3,TERRENO_PARQUE:3,TERRENO_TERRAZAS:3,TERRENO_PRADO:94,TERRENO_FONDO_AGUA:52,
+  AGUA_LAGUNA:5,AGUA_RIO:5,
+  EQ_AYUNTAMIENTO_FACHADA:4,EQ_AYUNTAMIENTO_CUBIERTA:250,EQ_TRABAJO_FACHADA:14,EQ_TRABAJO_CUBIERTA:163,EQ_CULTURAL_FACHADA:130,EQ_CULTURAL_CUBIERTA:92,
+  EQ_BARRIO_FACHADA:32,EQ_BARRIO_CUBIERTA:94,EQ_MANANTIAL_FACHADA:43,EQ_MANANTIAL_CUBIERTA:5};
+const ARQNAME={254:'Baldosa',42:'Piedra',62:'Terrazo',3:'Cesped',9:'Microcemento',52:'Tierra / grava',5:'Agua',7:'Enlucido',8:'Hormigon visto',1:'Ladrillo caravista',253:'Hormigon tablilla',251:'Metal claro',40:'Madera',161:'Chapa / zinc',4:'Vidrio',250:'Carpinteria metalica oscura',14:'Acero corten',163:'(tono chapa)',130:'Vidrio translucido',92:'(tono cesped: cubierta verde)',32:'Tarima / madera',94:'(tono cesped: cubierta verde)',43:'(tono piedra)'};
+const MATRGB=[[/^TERRENO_PLAZA_MAYOR/,[.93,.91,.86]],[/^TERRENO_PLAZA_EQUIP/,[.82,.83,.86]],[/^TERRENO_PLAZA/,[.88,.86,.80]],[/^TERRENO_GRADAS/,[.78,.70,.58]],[/^TERRENO_PASEO_RIBERA/,[.74,.82,.72]],[/^TERRENO_PASEO/,[.80,.77,.70]],[/^TERRENO_VIVIENDA/,[.92,.62,.46]],[/^TERRENO_PATIO/,[.60,.72,.45]],
+  [/^TERRENO_PARQUE/,[.42,.60,.30]],[/^TERRENO_TERRAZAS/,[.36,.54,.28]],[/^TERRENO_PRADO/,[.62,.70,.45]],[/^TERRENO_FONDO/,[.17,.25,.24]],
+  [/^AGUA_RIO/,[.22,.50,.58]],[/^AGUA/,[.18,.44,.54]],[/^EQ_AYUNTAMIENTO_CUBIERTA/,[.20,.28,.50]],[/^EQ_AYUNTAMIENTO/,[.62,.70,.88]],[/^EQ_TRABAJO_CUBIERTA/,[.40,.24,.14]],[/^EQ_TRABAJO/,[.70,.48,.32]],
+  [/^EQ_CULTURAL_CUBIERTA/,[.38,.22,.44]],[/^EQ_CULTURAL/,[.76,.62,.84]],[/^EQ_BARRIO_CUBIERTA/,[.20,.38,.24]],[/^EQ_BARRIO/,[.66,.82,.66]],[/^EQ_MANANTIAL_CUBIERTA/,[.16,.46,.52]],[/^EQ_MANANTIAL/,[.60,.84,.86]]];
+const matOf=n=>{for(const [re,c] of MATRGB)if(re.test(n))return c;return [.7,.7,.7];};
+
+/* ---- DXF 2D: planta con splines ---- */
+function dxf2d(R){
+  const P=S.params,D=DXF();
+  getLevels().forEach(l=>D.spline(l.L%5===0?'CURVAS_MAESTRAS':'CURVAS_NIVEL',l.pts,l.closed,l.z,10));
+  getWaterEdge().forEach(l=>D.spline('AGUA_BORDE',l.pts,l.closed,0,8));
+  R.rivers.forEach(r=>D.spline('RIO_EJE',r.pts,false,0,15));
+  R.rivers.forEach(r=>{const hw=r.hw[r.hw.length>>1];
+    [1,-1].forEach(sg=>{D.spline('RIO_ORILLA',offsetLine(r.pts,false,sg*hw),false,0,12);D.spline('PASEO_RIBERA_BORDE',offsetLine(r.pts,false,sg*(hw+P.paseoW)),false,0,12);});});
+  getVivLines().forEach(l=>{D.spline('VIV_EJE',l.pts,l.closed,0,9);[1,-1].forEach(sg=>D.spline('VIV_BORDE',offsetLine(l.pts,l.closed,sg*P.anchoViv/2),l.closed,0,9));});
+  getZoneLines().forEach(l=>D.spline(l.name,l.pts,l.closed,0,9));
+  {const st=R.stats;D.text('TEXTOS',XMIN+40,YMIN+60,0,14,'Suelo de VIVIENDA: '+Math.round(st.viv)+' m2 = franja de '+P.anchoViv+' m, '+Math.round(st.lenViv)+' m de linea (influencia '+P.sLinea+')');
+    D.text('TEXTOS',XMIN+40,YMIN+40,0,10,'Plaza mayor '+Math.round(st.area[8])+' m2 | plaza de barrio '+Math.round(st.area[7]+st.area[10])+' m2 | parque '+Math.round(st.area[4]+st.area[11])+' m2 | agua '+Math.round(st.area[1]+st.area[2])+' m2');}
+  S.objects.forEach(o=>{const r=FORM[o.peso].fp;D.circle('EQ_'+EQN[o.type],o.x,o.y,r);D.text('TEXTOS',o.x+r+4,o.y,0,6,o.name+'  '+sgn(o.z0||0));});
+  if(S.section){const a=S.section.a,b=S.section.b;D.line('SECCION',[a[0],a[1],0],[b[0],b[1],0]);D.text('SECCION',a[0]+5,a[1]+5,0,10,'A');D.text('SECCION',b[0]+5,b[1]+5,0,10,"A'");
+    const L=Math.hypot(b[0]-a[0],b[1]-a[1]),n=Math.max(2,Math.floor(L/3)),xa=[],ya=[];for(let q=0;q<=n;q++){xa.push(a[0]+(b[0]-a[0])*q/n);ya.push(a[1]+(b[1]-a[1])*q/n);}
+    const so=surfPts(R.C,xa,ya,n+1),x0=XMIN+300,oy=YMIN+100,ex=4,prof=[];for(let q=0;q<=n;q++)prof.push([x0+q/n*L,oy+so.Z[q]*ex]);
+    D.spline('SECCION_PERFIL',prof,false,0,9);
+    const wl=[];for(let q=0;q<=n;q++)if(so.Z[q]<so.WS[q])wl.push([q,x0+q/n*L,oy+so.WS[q]*ex]);
+    if(wl.length>1)D.line('SECCION_PERFIL',[wl[0][1],wl[0][2],0],[wl[wl.length-1][1],wl[wl.length-1][2],0]);}
+  return D.done();
+}
+function dxf3dMesh(M,R){
+  const D=DXF();
+  M.L.forEach((d,name)=>D.mesh(name,d.V,d.F));
+  getLevels().forEach(l=>D.spline(l.L%5===0?'CURVAS_MAESTRAS':'CURVAS_NIVEL',l.pts,l.closed,l.z,10));
+  return D.done();
+}
+function dxf3dFaces(M){
+  const D=DXF();
+  M.L.forEach((d,name)=>{const col=ARQ[name]!=null?ARQ[name]:7;D.layer(name,col);const V=d.V,F=d.F,pt=i=>[V[3*i],V[3*i+1],V[3*i+2]];
+    for(let q=0;q<F.length;q+=4)D.face(name,col,pt(F[q]),pt(F[q+1]),pt(F[q+2]),pt(F[q+3]));});
+  return D.done();
+}
+function objFiles(M){
+  const L=['# Ciudad Acuatica - curvas reales','# metros, Y arriba (importar en Blender con los ejes por defecto)','# origen desplazado: x-'+OBJ_CX+', y-'+OBJ_CY,'mtllib ciudad.mtl'],Mt=['# materiales por capa'];let off=1;
+  const n2=v=>(Math.round(v*100)/100).toString(),n4=v=>(Math.round(v*10000)/10000).toString();
+  [...M.L.keys()].sort().forEach(name=>{const d=M.L.get(name);L.push('o '+name,'usemtl '+name);
+    for(let i=0;i<d.n;i++)L.push('v '+n2(d.V[3*i]-OBJ_CX)+' '+n2(d.V[3*i+2])+' '+n2(-(d.V[3*i+1]-OBJ_CY)));
+    for(let i=0;i<d.n;i++)L.push('vn '+n4(d.N[3*i])+' '+n4(d.N[3*i+2])+' '+n4(-d.N[3*i+1]));
+    for(let q=0;q<d.F.length;q+=4){const f=d.F,a=f[q]+off,b=f[q+1]+off,c=f[q+2]+off,e=f[q+3]+off;L.push(f[q+3]===f[q+2]?`f ${a}//${a} ${b}//${b} ${c}//${c}`:`f ${a}//${a} ${b}//${b} ${c}//${c} ${e}//${e}`);}
+    off+=d.n;const c=matOf(name),w=/^AGUA/.test(name);
+    Mt.push('newmtl '+name,'Kd '+c.map(x=>x.toFixed(3)).join(' '),'Ka 0 0 0','Ks '+(w?'0.6 0.6 0.6':'0.04 0.04 0.04'),'Ns '+(w?'400':'30'),'d '+(w?'0.75':'1'),'illum 2','');});
+  return {obj:L.join('\n'),mtl:Mt.join('\n')};
+}
+
+/* ---- textos de ayuda del paquete ---- */
+const BLENDER_PY=String.raw`# Preparar la escena de la Ciudad Acuatica en Blender (3.6 / 4.x)
+# Uso: Blender > pestana Scripting > Abrir este archivo > Run Script.
+# Importa ciudad.obj (junto a este script) con sombreado suave en terreno, agua y fachadas curvas,
+# agua con transmision, sol, cielo y una camara aerea.
+import bpy, os, math
+RUTA = ""
+cands = [RUTA] if RUTA else []
+try:
+    txt = bpy.context.space_data.text
+    if txt and txt.filepath:
+        cands.append(os.path.join(os.path.dirname(bpy.path.abspath(txt.filepath)), "ciudad.obj"))
+except Exception:
+    pass
+try:
+    cands.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ciudad.obj"))
+except Exception:
+    pass
+if bpy.data.filepath:
+    cands.append(bpy.path.abspath("//ciudad.obj"))
+ruta = next((c for c in cands if c and os.path.exists(c)), None)
+if not ruta:
+    raise FileNotFoundError("No encuentro ciudad.obj: abre este script desde la carpeta blender o rellena RUTA")
+before = set(bpy.data.objects)
+if hasattr(bpy.ops.wm, "obj_import"):
+    bpy.ops.wm.obj_import(filepath=ruta, forward_axis='NEGATIVE_Z', up_axis='Y')
+else:
+    bpy.ops.import_scene.obj(filepath=ruta, axis_forward='-Z', axis_up='Y')
+nuevos = [o for o in bpy.data.objects if o not in before and o.type == 'MESH']
+for o in nuevos:
+    bpy.ops.object.select_all(action='DESELECT')
+    o.select_set(True)
+    bpy.context.view_layer.objects.active = o
+    try:
+        if o.name.startswith(("TERRENO", "AGUA", "VIV_", "EQ_")):
+            bpy.ops.object.shade_smooth()
+            if o.name.startswith(("VIV_", "EQ_")) and hasattr(bpy.ops.object, "shade_smooth_by_angle"):
+                bpy.ops.object.shade_smooth_by_angle(angle=math.radians(35))
+    except Exception as e:
+        print("shade:", e)
+def entrada(bsdf, *nombres):
+    for n in nombres:
+        if n in bsdf.inputs:
+            return bsdf.inputs[n]
+    return None
+for m in bpy.data.materials:
+    if not m.use_nodes or not m.node_tree:
+        continue
+    b = m.node_tree.nodes.get("Principled BSDF")
+    if not b:
+        continue
+    r = entrada(b, "Roughness")
+    if m.name.startswith("AGUA"):
+        t = entrada(b, "Transmission Weight", "Transmission")
+        if t: t.default_value = 0.85
+        if r: r.default_value = 0.04
+        a = entrada(b, "Alpha")
+        if a: a.default_value = 1.0
+        ior = entrada(b, "IOR")
+        if ior: ior.default_value = 1.33
+    elif "CUBIERTA" in m.name or m.name.startswith("TERRENO"):
+        if r: r.default_value = 0.85
+    else:
+        if r: r.default_value = 0.6
+bpy.ops.object.light_add(type='SUN', location=(0, 0, 400))
+sol = bpy.context.object
+sol.data.energy = 4.0
+sol.rotation_euler = (math.radians(50), 0, math.radians(-35))
+w = bpy.context.scene.world or bpy.data.worlds.new("Mundo")
+bpy.context.scene.world = w
+w.use_nodes = True
+bg = w.node_tree.nodes.get("Background")
+if bg:
+    bg.inputs[0].default_value = (0.62, 0.74, 0.86, 1)
+    bg.inputs[1].default_value = 0.8
+bpy.ops.object.empty_add(location=(0, 0, 0))
+centro = bpy.context.object
+centro.name = "Centro_ciudad"
+bpy.ops.object.camera_add(location=(-650, -900, 700))
+cam = bpy.context.object
+cam.data.lens = 35
+cam.data.clip_end = 10000
+c = cam.constraints.new(type='TRACK_TO')
+c.target = centro
+c.track_axis = 'TRACK_NEGATIVE_Z'
+c.up_axis = 'UP_Y'
+bpy.context.scene.camera = cam
+bpy.context.scene.render.engine = 'CYCLES'
+print("Ciudad Acuatica lista")
+`;
+function readme(){const st=RES.stats,P=S.params;return ['CIUDAD ACUATICA - CAMPO DE NIVELES (CURVAS REALES)','','Unidades: metros. X = este, Y = norte, Z = cota.','',
+  'ciudad_2D.dxf        Planta con SPLINES de AutoCAD (curvas reales): curvas de nivel a su cota, borde del agua, ejes y orillas de rio,',
+  '                     paseos del rio, fronteras entre zonas (LIM_*), circulos de equipamientos, textos y seccion A-A\' con su perfil (x4).',
+  'ciudad_3D_malla.dxf  Modelo 3D como entidades MESH (una capa por zona/material) + curvas de nivel 3D como splines.',
+  '                     AutoCAD 2010 o superior. Para suavizar mas: MESHSMOOTHMORE. Vista isometrica + estilo Realista.',
+  'blender/ciudad_arquiviz.dxf  Mismas superficies como caras 3D con el color de tu convencion ArquiViz (un material por color).',
+  'blender/ciudad.obj + ciudad.mtl  Mismo modelo con normales suaves.',
+  'blender/preparar_escena.py  En Blender: Scripting > Abrir > Run Script.',
+  'configuracion.json  Estado completo (objetos, influencias, choque por tipo, umbrales); sirve para recuperar la ciudad.','',
+  'COMO SE DECIDE CADA ZONA: cada objeto aporta una INFLUENCIA que baja con la distancia a su centro. Donde se solapan ondas,',
+  'las influencias se SUMAN (80 + 80 = 160) salvo que el choque del tipo diga que manda la mas pesada. El valor sumado S decide:',
+  '  S < '+P.sMin+'  fuera de la ciudad | '+P.sMin+'-'+P.sVerde+' prado/bosque de borde | '+P.sVerde+'-'+P.sViv+' parque (terrazas si la pendiente > '+P.pendT+' %)',
+  '  '+P.sViv+'-'+Math.round(.88*P.sAgua)+' franja de VIVIENDA de '+P.anchoViv+' m sobre la curva de influencia '+P.sLinea+' (el resto, patio) | '+Math.round(.88*P.sAgua)+'-'+P.sAgua+' paseo de orilla | '+P.sAgua+'-'+P.sPlaza+' agua (laguna)',
+  '  '+P.sPlaza+'-'+P.sMayor+' plaza de barrio (gradas si la pendiente > '+P.pendG+' %) | > '+P.sMayor+' plaza mayor',
+  'Los rios unen los pesos 1 y 2, son vadeables (0,5 m) y llevan paseo a cada lado ('+P.paseoW+' m).','',
+  'Resumen: SUELO DE VIVIENDA '+Math.round(st.viv)+' m2 (franja de '+P.anchoViv+' m, '+Math.round(st.lenViv)+' m de linea).',
+  'Con '+P.plantas+' plantas, ocupacion '+P.ocup+' y '+P.m2hab+' m2/hab: '+Math.round(st.edif)+' m2 construidos, '+Math.round(st.hab)+' habitantes aprox.',
+  st.nLevels+' niveles de '+sgn(st.minA)+' a '+sgn(st.maxA)+' m, '+S.objects.length+' objetos.','',
+  'Superficie por zona (m2):',...ZORDER.map(u=>'  '+USOS[u].name.padEnd(34,' ')+String(Math.round(st.area[u])).padStart(10,' '))].join('\r\n');}
+function readmeArq(){const rows=Object.entries(ARQ).map(([l,c])=>'  '+l.padEnd(28,' ')+' color '+String(c).padStart(3,' ')+'  ->  '+(ARQNAME[c]||''));
+ return ['CIUDAD ACUATICA -> BLENDER CON ARQUIVIZ','',
+ 'Archivo: ciudad_arquiviz.dxf  (solo caras 3D, en metros; colores segun tu convencion ArquiViz)','',
+ '1. Panel ArquiViz (tecla N) > 1 Importar DXF de AutoCAD > ciudad_arquiviz.dxf',
+ '   Un material por: Color  |  Llevar al origen: marcado  |  Unidades: Automatico (si sale raro, m)',
+ '2. Panel 2 Materiales por color: revisa la tabla. Los colores "(tono ...)" no son de la convencion: asignales tu el material.',
+ '3. Escena rapida, o Suelo simple + Sol + ambiente Hora dorada.',
+ '4. Vegetacion: selecciona el objeto del material Cesped > Dispersar sobre el objeto activo (Evitar edificios).',
+ '5. Camara Axonometria o Peatonal con Enderezar verticales > Calidad Final > F12.','',
+ 'Capa -> color -> material sugerido:',...rows,'',
+ 'El agua va en el color 5. La lamina de agua esta recortada exactamente por la orilla (curva real). Vivienda = color 7 (solo suelo; las plantas las dibujas tu).'].join('\r\n');}
+
+/* ---- ZIP ---- */
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+async function deflateRaw(u8){try{if(typeof CompressionStream==='undefined')return null;const st=new Blob([u8]).stream().pipeThrough(new CompressionStream('deflate-raw'));return new Uint8Array(await new Response(st).arrayBuffer());}catch(e){return null;}}
+async function zip(files){const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+  for(const f of files){const name=enc.encode(f.name),raw=f.data,crc=crc32(raw),cmp=await deflateRaw(raw),use=cmp&&cmp.length<raw.length,data=use?cmp:raw,meth=use?8:0,lh=new DataView(new ArrayBuffer(30));
+    lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(8,meth,true);lh.setUint16(10,0,true);lh.setUint16(12,0x21,true);
+    lh.setUint32(14,crc,true);lh.setUint32(18,data.length,true);lh.setUint32(22,raw.length,true);lh.setUint16(26,name.length,true);lh.setUint16(28,0,true);
+    parts.push(new Uint8Array(lh.buffer),name,data);
+    const ch=new DataView(new ArrayBuffer(46));ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(10,meth,true);ch.setUint16(12,0,true);ch.setUint16(14,0x21,true);
+    ch.setUint32(16,crc,true);ch.setUint32(20,data.length,true);ch.setUint32(24,raw.length,true);ch.setUint16(28,name.length,true);ch.setUint32(42,off,true);
+    cen.push(new Uint8Array(ch.buffer),name);off+=30+name.length+data.length;}
+  const cs=cen.reduce((a,b)=>a+b.length,0),end=new DataView(new ArrayBuffer(22));end.setUint32(0,0x06054b50,true);end.setUint16(8,files.length,true);end.setUint16(10,files.length,true);end.setUint32(12,cs,true);end.setUint32(16,off,true);
+  return new Blob([...parts,...cen,new Uint8Array(end.buffer)],{type:'application/zip'});}
+const tick=ms=>new Promise(r=>setTimeout(r,ms||20));
+async function buildPackage(say){
+  say=say||(()=>{});const enc=new TextEncoder();
+  say('Calculando curvas a 3 m…');await tick(30);
+  compute(H_EXPORT);const R=RES;
+  say('Dibujando splines del plano…');await tick();
+  const d2=dxf2d(R);
+  say('Cortando la malla 3D por las curvas…');await tick(30);
+  const M=build3D(R,S.res3d);
+  say('Escribiendo DXF 3D…');await tick();
+  const d3=dxf3dMesh(M,R);
+  say('Escribiendo caras para ArquiViz…');await tick();
+  const arq=dxf3dFaces(M);
+  say('Escribiendo OBJ…');await tick();
+  const ob=objFiles(M),faces=M.count();
+  const files=[{name:'ciudad_2D.dxf',data:enc.encode(d2)},{name:'ciudad_3D_malla.dxf',data:enc.encode(d3)},{name:'blender/ciudad_arquiviz.dxf',data:enc.encode(arq)},{name:'blender/LEEME_ARQUIVIZ.txt',data:enc.encode(readmeArq())},
+    {name:'blender/ciudad.obj',data:enc.encode(ob.obj)},{name:'blender/ciudad.mtl',data:enc.encode(ob.mtl)},{name:'blender/preparar_escena.py',data:enc.encode(BLENDER_PY)},{name:'LEEME.txt',data:enc.encode(readme())},{name:'configuracion.json',data:enc.encode(JSON.stringify(data(),null,1))}];
+  compute(H_FINE);render();
+  return {files,faces};
+}
+window.__buildPackage=buildPackage;
+let dlP=null;
+function getDownloads(){if(!dlP)dlP=(window.claude&&typeof window.claude.use==='function')?Promise.resolve(window.claude.use('downloads')).catch(()=>null):Promise.resolve(null);return dlP;}
+async function exportZip(){
+  if(!RES)return;const btn=$('#dl');btn.disabled=true;
+  try{
+    const pk=await buildPackage(t=>{btn.textContent=t;});
+    btn.textContent='Comprimiendo…';await tick(30);
+    const blob=await zip(pk.files);
+    const dl=await getDownloads();
+    if(dl){try{await dl.save({filename:'ciudad-acuatica.zip',data:blob});toast('Descarga lista');}
+      catch(e){toast(e&&e.code==='declined'?'Descarga cancelada':'No se pudo descargar: '+((e&&e.message)||'error'));}}
+    else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ciudad-acuatica.zip';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},4000);toast('Descargando ciudad-acuatica.zip');}
+  }catch(e){console.error(e);toast('Error al exportar: '+((e&&e.message)||e));}
+  finally{btn.disabled=false;btn.textContent='Descargar AutoCAD y Blender (.zip)';}
+}
+async function copyText(txt,title,ok){try{await navigator.clipboard.writeText(txt);toast(ok);}catch(e){$('#dlgt').textContent=title;$('#dlgtxt').value=txt;$('#dlgok').hidden=true;dlg.showModal();$('#dlgtxt').select();}}
+$('#dxf').onclick=()=>{if(!RES)return;copyText(dxf2d(RES),'Copia este DXF','DXF 2D copiado: pégalo en un archivo .dxf');};
+$('#dl').onclick=exportZip;
+$('#res3d').onchange=e=>{S.res3d=+e.target.value;save();};
+
+/* ---------- guardar ---------- */
+const KEY='campo-niveles-v6';let saveT=0;
+function data(){return {version:4,unidades:'metros; x este, y norte; z cota',params:S.params,choque:S.choque,section:S.section,objects:S.objects.map(({id,...o})=>({...o,x:Math.round(o.x*10)/10,y:Math.round(o.y*10)/10}))};}
+function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify({...data(),view:S.view,res3d:S.res3d}));}catch(e){}},300);}
+function parseConfig(text){
+  let t=String(text||'').trim();if(!t)throw new Error('No hay texto.');
+  const a=t.search(/[\[{]/),b=Math.max(t.lastIndexOf('}'),t.lastIndexOf(']'));if(a<0||b<a)throw new Error('No parece una configuración.');
+  let d;try{d=JSON.parse(t.slice(a,b+1));}catch(e){throw new Error('El texto está incompleto o cortado.');}
+  if(Array.isArray(d))d={objects:d};
+  if(!d||!Array.isArray(d.objects))throw new Error('Falta la lista de objetos.');
+  return d;}
+function load(d){
+  const num=(v,f)=>Number.isFinite(+v)&&v!==null&&v!==''?+v:f;
+  const ALIAS={ayuntamiento:'ayto',equipamiento:'equip',equipamiento_barrio:'equip',trabajo:'trabajo',cultura:'cultura',manantial:'manantial'};
+  d.objects.forEach(o=>{if(o&&ALIAS[o.type])o.type=ALIAS[o.type];});
+  S.params={...DEF_PARAMS};if(d.params&&typeof d.params==='object')for(const k in DEF_PARAMS){if(k in d.params){S.params[k]=typeof DEF_PARAMS[k]==='boolean'?!!d.params[k]:num(d.params[k],DEF_PARAMS[k]);}}
+  S.choque={...DEF_CHOQUE};if(d.choque&&typeof d.choque==='object'){const CA={ayto:'ayto',ayuntamiento:'ayto',trabajo:'trabajo',cultura:'cultura',equip:'equip',equipamiento:'equip',manantial:'manantial'};for(const k in d.choque){const t=CA[k];if(!t)continue;let v=+d.choque[k];if(!Number.isFinite(v))continue;if(v>1)v/=100;S.choque[t]=Math.max(0,Math.min(1,v));}}
+  S.section=d.section&&d.section.a&&d.section.b?{a:[+d.section.a[0],+d.section.a[1]],b:[+d.section.b[0],+d.section.b[1]]}:null;
+  S.objects=d.objects.filter(o=>o&&TYPES[o.type]&&Number.isFinite(+o.x)&&Number.isFinite(+o.y)).map(o=>{const p=[1,2,3,4,5].includes(+o.peso)?+o.peso:TYPES[o.type].peso,f=FORM[p];
+    return {...mkObj(o.type,+o.x,+o.y,o.name?String(o.name):undefined,p),r:num(o.r,f.r)||f.r,w:num(o.w,f.w)||f.w,a:num(o.a,f.a),c:0,inf:Math.max(0,num(o.inf,INF[p])),z0:num(o.z0,0)};});
+  if(d.view&&['relieve','niveles','usos'].includes(d.view))S.view=d.view;if([3,4,5,6].includes(+d.res3d))S.res3d=+d.res3d;S.sel=null;}
+function syncControls(){syncViews();renderParams();renderObjUI();renderAdd();renderLegend();$('#res3d').value=String(S.res3d);}
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2200);}
+const dlg=$('#dlg');
+$('#copy').onclick=()=>copyText(JSON.stringify(data(),null,1),'Copia este texto','Configuración copiada');
+$('#paste').onclick=()=>{$('#dlgt').textContent='Pega una configuración';$('#dlgtxt').value='';$('#dlgok').hidden=false;dlg.showModal();};
+dlg.addEventListener('close',()=>{if(dlg.returnValue!=='ok'||$('#dlgok').hidden)return;try{load(parseConfig($('#dlgtxt').value));syncControls();full();toast('Configuración cargada');}catch(e){toast('No se pudo leer: '+e.message);}});
+$('#file').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{load(parseConfig(await f.text()));syncControls();full();toast('Configuración cargada');}catch(err){toast('No se pudo leer: '+err.message);}};
+
+/* ---------- arranque ---------- */
+try{const raw=localStorage.getItem(KEY);if(raw)load(JSON.parse(raw));else{for(const k of ['campo-niveles-v5','campo-niveles-v4','campo-niveles-v3']){const old=localStorage.getItem(k);if(old){const d=JSON.parse(old);if(k.endsWith('v3'))delete d.params;load(d);break;}}}}catch(e){}
+if(!S.objects.length){let had=false;try{had=!!localStorage.getItem(KEY);}catch(e){}if(!had)S.objects=preset('sedes');}
+syncControls();
+new ResizeObserver(()=>{resize();renderSection();}).observe(cv);
+compute(H_FINE);renderResult();resize();
+})();
+</script>
+
+</body></html></body></html>
