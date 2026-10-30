@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taller 7 · Frente fluvial de Lora del Río · Jesús Ortiz Muñoz</title>
+<meta name="description" content="Lectura del frente fluvial de Lora del Río con herramientas propias: ortofotos, demoliciones y recorridos.">
+<meta property="og:title" content="Taller 7 · Frente fluvial de Lora del Río — Jesús Ortiz Muñoz">
+<meta property="og:description" content="Lectura del frente fluvial de Lora del Río con herramientas propias: ortofotos, demoliciones y recorridos.">
+<meta property="og:image" content="https://ortizmozjesus.github.io/JOM/proyectos/taller7-lora/ondas.webp">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<style>
+  .ficha{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:1.2rem 0 0}
+  .ficha div{border-top:1px solid var(--line);padding-top:.5rem}
+  .ficha b{display:block;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .ficha span{font-size:.88rem}
+  @media (max-width:760px){.ficha{grid-template-columns:1fr 1fr}}
+  .piezas{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem}
+  .pieza{display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--line);border-radius:10px;overflow:hidden;text-decoration:none;transition:border-color .25s,transform .25s}
+  .pieza:hover{border-color:var(--red);transform:translateY(-3px)}
+  .pieza img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top left;background:#1b1b1b;display:block}
+  .pieza .tx{padding:.9rem 1rem 1.1rem;display:flex;flex-direction:column;gap:.35rem}
+  .pieza h3{font-family:var(--fh);font-weight:400;letter-spacing:.03em;text-transform:uppercase;font-size:1.15rem}
+  .pieza p{font-size:.85rem;color:#cfcfcf}
+  .pieza .go{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-top:.3rem}
+  .texto{max-width:760px;display:grid;gap:.8rem;color:#d6d6d6;margin:0 0 2rem}
+  .texto h2{font-family:var(--fh);font-weight:400;text-transform:uppercase;letter-spacing:.03em;font-size:1.3rem;color:#fff;margin-top:.8rem}
+  @media (prefers-reduced-motion:reduce){.pieza,.pieza:hover{transition:none;transform:none}}
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="back" href="../../#interactivos">← JOM</a>
+  <span class="crumb">Taller 7 · Lora del Río</span>
+  <span class="links"></span>
+</header>
+
+<section class="lab-hero"><p class="lab-eye">Taller 7 Ciudad · Grupo 5.06 · ETSA Sevilla</p><h1>Frente fluvial<br>de Lora del Río</h1><p class="lead">El taller trabaja el borde entre Lora del Río y el Guadalquivir. Antes de proyectar necesitaba leer el sitio con datos: cómo ha cambiado desde 1956, qué se puede demoler y cómo se recorre la orilla. Cada lectura es una herramienta que se puede abrir.</p>
+<div class="ficha"><div><b>Curso</b><span>2026-27 · Taller 7</span></div><div><b>Escala</b><span>Maqueta A1 a 1:1500</span></div><div><b>Base</b><span>Catastro, PNOA, REDIAM</span></div><div><b>Papel</b><span>Proyecto individual</span></div></div>
+<div class="stack"><span>JavaScript</span><span>WMS (IGN · REDIAM)</span><span>Parcelario catastral</span><span>ETRS89 UTM 30N</span><span>Exportación de datos</span></div></section>
+<main class="wrap">
+<div class="piezas">
+<a class="pieza" href="ondas.html"><img src="ondas.webp" alt="Ondas de Lora del Río" loading="lazy"><div class="tx"><h3>Ondas de Lora</h3><p>Frente fluvial sobre la maqueta A1: cada punto de influencia lanza ecos; la pasarela los une y cambia de cota.</p><span class="go">Abrir →</span></div></a>
+<a class="pieza" href="demoliciones.html"><img src="demoliciones.webp" alt="Demoliciones de Lora del Río" loading="lazy"><div class="tx"><h3>Demoliciones</h3><p>Selección por categorías de los edificios a demoler o conservar sobre el parcelario catastral, con propuesta guardable.</p><span class="go">Abrir →</span></div></a>
+<a class="pieza" href="ortofotos.html"><img src="ortofotos.webp" alt="Ortofotos históricas de Lora del Río" loading="lazy"><div class="tx"><h3>Ortofotos 1956 → 2024</h3><p>Once vuelos con el mismo encuadre, servidos en directo desde el IGN y la REDIAM, con comparador antes/después.</p><span class="go">Abrir →</span></div></a>
+</div>
+<div class="texto" style="margin-top:2.2rem"><h2>Leer antes de proyectar</h2><p>Las ortofotos oficiales se piden en directo a los servicios WMS del IGN y de la Junta, siempre con el mismo encuadre (5,5 × 3,85 km en ETRS89 UTM 30N), así que se superponen exactas y se pueden comparar con un deslizador. Sobre el parcelario de Catastro marqué los edificios candidatos a demoler por categorías, y sobre la maqueta del frente fluvial se trazan pasarelas y puntos de influencia con sus cotas.</p></div>
+</main>
+<footer class="foot">Jesús Ortiz Muñoz · <a href="../../#interactivos">Volver al portfolio</a></footer>
+</body>
+</html>

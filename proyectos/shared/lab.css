@@ -1,0 +1,61 @@
+/* Estilos comunes de las demos del Lab — mismo lenguaje que el portfolio */
+:root{
+  --bg:#0f0f0f; --bg2:#171717; --bg3:#222; --line:#2c2c2c;
+  --red:#cc0000; --red2:#e60000; --white:#f3f3f3; --muted:#9a9a9a; --ok:#5fbf7a; --warn:#e0a03a;
+  --fh:'Anton',system-ui,sans-serif; --fb:'Work Sans',system-ui,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--white);font-family:var(--fb);line-height:1.5;-webkit-text-size-adjust:100%}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
+.lab-top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:1rem;justify-content:space-between;
+  padding:.7rem 1.25rem;background:rgba(15,15,15,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.lab-top .back{font-family:var(--fh);letter-spacing:.12em;color:var(--red);text-decoration:none;font-size:.9rem;white-space:nowrap}
+.lab-top .crumb{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lab-top .links{display:flex;gap:.5rem;flex-shrink:0}
+
+.lab-hero{padding:2.2rem 1.25rem 1.4rem;max-width:1200px;margin:0 auto}
+.lab-eye{font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--red);margin-bottom:.6rem}
+.lab-hero h1{font-family:var(--fh);font-weight:400;font-size:clamp(2rem,6vw,3.6rem);line-height:1;letter-spacing:.01em;text-transform:uppercase}
+.lab-hero p.lead{margin-top:.9rem;max-width:760px;color:#cfcfcf;font-size:1rem}
+.stack{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+.stack span{font-size:.7rem;letter-spacing:.08em;border:1px solid var(--line);padding:.25rem .55rem;border-radius:999px;color:#cfcfcf}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 1.25rem 3rem}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:1rem}
+.card h2,.card h3{font-family:var(--fh);font-weight:400;letter-spacing:.04em;text-transform:uppercase;font-size:1.05rem;margin-bottom:.6rem}
+.muted{color:var(--muted)}
+.small{font-size:.8rem}
+.mono{font-family:var(--mono)}
+
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .95rem;border-radius:6px;border:1px solid var(--line);
+  background:var(--bg3);cursor:pointer;font-size:.82rem;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:#555}
+.btn.red{background:var(--red);border-color:var(--red);color:#fff}
+.btn.red:hover{background:var(--red2)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+table.t{width:100%;border-collapse:collapse;font-size:.82rem}
+table.t th{text-align:left;font-weight:500;color:var(--muted);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;
+  border-bottom:1px solid var(--line);padding:.45rem .4rem;position:sticky;top:0;background:var(--bg2)}
+table.t td{border-bottom:1px solid #1f1f1f;padding:.4rem .4rem;vertical-align:top}
+table.t td.n,table.t th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.t tr.cap td{color:var(--red);font-weight:600;background:#141414}
+table.t tr.sum td{font-weight:600;border-top:1px solid #444}
+input.num{width:5.5rem;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:.2rem .35rem;text-align:right}
+input.txt,textarea.txt,select.txt{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:.45rem .6rem}
+textarea.txt{resize:vertical;min-height:4.5rem;font-family:var(--mono);font-size:.82rem}
+
+.tag{display:inline-block;font-size:.66rem;padding:.08rem .4rem;border-radius:4px;border:1px solid var(--line);color:#bbb}
+.tag.ok{border-color:#2f5f3c;color:var(--ok)}
+.tag.warn{border-color:#6b5022;color:var(--warn)}
+.tag.bad{border-color:#6b2222;color:#ff7b7b}
+
+.note{border-left:3px solid var(--red);padding:.6rem .9rem;background:#151515;color:#cfcfcf;font-size:.85rem;border-radius:0 6px 6px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.foot{max-width:1200px;margin:0 auto;padding:1.5rem 1.25rem 2.5rem;color:var(--muted);font-size:.78rem;border-top:1px solid var(--line)}
+.foot a{color:#ddd}

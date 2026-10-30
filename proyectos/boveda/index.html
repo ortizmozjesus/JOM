@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bóveda · servidor doméstico · Jesús Ortiz Muñoz</title>
+<meta name="description" content="Bóveda: servidor doméstico con Ubuntu Server, Docker, Nextcloud, Nginx y Tailscale, con panel de acceso diseñado como un plano.">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<style>
+  .capas{display:grid;gap:.4rem;max-width:860px}
+  .capa{display:grid;grid-template-columns:9rem 1fr;gap:.8rem;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:.6rem .8rem}
+  .capa b{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+  .capa span{font-size:.85rem}
+  .capa .chips{display:flex;flex-wrap:wrap;gap:.3rem}
+  .capa .chips i{font-style:normal;font-size:.75rem;border:1px solid var(--line);border-radius:999px;padding:.12rem .5rem;color:#ddd}
+  iframe{width:100%;height:640px;border:1px solid var(--line);border-radius:10px;background:#0d1b2e}
+  h2.sec{font-family:var(--fh);font-weight:400;text-transform:uppercase;letter-spacing:.03em;font-size:1.4rem;margin:2.2rem 0 .8rem}
+  @media (max-width:640px){.capa{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="back" href="../../#herramientas">← JOM</a>
+  <span class="crumb">Herramientas · Bóveda</span>
+  <span class="links"></span>
+</header>
+<section class="lab-hero">
+  <p class="lab-eye">Sistemas · Docker · Redes</p>
+  <h1>Bóveda: mi nube<br>privada en casa</h1>
+  <p class="lead">Un servidor doméstico montado desde cero para dejar de depender de OneDrive e iCloud: nube privada para la familia, copia de mi portfolio y acceso seguro desde cualquier sitio. El panel de entrada lo diseñé como un plano, porque es lo que sé dibujar.</p>
+  <div class="stack"><span>Ubuntu Server 24.04</span><span>Docker Compose</span><span>Nextcloud</span><span>Nginx</span><span>Tailscale</span><span>Fail2ban · UFW · 2FA</span><span>systemd</span></div>
+</section>
+<main class="wrap">
+  <h2 class="sec" style="margin-top:0">Cómo está montado</h2>
+  <div class="capas">
+    <div class="capa"><b>Acceso</b><span class="chips"><i>Tailscale (red privada)</i><i>HTTPS</i><i>Servicio systemd para «tailscale serve»</i></span></div>
+    <div class="capa"><b>Entrada</b><span class="chips"><i>Nginx como proxy inverso</i><i>Panel en HTML/CSS</i><i>Portfolio servido desde el repo de GitHub</i></span></div>
+    <div class="capa"><b>Servicios</b><span class="chips"><i>Nextcloud en Docker</i><i>Un usuario y una carpeta por persona</i><i>Jellyfin (pendiente)</i></span></div>
+    <div class="capa"><b>Seguridad</b><span class="chips"><i>SSH solo con clave</i><i>Cortafuegos UFW</i><i>Fail2ban (SSH y Nextcloud)</i><i>2FA TOTP</i><i>Actualizaciones automáticas</i></span></div>
+    <div class="capa"><b>Datos</b><span class="chips"><i>SSD para la nube</i><i>HDD para multimedia</i><i>Copias en disco externo (en curso)</i></span></div>
+  </div>
+  <p class="note" style="margin-top:1rem;max-width:860px">Lo más útil que aprendí: el acceso por Tailscale fallaba solo dentro de casa. No era el servidor sino el router (NAT hairpinning); desde fuera funcionaba. Lo dejé documentado con la alternativa local para no volver a perder una tarde.</p>
+  <h2 class="sec">El panel</h2>
+  <iframe src="panel.html" title="Panel de Bóveda (demo con enlaces internos desactivados)" loading="lazy"></iframe>
+</main>
+<footer class="foot">Jesús Ortiz Muñoz · <a href="../../#herramientas">Volver al portfolio</a> · Direcciones y usuarios reales retirados de la demo.</footer>
+</body>
+</html>

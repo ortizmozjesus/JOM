@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lora del Río · Ortofotos históricas</title>
+<style>
+:root{--bg:#f4f2ee;--fg:#1d1d1b;--mut:#6b6860;--line:#d8d4cb;--acc:#1f5f8b;--card:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#161615;--fg:#eceae4;--mut:#9a968c;--line:#34322e;--acc:#6fb0dd;--card:#1f1e1c}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:28px 20px 10px;max-width:1400px;margin:auto}
+h1{margin:0 0 6px;font-size:26px;letter-spacing:-.01em}
+p.sub{margin:0;color:var(--mut);max-width:900px}
+main{max-width:1400px;margin:auto;padding:10px 20px 60px}
+h2{font-size:17px;margin:34px 0 12px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.compare{position:relative;width:100%;aspect-ratio:10/7;background:#000;overflow:hidden;border-radius:6px;user-select:none;touch-action:none}
+.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.compare .top{clip-path:inset(0 50% 0 0)}
+.compare .bar{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 6px #000;pointer-events:none}
+.compare .lab{position:absolute;top:10px;padding:3px 9px;background:rgba(0,0,0,.65);color:#fff;font-weight:600;border-radius:4px;font-size:13px}
+.ctr{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+select,button,a.btn{font:inherit;padding:6px 10px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:5px;cursor:pointer;text-decoration:none}
+a.btn:hover,button:hover{border-color:var(--acc);color:var(--acc)}
+input[type=range]{flex:1;min-width:200px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:18px}
+@media (max-width:480px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.card img{display:block;width:100%;aspect-ratio:10/7;object-fit:cover;background:#222;cursor:zoom-in}
+.card .info{padding:10px 12px}
+.card .y{font-size:20px;font-weight:700}
+.card .s{color:var(--mut);font-size:13px;margin:2px 0 8px}
+.card .links{display:flex;gap:8px;flex-wrap:wrap}
+.note{color:var(--mut);font-size:13px}
+dialog{border:none;padding:0;max-width:96vw;max-height:94vh;background:#000}
+dialog img{max-width:96vw;max-height:94vh;display:block}
+dialog::backdrop{background:rgba(0,0,0,.85)}
+.volver{position:fixed;left:12px;bottom:12px;z-index:50;font:600 12px/1 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;background:#0f0f0f;color:#fff;padding:9px 12px;border-radius:999px;text-decoration:none;border:1px solid #cc0000}
+</style>
+</head>
+<body>
+<header>
+<h1>Lora del Río — progresión histórica (1956 → 2024)</h1>
+<p class="sub">Mismo encuadre en todas las fechas: núcleo urbano completo, meandro del Guadalquivir, vega y ferrocarril. Encuadre 5,5 × 3,85 km, ETRS89 UTM 30N (EPSG:25830), X 273900–279400 · Y 4168875–4172725. Las imágenes se cargan en directo desde los servicios WMS oficiales (IGN y REDIAM / Junta de Andalucía), así que hace falta conexión a internet.</p>
+</header>
+<main>
+<h2>Comparador (arrastra el deslizador)</h2>
+<div class="ctr">
+  <label>Izquierda <select id="selA"></select></label>
+  <label>Derecha <select id="selB"></select></label>
+  <input type="range" id="rng" min="0" max="100" value="50" aria-label="Posición del comparador">
+</div>
+<div class="compare" id="cmp">
+  <img id="imgB" class="bot" alt="">
+  <img id="imgA" class="top" alt="">
+  <div class="bar" id="bar"></div>
+  <span class="lab" id="labA" style="left:10px"></span>
+  <span class="lab" id="labB" style="right:10px"></span>
+</div>
+
+<h2>Serie completa</h2>
+<p class="note">«Alta resolución» abre la imagen a 4000 × 2800 px (≈1,4 m/píxel). Todas comparten encuadre, así que se superponen exactas en CAD o Illustrator.</p>
+<div class="grid" id="grid"></div>
+
+<h2>Para ir más atrás o más detalle</h2>
+<ul class="note">
+<li><b>Vuelo americano Serie A (1945-46)</b>: no hay ortofoto WMS para Sevilla; los fotogramas sueltos se descargan gratis en la <a href="https://fototeca.cnig.es/fototeca/" target="_blank" rel="noopener">Fototeca Digital del CNIG</a>.</li>
+<li><b>Comparador PNOA</b> del IGN para ver cualquier par de años con zoom libre: <a href="https://www.ign.es/web/comparador_pnoa/index.html" target="_blank" rel="noopener">ign.es/web/comparador_pnoa</a>.</li>
+<li><b>Visor de ortofotos históricas de Andalucía</b> (REDIAM): servicios WMS usados aquí, cargables también en QGIS.</li>
+</ul>
+<p class="note">Imágenes: © Instituto Geográfico Nacional (PNOA) y REDIAM, Junta de Andalucía.</p>
+</main>
+<dialog id="dlg"><img id="dlgImg" alt=""></dialog>
+<a class="volver" href="./">← Taller 7 · Lora</a>
+<script>
+const BBOX='273900,4168875,279400,4172725';
+const REDIAM='https://www.juntadeandalucia.es/medioambiente/mapwms/';
+const IGN='https://www.ign.es/wms/pnoa-historico';
+const IGNACT='https://www.ign.es/wms-inspire/pnoa-ma';
+const L=[
+ {y:'1956-57',s:'Vuelo americano Serie B · B/N · REDIAM',u:REDIAM+'REDIAM_Ortofoto_Andalucia_1956',l:'ortofoto_1956'},
+ {y:'1977-83',s:'Vuelo interministerial · B/N · REDIAM',u:REDIAM+'REDIAM_Ortofoto_BN_1977_83',l:'orto_BN_77_83'},
+ {y:'1984-85',s:'Vuelo nacional · B/N · REDIAM',u:REDIAM+'REDIAM_Ortofoto_PAN_Andalucia_84_85',l:'orto_1984_85'},
+ {y:'1997-98',s:'Vuelo OLISTAT · IGN',u:IGN,l:'OLISTAT'},
+ {y:'1997-2003',s:'Vuelo SIGPAC · B/N · IGN',u:IGN,l:'SIGPAC'},
+ {y:'2006',s:'PNOA · color · IGN',u:IGN,l:'PNOA2006'},
+ {y:'2010',s:'PNOA · color · IGN (franja norte sin datos)',u:IGN,l:'PNOA2010'},
+ {y:'2016',s:'PNOA · color · IGN',u:IGN,l:'PNOA2016'},
+ {y:'2019',s:'PNOA · color · IGN',u:IGN,l:'PNOA2019'},
+ {y:'2022',s:'PNOA · color · IGN',u:IGN,l:'PNOA2022'},
+ {y:'Actual',s:'PNOA máxima actualidad · IGN',u:IGNACT,l:'OI.OrthoimageCoverage'}
+];
+const url=(o,w,h)=>`${o.u}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=${o.l}&STYLES=&CRS=EPSG:25830&BBOX=${BBOX}&WIDTH=${w}&HEIGHT=${h}&FORMAT=image/jpeg`;
+const grid=document.getElementById('grid'),selA=document.getElementById('selA'),selB=document.getElementById('selB');
+const dlg=document.getElementById('dlg'),dlgImg=document.getElementById('dlgImg');
+L.forEach((o,i)=>{
+  const c=document.createElement('div');c.className='card';
+  c.innerHTML=`<img loading="lazy" src="${url(o,1400,980)}" alt="Lora del Río ${o.y}"><div class="info"><div class="y">${o.y}</div><div class="s">${o.s}</div><div class="links"><a class="btn" target="_blank" rel="noopener" href="${url(o,4000,2800)}">Alta resolución ↗</a><a class="btn" target="_blank" rel="noopener" href="${url(o,2000,1400)}">Media ↗</a></div></div>`;
+  c.querySelector('img').onclick=()=>{dlgImg.src=url(o,2000,1400);dlg.showModal()};
+  grid.appendChild(c);
+  selA.add(new Option(o.y,i));selB.add(new Option(o.y,i));
+});
+dlg.onclick=()=>dlg.close();
+selA.value=0;selB.value=L.length-1;
+function upd(){const a=L[selA.value],b=L[selB.value];
+ document.getElementById('imgA').src=url(a,1800,1260);document.getElementById('imgB').src=url(b,1800,1260);
+ document.getElementById('labA').textContent=a.y;document.getElementById('labB').textContent=b.y;}
+selA.onchange=selB.onchange=upd;upd();
+const rng=document.getElementById('rng'),cmp=document.getElementById('cmp');
+function setPos(p){document.getElementById('imgA').style.clipPath=`inset(0 ${100-p}% 0 0)`;document.getElementById('bar').style.left=p+'%';rng.value=p}
+rng.oninput=()=>setPos(+rng.value);
+let drag=false;cmp.onpointerdown=e=>{drag=true;cmp.setPointerCapture(e.pointerId);mv(e)};cmp.onpointermove=e=>drag&&mv(e);cmp.onpointerup=()=>drag=false;
+function mv(e){const r=cmp.getBoundingClientRect();setPos(Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100)))}
+</script>
+</body>
+</html>

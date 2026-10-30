@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BÓVEDA — Panel (demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--blue-deep:#0d1b2e;--blue-panel:#132840;--blue-line:#3f6b96;--cyan:#8fd3ff;--paper:#eef1ea;--amber:#d99a4e;--green-ok:#7fd8a0}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:linear-gradient(var(--blue-deep),var(--blue-deep)),repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(143,211,255,.06) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(143,211,255,.06) 40px);color:var(--paper);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding:48px 24px 80px}
+  .mono{font-family:'IBM Plex Mono',monospace}
+  header{max-width:980px;margin:0 auto 56px;border-bottom:1px solid var(--blue-line);padding-bottom:24px}
+  .coord{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:var(--cyan);opacity:.75;margin-bottom:14px}
+  h1{font-size:clamp(2.4rem,6vw,3.6rem);font-weight:700;letter-spacing:-.02em;line-height:1}
+  h1 span{color:var(--cyan)}
+  .subtitle{margin-top:10px;font-size:14px;opacity:.55;max-width:520px}
+  .clock{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--cyan);opacity:.8;margin-top:18px}
+  main{max-width:980px;margin:0 auto}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px}
+  .plot{position:relative;border:1px solid var(--blue-line);background:var(--blue-panel);padding:26px 24px 24px;min-height:200px;display:flex;flex-direction:column;justify-content:space-between;transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease;text-decoration:none;color:inherit}
+  .plot::before{content:'';position:absolute;top:-1px;left:-1px;width:14px;height:14px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan)}
+  .plot::after{content:'';position:absolute;bottom:-1px;right:-1px;width:14px;height:14px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan)}
+  a.plot:hover{border-color:var(--cyan);transform:translateY(-3px);box-shadow:0 12px 32px rgba(143,211,255,.12)}
+  .plot.disabled{opacity:.5}
+  .plot-id{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--cyan);opacity:.7}
+  .plot-name{font-size:1.5rem;font-weight:600;margin-top:10px}
+  .plot-desc{font-size:13px;opacity:.6;margin-top:8px;line-height:1.5}
+  .plot-footer{display:flex;justify-content:space-between;align-items:center;margin-top:24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em}
+  .status{display:flex;align-items:center;gap:6px}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green-ok);box-shadow:0 0 6px var(--green-ok)}
+  .dot.pending{background:var(--amber);box-shadow:0 0 6px var(--amber)}
+  .status.ok{color:var(--green-ok)}.status.pending{color:var(--amber)}
+  .arrow{opacity:.5}
+  .users{display:flex;flex-direction:column;gap:8px;margin-top:22px}
+  .user-link{display:flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--paper);text-decoration:none;border-top:1px dashed rgba(143,211,255,.25);padding-top:8px}
+  .user-link:first-child{border-top:none;padding-top:0}
+  .user-link .arrow{margin-left:auto}
+  footer{max-width:980px;margin:64px auto 0;padding-top:20px;border-top:1px solid var(--blue-line);font-family:'IBM Plex Mono',monospace;font-size:11px;opacity:.4;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .demo-note{max-width:980px;margin:0 auto 24px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber)}
+  @media (max-width:520px){body{padding:32px 16px 64px}header{margin-bottom:40px}}
+</style>
+</head>
+<body>
+<p class="demo-note">DEMO PÚBLICA · enlaces internos desactivados</p>
+<header>
+  <div class="coord mono">LEV. BOVEDA-01 · RED PRIVADA TAILSCALE</div>
+  <h1>PLANTA <span>BÓVEDA</span></h1>
+  <p class="subtitle">Panel de acceso a los servicios del servidor doméstico. Cada plano abre el servicio correspondiente dentro de la red privada.</p>
+  <div class="clock mono" id="clock">— cargando reloj —</div>
+</header>
+<main>
+  <div class="grid">
+    <div class="plot">
+      <div><div class="plot-id mono">PLANO 01 · NUBE</div><div class="plot-name">Nextcloud</div><div class="plot-desc">Cada persona entra con su propio usuario y ve solo su carpeta.</div></div>
+      <div class="users">
+        <span class="user-link"><span class="dot"></span> Jesús <span class="arrow">→</span></span>
+        <span class="user-link"><span class="dot"></span> Familia <span class="arrow">→</span></span>
+      </div>
+    </div>
+    <a class="plot" href="../../" target="_top">
+      <div><div class="plot-id mono">PLANO 02 · PORTFOLIO</div><div class="plot-name">Portfolio</div><div class="plot-desc">Proyectos de arquitectura y trabajo académico publicado.</div></div>
+      <div class="plot-footer"><span class="status ok"><span class="dot"></span>ACTIVO</span><span class="arrow">ABRIR →</span></div>
+    </a>
+    <div class="plot disabled">
+      <div><div class="plot-id mono">PLANO 03 · MULTIMEDIA</div><div class="plot-name">Jellyfin</div><div class="plot-desc">Películas, series y música. Pendiente de instalación.</div></div>
+      <div class="plot-footer"><span class="status pending"><span class="dot pending"></span>PENDIENTE</span><span class="arrow"></span></div>
+    </div>
+  </div>
+</main>
+<footer class="mono"><span>SERVIDOR BOVEDA — UBUNTU 24.04 LTS</span><span>DOCKER · NGINX · TAILSCALE</span></footer>
+<script>
+  function tick(){const now=new Date();document.getElementById('clock').textContent=now.toLocaleString('es-ES',{weekday:'short',year:'numeric',month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'}).toUpperCase();}
+  tick();setInterval(tick,1000);
+</script>
+</body>
+</html>

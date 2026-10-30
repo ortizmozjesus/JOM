@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forja · imágenes con IA por lotes · Jesús Ortiz Muñoz</title>
+<meta name="description" content="Forja: app local para generar imágenes con IA por lotes a partir de una plantilla con variables, alternativas y referencias. Demo con el motor real.">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<style>
+  .app{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:1rem}
+  @media (max-width:900px){.app{grid-template-columns:1fr}}
+  .modo{display:flex;gap:.4rem;margin-bottom:.8rem}
+  .modo button{padding:.45rem .8rem;border:1px solid var(--line);border-radius:6px;background:var(--bg2);cursor:pointer;font-size:.82rem}
+  .modo button.on{background:var(--red);border-color:var(--red);color:#fff}
+  .lbl{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:.8rem 0 .3rem;display:block}
+  .vars .v{display:grid;grid-template-columns:7rem 1fr;gap:.4rem;margin-bottom:.35rem}
+  .refs .r{display:grid;grid-template-columns:8rem 7rem;gap:.4rem;margin-bottom:.35rem;align-items:center}
+  .contador{font-family:var(--fh);font-size:2.6rem;line-height:1;color:var(--red)}
+  .lista{max-height:560px;overflow:auto;display:grid;gap:.5rem}
+  .job{border:1px solid var(--line);border-radius:8px;padding:.6rem .7rem;background:#121212}
+  .job .n{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+  .job p{font-size:.82rem;white-space:pre-wrap;margin-top:.25rem}
+  .job mark{background:none;color:#ff6b6b;font-weight:600}
+  .syn{font-size:.78rem;display:grid;gap:.2rem;margin-top:.6rem}
+  .syn code{font-family:var(--mono);color:#ff8b8b}
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="back" href="../../#herramientas">← JOM</a>
+  <span class="crumb">Herramientas · Forja</span>
+  <span class="links"></span>
+</header>
+
+<section class="lab-hero">
+  <p class="lab-eye">IA generativa · Visualización · Node.js</p>
+  <h1>Forja: cien renders<br>de una sola frase</h1>
+  <p class="lead">Una app local que me hice para dejar de pedir imágenes de una en una. Escribes una plantilla con variables, alternativas y referencias, y Forja monta la matriz completa de prompts, la lanza en paralelo contra la API de Gemini (Nano Banana) u OpenAI con reintentos, y guarda cada imagen con su prompt exacto. También compone una máquina o un mueble real sobre la foto de un sitio real.</p>
+  <div class="stack"><span>Node.js sin dependencias</span><span>Gemini · OpenAI · compatibles</span><span>Cola con reintentos</span><span>Interfaz web local + CLI</span></div>
+</section>
+
+<main class="wrap">
+  <div class="app">
+    <div class="card">
+      <div class="modo">
+        <button class="on" data-modo="crear">Crear desde cero</button>
+        <button data-modo="composicion">Componer sobre una foto</button>
+      </div>
+      <span class="lbl">Plantilla</span>
+      <textarea class="txt" id="plantilla" spellcheck="false"></textarea>
+      <span class="lbl">Sufijo fijo</span>
+      <input class="txt" id="sufijo">
+      <div id="bloqueConservar" hidden>
+        <span class="lbl">Qué NO debe cambiar</span>
+        <input class="txt" id="conservar">
+      </div>
+      <span class="lbl">Variables <span class="small">(valores separados por comas)</span></span>
+      <div class="vars" id="vars"></div>
+      <span class="lbl">Referencias</span>
+      <div class="refs" id="refs"></div>
+      <span class="lbl">Variantes por prompt</span>
+      <input class="num" id="variantes" type="number" min="1" max="4" value="1">
+      <div class="syn">
+        <div><code>{{tipo}}</code> se sustituye por cada valor de la variable.</div>
+        <div><code>[a|b|c]</code> alternativa rápida que multiplica el lote.</div>
+        <div><code>@moodboard</code> adjunta y nombra una imagen de referencia.</div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="display:flex;align-items:center;gap:1rem;margin-bottom:.8rem">
+        <div class="contador" id="cuenta">0</div>
+        <div class="small"><b>imágenes en el lote</b><br><span class="muted" id="coste"></span></div>
+        <button class="btn red" id="txt" style="margin-left:auto">Descargar prompts.txt</button>
+      </div>
+      <div class="lista" id="lista"></div>
+    </div>
+  </div>
+  <div class="grid2" style="margin-top:1rem">
+    <div class="card"><h3>Qué estás viendo</h3><p class="small">Esta página usa el mismo archivo <span class="mono">lib/plantilla.js</span> de la app: la expansión de variables, el orden de las imágenes por rol y la instrucción de composición son exactamente los que se envían a la API. Lo único que falta aquí es la llamada de pago, que en la app hace la cola de <span class="mono">lib/motor.js</span>.</p></div>
+    <div class="card"><h3>Para qué la uso</h3><p class="small">Fachadas con distintos materiales y horas de luz para decidir en taller, y montajes de una máquina en una nave existente partiendo de la foto del sitio, la foto del objeto y un 3D conceptual. Precio real con Nano Banana: unos 0,04 $ por imagen.</p></div>
+  </div>
+</main>
+<footer class="foot">Jesús Ortiz Muñoz · <a href="../../#herramientas">Volver al portfolio</a></footer>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

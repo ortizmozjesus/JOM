@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IFC → Mediciones → BC3 · Jesús Ortiz Muñoz</title>
+<meta name="description" content="Visor IFC en el navegador hecho con That Open Engine: lee las cantidades del modelo BIM, las ordena en partidas y exporta un BC3 para Presto.">
+<meta property="og:title" content="IFC → Mediciones → BC3 — Jesús Ortiz Muñoz">
+<meta property="og:description" content="Del modelo BIM al presupuesto en el navegador, con That Open Engine y web-ifc.">
+<meta property="og:image" content="https://ortizmozjesus.github.io/JOM/proyectos/ifc-bc3/preview.jpg">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+    "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.webgpu.js",
+    "three/tsl": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.tsl.js",
+    "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "camera-controls": "https://cdn.jsdelivr.net/npm/camera-controls@3.1.2/dist/camera-controls.module.js",
+    "web-ifc": "https://cdn.jsdelivr.net/npm/web-ifc@0.0.77/web-ifc-api.js",
+    "@thatopen/fragments": "https://cdn.jsdelivr.net/npm/@thatopen/fragments@3.6.0/dist/index.mjs",
+    "@thatopen/components": "https://cdn.jsdelivr.net/npm/@thatopen/components@3.6.0/dist/index.mjs"
+  }
+}
+</script>
+<style>
+  .app{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(360px,1fr);gap:1rem;max-width:1400px;margin:0 auto;padding:0 1.25rem 1.5rem}
+  .viewer{position:relative;height:min(72vh,720px);min-height:420px;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    background:radial-gradient(ellipse at 50% 30%,#232323,#111)}
+  .viewer canvas{display:block}
+  #status{position:absolute;left:12px;bottom:12px;right:12px;font-size:.78rem;color:#ddd;background:rgba(0,0,0,.6);padding:.45rem .7rem;border-radius:6px;pointer-events:none}
+  #status.hide{display:none}
+  .drop{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(204,0,0,.18);border:2px dashed var(--red);
+    font-family:var(--fh);letter-spacing:.1em;font-size:1.4rem;z-index:5}
+  .viewer.dragging .drop{display:flex}
+  .tools{position:absolute;top:10px;left:10px;display:flex;gap:.4rem;flex-wrap:wrap;z-index:4}
+  .tools .btn{background:rgba(20,20,20,.85)}
+  .side{display:flex;flex-direction:column;gap:.8rem;min-width:0}
+  .tablewrap{max-height:min(52vh,520px);overflow:auto;border:1px solid var(--line);border-radius:8px}
+  table.t tr.part{cursor:pointer}
+  table.t tr.part:hover td{background:#1c1c1c}
+  table.t tr.part.sel td{background:#2a1212}
+  table.t tr.line td{font-size:.74rem;color:#bdbdbd;padding-top:.2rem;padding-bottom:.2rem}
+  table.t tr.line.sel td{color:#fff;background:#2a1212}
+  table.t tr.line td:first-child{padding-left:1.3rem}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+  .kpi{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:.6rem .7rem}
+  .kpi b{display:block;font-family:var(--fh);font-weight:400;font-size:1.35rem;letter-spacing:.02em}
+  .kpi span{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .actions{display:flex;flex-wrap:wrap;gap:.5rem}
+  #info{font-size:.8rem;min-height:2.4rem}
+  @media (max-width:980px){.app{grid-template-columns:1fr}.viewer{height:56vh}}
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="back" href="../../#herramientas">← JOM</a>
+  <span class="crumb">Herramientas · IFC → Mediciones → BC3</span>
+  <span class="links"><a class="btn" href="https://github.com/ortizmozjesus/JOM/tree/main/proyectos/ifc-bc3" target="_blank" rel="noopener">Código</a></span>
+</header>
+
+<section class="lab-hero">
+  <p class="lab-eye">BIM · Presupuestos · That Open Engine</p>
+  <h1>Del modelo IFC<br>al presupuesto en BC3</h1>
+  <p class="lead">Abre un modelo BIM en el navegador, lee las cantidades que trae cada elemento (Qto), las ordena en capítulos y partidas y genera un BC3 que se abre en Presto con la medición detallada línea a línea. Si un elemento no trae cantidades, no se inventan: se marca para medirlo a mano.</p>
+  <div class="stack"><span>That Open Engine 3.6</span><span>web-ifc</span><span>Three.js</span><span>FIEBDC-3 / Presto</span><span>JavaScript</span></div>
+</section>
+
+<main class="app">
+  <div>
+    <div class="viewer" id="viewer">
+      <div class="tools">
+        <label class="btn red" for="file">Abrir mi IFC</label>
+        <input id="file" type="file" accept=".ifc" hidden>
+        <button class="btn" id="fit">Encuadrar</button>
+        <button class="btn" id="xray">Rayos X</button>
+      </div>
+      <div class="drop">Suelta el IFC aquí</div>
+      <div id="status">Cargando motor…</div>
+    </div>
+    <p class="small muted" style="margin-top:.5rem">Modelo de ejemplo: casa-taller para un escultor (8 × 8 m) que proyecté en Proyectos III, modelado en IFC con IfcOpenShell. Clic en un elemento para ver su partida; clic en una línea de medición para verlo en 3D. Tu archivo no sale de tu navegador.</p>
+  </div>
+
+  <aside class="side">
+    <div class="kpis">
+      <div class="kpi"><b id="kElems">—</b><span>Elementos</span></div>
+      <div class="kpi"><b id="kParts">—</b><span>Partidas</span></div>
+      <div class="kpi"><b id="kTotal">—</b><span>PEM orientativo</span></div>
+    </div>
+    <div class="card" id="info"><span class="muted">Selecciona un elemento.</span></div>
+    <div class="tablewrap">
+      <table class="t" id="tabla">
+        <thead><tr><th>Código</th><th>Ud</th><th>Resumen</th><th class="n">Medición</th><th class="n">Precio</th><th class="n">Importe</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="actions">
+      <button class="btn red" id="bc3" disabled>Descargar BC3</button>
+      <button class="btn" id="csv" disabled>Descargar CSV</button>
+    </div>
+    <p class="small muted">Los precios son orientativos y editables: cámbialos en la tabla y el BC3 sale con los tuyos. Formato FIEBDC-3/2002, ANSI, capítulos con #, medición detallada (~M) con el GlobalId de cada elemento.</p>
+  </aside>
+</main>
+
+<section class="wrap">
+  <div class="grid2">
+    <div class="card">
+      <h3>Cómo funciona</h3>
+      <ol class="small" style="padding-left:1.1rem;display:grid;gap:.35rem">
+        <li><b>That Open Engine</b> convierte el IFC a Fragments y lo pinta con Three.js.</li>
+        <li><b>web-ifc</b> lee los conjuntos de cantidades (Qto_WallBaseQuantities, Qto_SlabBaseQuantities…), los Pset y la planta de cada elemento.</li>
+        <li>Unas reglas asignan cada elemento a una partida: clase IFC, tipo predefinido, si es exterior, espesor.</li>
+        <li>Se escribe el BC3 con la estructura que uso en Presto: raíz, capítulos, partidas, texto y mediciones.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Por qué lo hice</h3>
+      <p class="small">En mis prácticas de 2026 en una constructora pasaba mediciones de planos a Presto a mano. Cada partida es una búsqueda, una suma y un riesgo de error. Si el modelo ya sabe cuánto mide cada muro, el presupuesto debería salir de ahí. Esta demo es la primera pieza: del IFC a un BC3 revisable, con trazabilidad de cada línea al elemento del modelo.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">Jesús Ortiz Muñoz · <a href="../../#herramientas">Volver al portfolio</a> · Hecho con <a href="https://thatopen.com" target="_blank" rel="noopener">That Open Engine</a> (MIT).</footer>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

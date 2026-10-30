@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArquiViz · de AutoCAD a Blender · Jesús Ortiz Muñoz</title>
+<meta name="description" content="ArquiViz: add-on de Blender que convierte un DXF de AutoCAD en una escena de render con un material por color, entorno de OpenStreetMap, sol real, vegetación y asistente Claude.">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"
+} }
+</script>
+<style>
+  .demo{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:1rem}
+  @media (max-width:900px){.demo{grid-template-columns:1fr}}
+  #escena{position:relative;height:min(64vh,620px);min-height:380px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#cfd8de}
+  #escena canvas{display:block;width:100%;height:100%}
+  .modo{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.9rem}
+  .modo button{padding:.5rem .85rem;border:1px solid var(--line);border-radius:6px;background:var(--bg2);cursor:pointer;font-size:.82rem}
+  .modo button.on{background:var(--red);border-color:var(--red);color:#fff}
+  .ctrl label{display:block;font-size:.8rem;margin:.7rem 0 .2rem}
+  .ctrl input[type=range]{width:100%;accent-color:var(--red)}
+  .aci{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.3rem .8rem;font-size:.78rem;margin-top:.6rem}
+  .aci span{display:flex;align-items:center;gap:.45rem}
+  .aci i{width:.9rem;height:.9rem;border-radius:2px;flex-shrink:0;border:1px solid #444}
+  .fases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}
+  @media (max-width:900px){.fases{grid-template-columns:1fr}}
+  .fase b{display:block;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:.25rem}
+  h2.sec{font-family:var(--fh);font-weight:400;text-transform:uppercase;letter-spacing:.03em;font-size:1.4rem;margin:2.2rem 0 .8rem}
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="back" href="../../#herramientas">← JOM</a>
+  <span class="crumb">Herramientas · ArquiViz</span>
+  <span class="links"></span>
+</header>
+
+<section class="lab-hero">
+  <p class="lab-eye">Visualización · Blender · Python</p>
+  <h1>ArquiViz: de AutoCAD<br>a render sin repetir trabajo</h1>
+  <p class="lead">Un add-on de Blender que me hice para no volver a asignar materiales a mano. En AutoCAD cada material va en su capa con un color; ArquiViz importa el DXF y convierte cada color en un material real a escala, pone el entorno de OpenStreetMap, el sol de la fecha y la hora, personas y vegetación, y prepara la cámara y el render. Desde la versión 1.1 tiene un asistente Claude dentro de Blender que hace los cambios a partir de lo que le pides.</p>
+  <div class="stack"><span>Python · API de Blender 4.2</span><span>ezdxf</span><span>AutoLISP</span><span>OpenStreetMap</span><span>Poly Haven</span><span>API de Claude</span></div>
+</section>
+
+<main class="wrap">
+  <div class="demo">
+    <div id="escena"><p class="small" style="position:absolute;left:12px;bottom:10px;color:#333;z-index:2" id="estado">Cargando escena…</p></div>
+    <div class="card ctrl">
+      <h3>Pruébalo</h3>
+      <div class="modo" id="modos">
+        <button data-m="aci">Así llega de AutoCAD</button>
+        <button data-m="mat" class="on">Con ArquiViz</button>
+        <button data-m="maqueta">Modo maqueta</button>
+      </div>
+      <label for="hora">Hora solar: <b id="horaTxt">17:00</b> · 21 de junio, Sevilla</label>
+      <input type="range" id="hora" min="7" max="21" step="0.25" value="17">
+      <div class="aci" id="aci"></div>
+      <p class="small muted" style="margin-top:.8rem">Esta es una simulación web con Three.js de lo que hace el add-on: mismo modelo, mismos colores de capa, mismo cambio de color a material y sol calculado. El add-on real trabaja dentro de Blender con texturas PBR y render en Cycles.</p>
+    </div>
+  </div>
+
+  <h2 class="sec">Cómo se trabaja</h2>
+  <div class="fases">
+    <div class="card fase"><b>1 · AutoCAD</b><p class="small">Comandos propios en AutoLISP (AVCAPAS, AVCOLORES, AVMALLA) crean las capas con su color, revisan los colores usados y convierten formas libres en malla. Se guarda como DXF.</p></div>
+    <div class="card fase"><b>2 · Importar y materiales</b><p class="small">Un material por color con escala real del patrón, 23 tipos editables y texturas de Poly Haven. La convención se guarda y sirve para todos los proyectos.</p></div>
+    <div class="card fase"><b>3 · Emplazamiento y sol</b><p class="small">Busca la dirección, levanta edificios, calles, verde, agua y árboles de OpenStreetMap, y coloca el sol real; también hace el estudio de soleamiento hora a hora.</p></div>
+    <div class="card fase"><b>4 · Personas y vegetación</b><p class="small">Personas en cuatro poses, seis tipos de árbol, dispersión sobre el terreno evitando edificios y césped 3D solo donde el material es césped.</p></div>
+    <div class="card fase"><b>5 · Luz, cámara, render</b><p class="small">Ambientes (día, hora dorada, nublado, noche, maqueta), cámaras peatonal, axonométrica, planta y alzado con verticales rectas, y formatos A3, A1 o 4K.</p></div>
+    <div class="card fase"><b>6 · Asistente Claude</b><p class="small">«Dale vida», «imagen de lámina», «axonometría de maqueta»: Claude usa las mismas herramientas del add-on, mira una vista previa para comprobar su trabajo y se deshace con Ctrl+Z.</p></div>
+  </div>
+</main>
+<footer class="foot">Jesús Ortiz Muñoz · <a href="../../#herramientas">Volver al portfolio</a> · Entorno: datos © colaboradores de OpenStreetMap.</footer>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// Convención de colores ACI -> material (la misma del add-on)
+const ACI = {
+  7:  { n: 'Enlucido / pintura', c: '#ffffff', m: { color: '#efece6', roughness: 0.92 } },
+  8:  { n: 'Hormigón visto', c: '#808080', m: { color: '#a7a49d', roughness: 0.85 } },
+  4:  { n: 'Vidrio', c: '#00ffff', m: { color: '#9cc7d6', roughness: 0.05, metalness: 0.1, transparent: true, opacity: 0.35 } },
+  250:{ n: 'Carpintería oscura', c: '#333333', m: { color: '#2b2b2b', roughness: 0.4, metalness: 0.6 } },
+  40: { n: 'Madera', c: '#ffbf00', m: { color: '#a0714a', roughness: 0.7 } },
+  14: { n: 'Acero corten', c: '#bd5e00', m: { color: '#8a4424', roughness: 0.8, metalness: 0.3 } },
+  3:  { n: 'Césped', c: '#00ff00', m: { color: '#5d8a3f', roughness: 1 } },
+  52: { n: 'Tierra / grava', c: '#cc9933', m: { color: '#b8a888', roughness: 1 } },
+  5:  { n: 'Agua', c: '#0000ff', m: { color: '#3d6f86', roughness: 0.08, metalness: 0.2, transparent: true, opacity: 0.85 } },
+};
+document.getElementById('aci').innerHTML = Object.entries(ACI).map(([k, v]) => `<span><i style="background:${v.c}"></i>ACI ${k} · ${v.n}</span>`).join('');
+
+const cont = document.getElementById('escena');
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+cont.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 500);
+camera.position.set(26, 15, 24);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 2.5, 0);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.49;
+
+const hemi = new THREE.HemisphereLight('#dfe9f2', '#5b5346', 0.9);
+scene.add(hemi);
+const sol = new THREE.DirectionalLight('#fff4e0', 2.6);
+sol.castShadow = true;
+sol.shadow.mapSize.set(2048, 2048);
+Object.assign(sol.shadow.camera, { left: -25, right: 25, top: 25, bottom: -25, near: 1, far: 120 });
+scene.add(sol, sol.target);
+
+// Modelo: casa-taller 8 x 8 m con porche, estanque y jardín (cada pieza con su color de capa)
+const piezas = [];
+const caja = (aci, w, h, d, x, y, z) => {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshStandardMaterial());
+  m.position.set(x, y + h / 2, z); m.castShadow = m.receiveShadow = true; m.userData.aci = aci;
+  scene.add(m); piezas.push(m); return m;
+};
+caja(3, 40, 0.1, 40, 0, -0.1, 0);              // césped
+caja(52, 3, 0.05, 12, -7, 0, 2);               // camino de grava
+caja(5, 6, 0.06, 3, 7.5, 0, 5);                // estanque
+caja(8, 9, 0.4, 9, 0, 0, 0);                   // losa
+caja(7, 8, 6.6, 0.3, 0, 0.4, -3.85);           // muro sur (fondo)
+caja(7, 0.3, 6.6, 8, -3.85, 0.4, 0);           // muro oeste
+caja(7, 0.3, 6.6, 3.2, 3.85, 0.4, -2.4);       // muro este (tramo)
+caja(4, 0.08, 6.0, 4.6, 3.85, 0.7, 1.6);       // gran ventanal este
+caja(250, 0.16, 6.6, 0.16, 3.85, 0.4, -0.75);  // montante
+caja(7, 2.2, 6.6, 0.3, -2.75, 0.4, 3.85);      // muro norte izq
+caja(7, 2.2, 6.6, 0.3, 2.75, 0.4, 3.85);       // muro norte dcha
+caja(4, 3.2, 4.4, 0.08, 0, 0.4, 3.85);         // vidrio acceso
+caja(7, 3.2, 2.2, 0.3, 0, 4.8, 3.85);          // dintel
+caja(8, 8.6, 0.35, 8.6, 0, 7.0, 0);            // cubierta
+caja(14, 3.6, 0.12, 4, 0, 4.7, 5.9);           // marquesina corten
+caja(14, 0.12, 4.7, 0.12, -1.7, 0, 7.8);       // pilar corten
+caja(14, 0.12, 4.7, 0.12, 1.7, 0, 7.8);
+caja(40, 6, 0.15, 3, 0, 0.4, 5.6);             // tarima de madera
+for (const [x, z, h] of [[-9, 7, 7], [-12, -3, 9], [11, -8, 8], [14, -14, 6]]) {   // árboles abstractos
+  const t = new THREE.Mesh(new THREE.SphereGeometry(h / 3, 16, 12), new THREE.MeshStandardMaterial());
+  t.position.set(x, h * 0.75, z); t.castShadow = true; t.userData.aci = 3; t.userData.arbol = true; scene.add(t); piezas.push(t);
+}
+
+const edges = [];
+let modo = 'mat';
+function aplicar() {
+  edges.forEach((e) => scene.remove(e)); edges.length = 0;
+  for (const p of piezas) {
+    const a = ACI[p.userData.aci];
+    const mat = p.material;
+    mat.transparent = false; mat.opacity = 1; mat.metalness = 0; mat.roughness = 0.9;
+    if (modo === 'aci') {
+      mat.color.set(a.c); mat.roughness = 1;
+    } else if (modo === 'maqueta') {
+      mat.color.set(p.userData.aci === 4 || p.userData.aci === 5 ? '#e8eef0' : '#f4f2ee');
+      if (p.userData.aci === 4) { mat.transparent = true; mat.opacity = 0.5; }
+      const e = new THREE.LineSegments(new THREE.EdgesGeometry(p.geometry, 30), new THREE.LineBasicMaterial({ color: '#222' }));
+      e.position.copy(p.position); scene.add(e); edges.push(e);
+    } else {
+      mat.color.set(p.userData.arbol ? '#5f7d45' : a.m.color);
+      mat.roughness = a.m.roughness ?? 0.9; mat.metalness = a.m.metalness ?? 0;
+      if (a.m.transparent) { mat.transparent = true; mat.opacity = a.m.opacity; }
+    }
+    mat.needsUpdate = true;
+  }
+  scene.background = new THREE.Color(modo === 'aci' ? '#000000' : modo === 'maqueta' ? '#e9e6df' : '#bcd3e3');
+  hemi.intensity = modo === 'aci' ? 1.6 : 0.9;
+}
+
+// Posición del sol (aprox.) en Sevilla, 37,4º N, solsticio de verano
+function ponerSol(h) {
+  const lat = THREE.MathUtils.degToRad(37.4), dec = THREE.MathUtils.degToRad(23.44);
+  const H = THREE.MathUtils.degToRad((h - 13.6) * 15);  // hora oficial ≈ solar + 1h36 en verano
+  const alt = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec) * Math.cos(H));
+  const az = Math.atan2(Math.sin(H), Math.cos(H) * Math.sin(lat) - Math.tan(dec) * Math.cos(lat));
+  const r = 60;
+  sol.position.set(r * Math.cos(alt) * Math.sin(az), Math.max(r * Math.sin(alt), 0.5), r * Math.cos(alt) * Math.cos(az));
+  sol.intensity = Math.max(0, Math.sin(alt)) * 3.2 + 0.15;
+  sol.color.set(alt < 0.25 ? '#ffb070' : '#fff4e0');
+  const hh = Math.floor(h), mm = Math.round((h - hh) * 60);
+  document.getElementById('horaTxt').textContent = `${hh}:${String(mm).padStart(2, '0')}`;
+}
+
+document.querySelectorAll('#modos button').forEach((b) => b.addEventListener('click', () => {
+  document.querySelectorAll('#modos button').forEach((x) => x.classList.toggle('on', x === b));
+  modo = b.dataset.m; aplicar();
+}));
+document.getElementById('hora').addEventListener('input', (e) => ponerSol(+e.target.value));
+
+function tam() { const w = cont.clientWidth, h = cont.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+new ResizeObserver(tam).observe(cont);
+tam(); aplicar(); ponerSol(17);
+document.getElementById('estado').textContent = 'Arrastra para girar · rueda para acercar';
+renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+window.__demo = { ok: true };
+</script>
+</body>
+</html>
