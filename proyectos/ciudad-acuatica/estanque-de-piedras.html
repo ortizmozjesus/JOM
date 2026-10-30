@@ -1,0 +1,649 @@
+<!doctype html><html><head>
+<script>/* Fuera de claude.ai: descargas directas y estado guardado en este navegador */
+(function(){if(window.claude&&window.claude.use)return;
+function save(o){var b=o.data instanceof Blob?o.data:new Blob([o.data]);var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=o.filename||'archivo';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},800);return Promise.resolve({ok:true})}
+function db(){return{doc:function(p){var k='jom-db:'+p;return{get:function(){try{var v=JSON.parse(localStorage.getItem(k));return Promise.resolve(v?{data:function(){return v}}:null)}catch(e){return Promise.resolve(null)}},set:function(v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}return Promise.resolve()}}}}}
+window.claude={use:function(n){if(n==='downloads')return Promise.resolve({save:save});if(n==='db')return Promise.resolve(db());return Promise.reject(new Error('no disponible'))}};})();</script>
+<meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Estanque de piedras</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Composición: lienzo de agua a pantalla completa y panel de piedras a la derecha; en móvil el panel baja. */
+:root{
+  --bg:#eef2f1; --panel:#ffffff; --ink:#142a30; --mute:#5c7077; --line:#d3dedd; --accent:#0e7490; --accent-ink:#ffffff; --chip:#e3ecec;
+  --f-display:'Fraunces',Georgia,serif; --f-body:'Instrument Sans',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b171b;--panel:#122328;--ink:#e4eeee;--mute:#8aa2a8;--line:#223a40;--accent:#4fc3d9;--accent-ink:#06222a;--chip:#1a3138;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b171b;--panel:#122328;--ink:#e4eeee;--mute:#8aa2a8;--line:#223a40;--accent:#4fc3d9;--accent-ink:#06222a;--chip:#1a3138;color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.4}
+*{box-sizing:border-box}
+.app{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:0}
+.stage{position:relative;min-width:0;min-height:0;background:#0d3040}
+canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.bar{position:absolute;left:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 24px)}
+.seg{display:flex;background:rgba(8,24,30,.72);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:3px;backdrop-filter:blur(6px)}
+.seg button,.btn{font:inherit;border:0;background:transparent;color:#dcebee;padding:7px 12px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:#e8f4f6;color:#0b2a33;font-weight:600}
+.seg button:hover:not([aria-pressed="true"]){background:rgba(255,255,255,.12)}
+.hint{position:absolute;left:12px;bottom:12px;max-width:calc(100% - 24px);width:fit-content;color:#e8f4f6;font-size:13px;background:rgba(8,24,30,.72);padding:6px 10px;border-radius:8px;pointer-events:none}
+.side{background:var(--panel);border-left:1px solid var(--line);padding:18px max(16px,env(safe-area-inset-right,0px)) 18px 16px;overflow:auto;display:flex;flex-direction:column;gap:18px;min-height:0}
+h1{font-family:var(--f-display);font-weight:700;font-size:24px;line-height:1.1;margin:0 0 4px;text-wrap:balance}
+.lede{margin:0;color:var(--mute)}
+h2{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);margin:0 0 8px;font-weight:600}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.type{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;font:inherit;cursor:pointer;text-align:left;min-width:0}
+.type[aria-pressed="true"]{border-color:var(--accent);background:var(--chip)}
+.dot{width:11px;height:11px;border-radius:50%;flex:none}
+.row{display:grid;grid-template-columns:90px minmax(0,1fr) 44px;align-items:center;gap:8px;margin:6px 0}
+.row label{color:var(--mute)}
+.row output{text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+.b{font:inherit;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.b:hover{background:var(--chip)}
+.b.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.b[aria-pressed="true"]{background:var(--chip);border-color:var(--accent)}
+.list{display:flex;flex-direction:column;gap:6px}
+.st{display:grid;grid-template-columns:12px minmax(0,1fr) 84px 28px;align-items:center;gap:8px;padding:7px 8px;border:1px solid var(--line);border-radius:8px}
+.st.sel{border-color:var(--accent);background:var(--chip)}
+.st .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.st .del{border:0;background:transparent;color:var(--mute);cursor:pointer;font-size:16px;line-height:1}
+.empty{color:var(--mute);padding:8px 0}
+.note{color:var(--mute);font-size:12.5px;margin:0}
+.toast{position:absolute;right:12px;top:12px;background:#e8f4f6;color:#0b2a33;padding:8px 12px;border-radius:8px;font-weight:500}
+textarea{width:100%;height:90px;font:12px ui-monospace,monospace;background:var(--chip);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr;grid-template-rows:62% 38%;height:100%}
+  .side{border-left:0;border-top:1px solid var(--line)}
+}
+</style>
+
+<div class="app">
+  <div class="stage" id="stage">
+    <canvas id="cv" aria-label="Estanque: pulsa para tirar una piedra"></canvas>
+    <div class="bar">
+      <div class="seg" role="group" aria-label="Vista">
+        <button id="mOndas" aria-pressed="true">Ondas</button>
+        <button id="mCotas" aria-pressed="false">Cotas</button>
+      </div>
+      <div class="seg" role="group" aria-label="Tiempo">
+        <button id="play" aria-pressed="false">Pausar</button>
+        <button id="rain" aria-pressed="false">Lluvia</button>
+        <button id="all">Soltar todas a la vez</button>
+        <button id="prog">Poner las 36 piedras</button>
+      </div>
+    </div>
+    <div class="hint" id="hint">Pulsa en el agua para tirar una piedra. Arrastra una piedra para moverla.</div>
+    <div class="toast" id="toast" hidden></div>
+  </div>
+  <aside class="side">
+    <div>
+      <h1>Estanque de piedras</h1>
+      <p class="lede">Cada piedra abre ondas circulares. Cuando dos se cruzan, la de más peso queda encima y la ligera solo asoma donde la otra no llega.</p>
+    </div>
+    <section>
+      <h2>Piedra que vas a tirar</h2>
+      <div class="types" id="types"></div>
+      <div class="row"><label for="peso">Peso</label><input id="peso" type="range" min="1" max="5" step="1" value="3"><output id="pesoO">3</output></div>
+    </section>
+    <section>
+      <h2>Choque</h2>
+      <div class="row"><label for="dom">Todos los tipos</label><input id="dom" type="range" min="0" max="100" value="100"><output id="domO">100%</output></div>
+      <div id="domTypes"></div>
+      <div class="row"><label for="vel">Velocidad</label><input id="vel" type="range" min="25" max="200" value="100"><output id="velO">1,0×</output></div>
+      <p class="note">Cada tipo tiene su propio choque. 0% suma sus ondas con las demás sin jerarquía; 100% las deja tapando a las más ligeras donde se cruzan.</p>
+    </section>
+    <section>
+      <h2>Editar todas las de un tipo</h2>
+      <div class="row"><label for="gt">Tipo</label><select id="gt" style="grid-column:2/4;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)"></select></div>
+      <div class="row"><label for="gw">Peso</label><input id="gw" type="range" min="1" max="5" step="1" value="3"><output id="gwO">3</output></div>
+      <div class="btns"><button class="b" id="gdel">Borrar todas de este tipo</button></div>
+      <p class="note">El peso se aplica a todas las piedras de ese tipo a la vez, y ellas recalculan sus ondas.</p>
+    </section>
+    <section>
+      <h2>Piedras <span id="count" style="font-weight:400"></span></h2>
+      <div class="list" id="list"></div>
+      <div class="btns" style="margin-top:10px">
+        <button class="b" id="undo">Deshacer</button>
+        <button class="b" id="clear">Vaciar</button>
+      </div>
+    </section>
+    <section>
+      <h2>Sacar para dibujar</h2>
+      <p class="note">Usa el instante que ves ahora: pausa cuando las ondas estén como quieras (o pulsa «Soltar todas a la vez» y pausa).</p>
+      <div class="row"><label for="pxw">Resolución PNG</label><select id="pxw" style="grid-column:2/4;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)"><option value="4000">4000 px</option><option value="6000">6000 px</option><option value="8000" selected>8000 px (iPad Pro, recomendado)</option><option value="10000">10000 px (máxima, pesado)</option></select></div>
+      <label style="display:flex;gap:8px;align-items:center;margin:6px 0"><input type="checkbox" id="zrings"> Incluir anillos de cota dentro de las zonas</label>
+      <div class="btns"><button class="b main" id="xAll">Paquete completo (.zip)</button></div>
+      <div class="btns" style="margin-top:6px">
+        <button class="b" id="xDxf">DXF de ecos y relieve</button>
+        <button class="b" id="xOndas">PNG ondas en color</button>
+        <button class="b" id="xCotas">PNG cotas en color</button>
+        <button class="b" id="xCalco">PNG calco transparente</button>
+        <button class="b" id="xPlan">PNG plantilla con cuadrícula</button>
+        <button class="b" id="xZonas">PNG zonas para colorear (3 archivos)</button>
+      </div>
+      <p class="note">Todos los PNG llevan 300 ppi. Para iPad Pro usa 8000 px; 10000 px es muy pesado. Los PNG de color (ondas/cotas) se limitan a 4000 px. El DXF trae splines reales (ecos, frentes por tipo, relieve cada 0,8 m, zonas, piedras, marco y cuadrícula). <b>Procreate:</b> importa estanque_zonas_blanco.png como lienzo y rellena con ColorDrop; pon estanque_zonas_lineas.png o el calco como capa de referencia/encima; estanque_zonas_color.png es una base ya coloreada. Las imágenes de zonas no llevan cuadrícula ni textos, así los rellenos no se parten. Con «anillos» marcas también las curvas de cada zona.</p>
+    </section>
+    <section>
+      <h2>Llevarlo al campo de niveles</h2>
+      <div class="btns"><button class="b main" id="copy">Copiar configuración</button></div>
+      <p class="note">Pega el texto en «Pegar configuración» de campo-ondas.html. Las posiciones se reescalan y centran para que quepan en su plano, y el peso se convierte a su escala (5 aquí es 1, el ayuntamiento).</p>
+      <textarea id="ta" hidden readonly></textarea>
+    </section>
+  </aside>
+</div>
+
+<script>
+(()=>{
+const W=1000,H=700;                       // mundo en metros
+const TYPES={
+  ayuntamiento:{n:'Ayuntamiento',c:[45,79,201],w:5},
+  trabajo:{n:'Zona de trabajo',c:[196,98,45],w:4},
+  cultura:{n:'Centro cultural',c:[140,80,175],w:3},
+  equipamiento:{n:'Equipamiento',c:[70,150,95],w:2},
+  manantial:{n:'Manantial',c:[30,170,190],w:1}
+};
+const $=s=>document.querySelector(s);
+const cv=$('#cv'),ctx=cv.getContext('2d'),stage=$('#stage');
+const off=document.createElement('canvas'),octx=off.getContext('2d');
+let stones=[],nextId=1,mode='ondas',paused=false,rain=false,dom=1,domT={ayuntamiento:1,trabajo:1,cultura:1,equipamiento:1,manantial:1},vel=1,sel=null,curType='cultura',curW=3,t=0;
+const KEY='estanque-piedras-v1';
+
+/* ---- parámetros de onda según el peso ---- */
+const P=w=>({A:.35+.3*w, c:30+4*w, lam:18+7*w, R:90+40*w, sg:(18+7*w)*1.3, life:(90+40*w)/(30+4*w)});
+const rStat=w=>40+20*w, zStat=w=>1+1.2*w;
+
+/* ---- estado ---- */
+function addStone(x,y,type,w,tt){
+  const s={id:nextId++,x,y,type,w,t0:tt??t,name:TYPES[type].n+' '+(stones.filter(o=>o.type===type).length+1)};
+  stones.push(s);sel=s.id;save();renderList();return s;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({stones,nextId,mode,dom,domT,vel}))}catch(e){}}
+function load(){
+  try{const d=JSON.parse(localStorage.getItem(KEY)||'null');
+    if(d&&Array.isArray(d.stones)&&d.stones.length){stones=d.stones.map((s,i)=>({...s,t0:-(0.2+0.15*i)}));nextId=d.nextId||stones.length+1;
+      if(d.mode==='cotas')mode='cotas';dom=d.dom??1;if(d.domT)for(const k in domT)if(typeof d.domT[k]==='number')domT[k]=d.domT[k];vel=d.vel??1;return true}}catch(e){}
+  return false;
+}
+function seed(){
+  addStone(340,330,'ayuntamiento',5,-1.6);addStone(640,290,'trabajo',4,-1.0);
+  addStone(520,470,'cultura',3,-.6);addStone(230,520,'manantial',1,-.3);sel=null;
+}
+
+/* ---- campo ---- */
+let GW=0,GH=0,hG,tr,tg,tb,tw;
+function sizeGrid(){
+  const r=stage.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);
+  cv.width=Math.round(r.width*dpr);cv.height=Math.round(r.height*dpr);
+  GW=mode==='cotas'?Math.max(120,Math.min(520,Math.round(r.width/1.8))):Math.max(90,Math.min(260,Math.round(r.width/3.2)));GH=Math.max(60,Math.round(GW*H/W));
+  off.width=GW;off.height=GH;
+  const n=GW*GH;hG=new Float32Array(n);tr=new Float32Array(n);tg=new Float32Array(n);tb=new Float32Array(n);tw=new Float32Array(n);
+}
+const sm=(a,b,x)=>{x=Math.max(0,Math.min(1,(x-a)/(b-a)));return x*x*(3-2*x)};
+
+function fieldOndas(gw=GW,gh=GH,A=null,tm=t){const O=A||{h:hG,r:tr,g:tg,b:tb,w:tw};
+  const order=stones.slice().sort((a,b)=>a.w-b.w||a.t0-b.t0);
+  const pr=order.map(s=>({s,p:P(s.w)}));
+  for(let j=0;j<gh;j++){const y=(j+.5)*H/gh;
+    for(let i=0;i<gw;i++){const x=(i+.5)*W/gw,k=j*gw+i;
+      let hl=0,r=0,g=0,b=0,w=0;
+      for(const {s,p} of pr){
+        const a=tm-s.t0;if(a<0)continue;
+        const fadeT=Math.max(0,1-a/p.life);if(fadeT<=0){continue}
+        const R=p.c*a,d=Math.hypot(x-s.x,y-s.y),q=d-R;
+        if(Math.abs(q)>p.sg*2.6)continue;
+        const fade=Math.pow(fadeT,1.4),env=Math.exp(-(q*q)/(p.sg*p.sg))*fade;
+        const f=p.A*Math.cos(6.2832*q/p.lam)*env/Math.sqrt(1+d/30);
+        const cd=domT[s.type];hl=hl*(1-cd*env)+f*((1-cd)+cd*env);
+        const c=TYPES[s.type].c,m=env*.9;
+        r=r*(1-m)+c[0]*m;g=g*(1-m)+c[1]*m;b=b*(1-m)+c[2]*m;w=w*(1-m)+m;
+        // tinte acumulado por la capa: la pesada queda encima porque se procesa después
+      }
+      O.h[k]=hl;O.r[k]=r;O.g[k]=g;O.b[k]=b;O.w[k]=w;
+    }}
+}
+function fieldCotas(gw=GW,gh=GH,A=null){const O=A||{h:hG,r:tr,g:tg,b:tb,w:tw};
+  const order=stones.slice().sort((a,b)=>a.w-b.w||a.t0-b.t0);
+  for(let j=0;j<gh;j++){const y=(j+.5)*H/gh;
+    for(let i=0;i<gw;i++){const x=(i+.5)*W/gw,k=j*gw+i;
+      let hl=0,r=0,g=0,b=0,w=0;
+      for(const s of order){
+        const rr=rStat(s.w),d=Math.hypot(x-s.x,y-s.y),ro=d/rr;
+        if(ro>1.7)continue;
+        const Z=zStat(s.w),z=Z*(Math.exp(-ro*ro*1.5)+.22*Math.exp(-Math.pow((ro-1)/.22,2)));
+        const e=1-sm(.82,1.12,ro);
+        const cd=domT[s.type];hl=hl*(1-cd*e)+z*((1-cd)+cd*e);
+        const c=TYPES[s.type].c,m=e;
+        r=r*(1-m)+c[0]*m;g=g*(1-m)+c[1]*m;b=b*(1-m)+c[2]*m;w=w*(1-m)+m;
+      }
+      O.h[k]=hl;O.r[k]=r;O.g[k]=g;O.b[k]=b;O.w[k]=w;
+    }}
+}
+
+function shade(mode,gw,gh,A,ep){
+  const img=new ImageData(gw,gh),D=img.data;
+  const dx=W/gw;
+  if(mode==='ondas'){
+    for(let j=0;j<gh;j++)for(let i=0;i<gw;i++){
+      const k=j*gw+i,l=A.h[j*gw+Math.max(0,i-1)],rr=A.h[j*gw+Math.min(gw-1,i+1)],u=A.h[Math.max(0,j-1)*gw+i],dn=A.h[Math.min(gh-1,j+1)*gw+i];
+      const gx=(rr-l)/(2*dx),gy=(dn-u)/(2*dx);
+      const lit=-(gx*.7+gy*.7)*38;           // luz desde el noroeste
+      const h=A.h[k];
+      let base=.30+.5*Math.max(-.5,Math.min(.8,h*.35))+lit*.5;
+      base=Math.max(0,Math.min(1,base));
+      const spec=Math.pow(Math.max(0,lit-.35),2)*2.2;
+      let R=13+base*70,G=58+base*125,B=78+base*130;
+      const tint=Math.min(.55,A.w[k]*.5);
+      const q=A.w[k]>0?1/A.w[k]:0,cr=A.r[k]*q,cg=A.g[k]*q,cb=A.b[k]*q;R=R*(1-tint)+(cr*.55+R*.45)*tint;G=G*(1-tint)+(cg*.55+G*.45)*tint;B=B*(1-tint)+(cb*.55+B*.45)*tint;
+      const o=k*4;D[o]=Math.min(255,R+spec*120);D[o+1]=Math.min(255,G+spec*120);D[o+2]=Math.min(255,B+spec*120);D[o+3]=255;
+    }
+  }else{
+    const step=.8;
+    for(let j=0;j<gh;j++)for(let i=0;i<gw;i++){
+      const k=j*gw+i,h=A.h[k],band=Math.floor(h/step);
+      const bR=A.h[j*gw+Math.min(gw-1,i+ep)],bD=A.h[Math.min(gh-1,j+ep)*gw+i];
+      const edge=(Math.floor(bR/step)!==band)||(Math.floor(bD/step)!==band);
+      const lv=Math.max(0,Math.min(1,h/6));
+      let R=214-lv*120,G=226-lv*90,B=222-lv*110;           // papel verdoso a verde hondo
+      const m=Math.min(.78,A.w[k]*.78)*Math.min(1,.25+lv*1.3),q=A.w[k]>0?1/A.w[k]:0;
+      R=R*(1-m)+A.r[k]*q*m;G=G*(1-m)+A.g[k]*q*m;B=B*(1-m)+A.b[k]*q*m;
+      if(edge){R=18;G=36;B=44}
+      const o=k*4;D[o]=R;D[o+1]=G;D[o+2]=B;D[o+3]=255;
+    }
+  }
+  return img;
+}
+function paint(){
+  const img=shade(mode,GW,GH,{h:hG,r:tr,g:tg,b:tb,w:tw},1);octx.putImageData(img,0,0);
+  ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+  ctx.drawImage(off,0,0,cv.width,cv.height);
+}
+function drawStones(){
+  const sx=cv.width/W,sy=cv.height/H,dpr=cv.width/stage.getBoundingClientRect().width;
+  for(const s of stones){
+    const c=TYPES[s.type].c,x=s.x*sx,y=s.y*sy,r=(5+s.w*1.8)*dpr;
+    ctx.beginPath();ctx.arc(x,y,r,0,6.2832);ctx.fillStyle=`rgb(${c[0]},${c[1]},${c[2]})`;ctx.fill();
+    ctx.lineWidth=(s.id===sel?3:1.6)*dpr;ctx.strokeStyle=s.id===sel?'#ffffff':'rgba(255,255,255,.85)';ctx.stroke();
+    if(mode==='cotas'||s.id===sel){ctx.font=`${12*dpr}px Instrument Sans,system-ui,sans-serif`;ctx.fillStyle='#fff';ctx.shadowColor='rgba(0,0,0,.7)';ctx.shadowBlur=4*dpr;ctx.fillText(s.name,x+r+5*dpr,y+4*dpr);ctx.shadowBlur=0}
+  }
+}
+
+/* ---- bucle ---- */
+let last=performance.now(),rainT=0;
+function frame(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  if(!paused)t+=dt*vel;
+  if(rain&&!paused){rainT-=dt*vel;if(rainT<=0){rainT=.5+Math.random()*.7;
+    const types=Object.keys(TYPES),ty=types[Math.random()*5|0];
+    addStone(80+Math.random()*(W-160),80+Math.random()*(H-160),ty,1+(Math.random()*5|0));sel=null;renderList()}}
+  if(GW){(mode==='ondas'?fieldOndas:fieldCotas)();paint();drawStones()}
+  requestAnimationFrame(frame);
+}
+
+/* ---- interacción ---- */
+function pos(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H,r.width/W]}
+let drag=null;
+cv.addEventListener('pointerdown',e=>{
+  const [x,y,k]=pos(e);cv.setPointerCapture(e.pointerId);
+  let hit=null,bd=1e9;
+  for(const s of stones){const d=Math.hypot(s.x-x,s.y-y)*k;if(d<(9+s.w*2)+6&&d<bd){hit=s;bd=d}}
+  if(hit){drag=hit;sel=hit.id;renderList();}
+  else{addStone(x,y,curType,curW);if(mode==='cotas'){stones[stones.length-1].t0=-99}}
+});
+cv.addEventListener('pointermove',e=>{
+  if(!drag)return;const [x,y]=pos(e);drag.x=Math.max(0,Math.min(W,x));drag.y=Math.max(0,Math.min(H,y));
+});
+const endDrag=()=>{if(drag){drag=null;save()}};
+cv.addEventListener('pointerup',endDrag);cv.addEventListener('pointercancel',endDrag);
+
+function setMode(m){mode=m;$('#mOndas').setAttribute('aria-pressed',m==='ondas');$('#mCotas').setAttribute('aria-pressed',m==='cotas');
+  $('#hint').textContent=m==='ondas'?'Pulsa en el agua para tirar una piedra. Arrastra una piedra para moverla.':'Cotas finales: cada piedra deja una meseta y la más pesada tapa a las ligeras. Cada línea es un salto de 0,8 m.';save();if(typeof sizeGrid==='function'&&cv.width)sizeGrid()}
+$('#mOndas').onclick=()=>setMode('ondas');$('#mCotas').onclick=()=>setMode('cotas');
+$('#play').onclick=e=>{paused=!paused;e.target.textContent=paused?'Seguir':'Pausar';e.target.setAttribute('aria-pressed',paused)};
+$('#rain').onclick=e=>{rain=!rain;e.target.setAttribute('aria-pressed',rain)};
+$('#dom').oninput=e=>{const v=e.target.value/100;dom=v;$('#domO').textContent=e.target.value+'%';for(const k in domT)domT[k]=v;renderDomTypes();save()};
+function renderDomTypes(){const el=$('#domTypes');el.innerHTML='';
+  for(const k in TYPES){const r=document.createElement('div');r.className='row';r.style.gridTemplateColumns='128px minmax(0,1fr) 44px';const v=Math.round(domT[k]*100);
+    r.innerHTML=`<label for="dt_${k}" style="display:flex;align-items:center;gap:6px"><span class="dot" style="background:rgb(${TYPES[k].c})"></span>${TYPES[k].n}</label><input id="dt_${k}" type="range" min="0" max="100" value="${v}"><output>${v}%</output>`;
+    r.querySelector('input').oninput=e=>{domT[k]=e.target.value/100;r.querySelector('output').textContent=e.target.value+'%';save()};
+    el.appendChild(r)}}
+$('#vel').oninput=e=>{vel=e.target.value/100;$('#velO').textContent=vel.toFixed(1).replace('.',',')+'×';save()};
+$('#peso').oninput=e=>{curW=+e.target.value;$('#pesoO').textContent=curW};
+$('#all').onclick=()=>{if(!stones.length){toast('Tira alguna piedra primero');return}if(mode==='cotas')setMode('ondas');paused=false;const p=$('#play');p.textContent='Pausar';p.setAttribute('aria-pressed',false);for(const s of stones)s.t0=t;save()};
+$('#prog').onclick=()=>{
+  const plan=[['ayuntamiento',3],['trabajo',4],['cultura',5],['equipamiento',14],['manantial',10]];
+  stones=[];nextId=1;
+  const cx=W/2,cy=H/2;
+  for(const [ty,n] of plan)for(let c=0;c<n;c++){
+    const w=TYPES[ty].w,rr=rStat(w)*.7;let best=null,bd=-1;
+    for(let k=0;k<300;k++){
+      const x=90+Math.random()*(W-180),y=90+Math.random()*(H-180);
+      const dc=Math.hypot((x-cx)/(W*.5),(y-cy)/(H*.5));if(dc>1)continue;
+      let md=1e9;for(const o of stones)md=Math.min(md,Math.hypot(o.x-x,o.y-y)-(rStat(o.w)+rr)*.55);
+      if(md>bd){bd=md;best={x,y}}if(md>0)break}
+    if(best)addStone(best.x,best.y,ty,w,t)}
+  sel=null;if(mode==='cotas')setMode('ondas');paused=false;const p=$('#play');p.textContent='Pausar';p.setAttribute('aria-pressed',false);
+  save();renderList();toast('36 piedras colocadas: muévelas como quieras');
+};
+$('#undo').onclick=()=>{stones.pop();sel=null;save();renderList()};
+$('#clear').onclick=()=>{stones=[];sel=null;save();renderList()};
+
+const typesEl=$('#types');
+function renderTypes(){
+  typesEl.innerHTML='';
+  for(const k in TYPES){const b=document.createElement('button');b.className='type';b.setAttribute('aria-pressed',k===curType);
+    b.innerHTML=`<span class="dot" style="background:rgb(${TYPES[k].c})"></span><span>${TYPES[k].n}</span>`;
+    b.onclick=()=>{curType=k;curW=TYPES[k].w;$('#peso').value=curW;$('#pesoO').textContent=curW;renderTypes()};
+    typesEl.appendChild(b)}
+}
+function renderList(keepGroup){
+  if(typeof renderGroup==='function'&&!keepGroup)renderGroup();
+  const el=$('#list');el.innerHTML='';$('#count').textContent='('+stones.length+')';
+  if(!stones.length){el.innerHTML='<div class="empty">Aún no has tirado ninguna. Pulsa en el agua.</div>';return}
+  for(const s of stones.slice().reverse()){
+    const d=document.createElement('div');d.className='st'+(s.id===sel?' sel':'');
+    d.innerHTML=`<span class="dot" style="background:rgb(${TYPES[s.type].c})"></span><span class="nm" title="${s.name}">${s.name}</span><input type="range" min="1" max="5" value="${s.w}" aria-label="Peso de ${s.name}"><button class="del" aria-label="Borrar ${s.name}">×</button>`;
+    d.querySelector('.nm').onclick=()=>{sel=s.id;renderList()};
+    d.querySelector('input').oninput=e=>{s.w=+e.target.value;s.t0=Math.min(s.t0,t-.2);save()};
+    d.querySelector('.del').onclick=()=>{stones=stones.filter(o=>o.id!==s.id);save();renderList()};
+    el.appendChild(d)}
+}
+function toast(m){const e=$('#toast');e.textContent=m;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2200)}
+$('#copy').onclick=async()=>{
+  const TM={ayuntamiento:'ayto',equipamiento:'equip'};
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(const s of stones){x0=Math.min(x0,s.x);x1=Math.max(x1,s.x);y0=Math.min(y0,s.y);y1=Math.max(y1,s.y)}
+  const bw=Math.max(1,x1-x0),bh=Math.max(1,y1-y0),k=stones.length?Math.min(1000/bw,1150/bh,1.8):1,mx=(x0+x1)/2,my=(y0+y1)/2;
+  const choque={};for(const k in domT)choque[TM[k]||k]=Math.round(domT[k]*100)/100;
+  const cfg={version:4,unidades:'metros; x este, y norte; z cota',params:{},choque,section:null,
+    objects:stones.map(s=>({type:TM[s.type]||s.type,name:s.name,peso:6-s.w,x:Math.round((560+(s.x-mx)*k)*10)/10,y:Math.round((650-(s.y-my)*k)*10)/10,z0:0}))};
+  const txt=JSON.stringify(cfg,null,1);
+  try{await navigator.clipboard.writeText(txt);toast('Configuración copiada')}
+  catch(e){const ta=$('#ta');ta.hidden=false;ta.value=txt;ta.select();toast('Selecciona y copia el texto')}
+};
+
+
+/* ---- edición por tipo ---- */
+const gt=$('#gt');
+function renderGroup(){
+  const keep=gt.value||curType;gt.innerHTML='';
+  for(const k in TYPES){const n=stones.filter(s=>s.type===k).length;const o=document.createElement('option');o.value=k;o.textContent=TYPES[k].n+' ('+n+')';gt.appendChild(o)}
+  gt.value=TYPES[keep]?keep:curType;syncGroupW();
+}
+function syncGroupW(){const l=stones.filter(s=>s.type===gt.value);const v=l.length?l[0].w:TYPES[gt.value].w;$('#gw').value=v;$('#gwO').textContent=v;$('#gw').disabled=!l.length;$('#gdel').disabled=!l.length}
+gt.onchange=syncGroupW;
+$('#gw').oninput=e=>{const v=+e.target.value;$('#gwO').textContent=v;for(const s of stones)if(s.type===gt.value){s.w=v;s.t0=Math.min(s.t0,t-.2)}save();renderList(true)};
+$('#gdel').onclick=()=>{const n=stones.filter(s=>s.type===gt.value).length;stones=stones.filter(s=>s.type!==gt.value);sel=null;save();renderList();toast(n+' piedras borradas')};
+
+const DXF_TPL={"head": "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1024\n  9\n$ACADMAINTVER\n 70\n6\n  9\n$DWGCODEPAGE\n  3\nANSI_1252\n  9\n$LASTSAVEDBY\n  1\nezdxf\n  9\n$INSBASE\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$EXTMIN\n 10\n1e+20\n 20\n1e+20\n 30\n1e+20\n  9\n$EXTMAX\n 10\n-1e+20\n 20\n-1e+20\n 30\n-1e+20\n  9\n$LIMMIN\n 10\n0.0\n 20\n0.0\n  9\n$LIMMAX\n 10\n420.0\n 20\n297.0\n  9\n$ORTHOMODE\n 70\n0\n  9\n$REGENMODE\n 70\n1\n  9\n$FILLMODE\n 70\n1\n  9\n$QTEXTMODE\n 70\n0\n  9\n$MIRRTEXT\n 70\n1\n  9\n$LTSCALE\n 40\n1.0\n  9\n$ATTMODE\n 70\n1\n  9\n$TEXTSIZE\n 40\n2.5\n  9\n$TRACEWID\n 40\n1.0\n  9\n$TEXTSTYLE\n  7\nStandard\n  9\n$CLAYER\n  8\n0\n  9\n$CELTYPE\n  6\nByLayer\n  9\n$CECOLOR\n 62\n256\n  9\n$CELTSCALE\n 40\n1.0\n  9\n$DISPSILH\n 70\n0\n  9\n$DIMSCALE\n 40\n1.0\n  9\n$DIMASZ\n 40\n2.5\n  9\n$DIMEXO\n 40\n0.625\n  9\n$DIMDLI\n 40\n3.75\n  9\n$DIMRND\n 40\n0.0\n  9\n$DIMDLE\n 40\n0.0\n  9\n$DIMEXE\n 40\n1.25\n  9\n$DIMTP\n 40\n0.0\n  9\n$DIMTM\n 40\n0.0\n  9\n$DIMTXT\n 40\n2.5\n  9\n$DIMCEN\n 40\n2.5\n  9\n$DIMTSZ\n 40\n0.0\n  9\n$DIMTOL\n 70\n0\n  9\n$DIMLIM\n 70\n0\n  9\n$DIMTIH\n 70\n0\n  9\n$DIMTOH\n 70\n0\n  9\n$DIMSE1\n 70\n0\n  9\n$DIMSE2\n 70\n0\n  9\n$DIMTAD\n 70\n1\n  9\n$DIMZIN\n 70\n8\n  9\n$DIMBLK\n  1\n\n  9\n$DIMASO\n 70\n1\n  9\n$DIMSHO\n 70\n1\n  9\n$DIMPOST\n  1\n\n  9\n$DIMAPOST\n  1\n\n  9\n$DIMALT\n 70\n0\n  9\n$DIMALTD\n 70\n3\n  9\n$DIMALTF\n 40\n0.03937007874\n  9\n$DIMLFAC\n 40\n1.0\n  9\n$DIMTOFL\n 70\n1\n  9\n$DIMTVP\n 40\n0.0\n  9\n$DIMTIX\n 70\n0\n  9\n$DIMSOXD\n 70\n0\n  9\n$DIMSAH\n 70\n0\n  9\n$DIMBLK1\n  1\n\n  9\n$DIMBLK2\n  1\n\n  9\n$DIMSTYLE\n  2\nISO-25\n  9\n$DIMCLRD\n 70\n0\n  9\n$DIMCLRE\n 70\n0\n  9\n$DIMCLRT\n 70\n0\n  9\n$DIMTFAC\n 40\n1.0\n  9\n$DIMGAP\n 40\n0.625\n  9\n$DIMJUST\n 70\n0\n  9\n$DIMSD1\n 70\n0\n  9\n$DIMSD2\n 70\n0\n  9\n$DIMTOLJ\n 70\n0\n  9\n$DIMTZIN\n 70\n8\n  9\n$DIMALTZ\n 70\n0\n  9\n$DIMALTTZ\n 70\n0\n  9\n$DIMUPT\n 70\n0\n  9\n$DIMDEC\n 70\n2\n  9\n$DIMTDEC\n 70\n2\n  9\n$DIMALTU\n 70\n2\n  9\n$DIMALTTD\n 70\n3\n  9\n$DIMTXSTY\n  7\nStandard\n  9\n$DIMAUNIT\n 70\n0\n  9\n$DIMADEC\n 70\n0\n  9\n$DIMALTRND\n 40\n0.0\n  9\n$DIMAZIN\n 70\n0\n  9\n$DIMDSEP\n 70\n44\n  9\n$DIMATFIT\n 70\n3\n  9\n$DIMFRAC\n 70\n0\n  9\n$DIMLDRBLK\n  1\n\n  9\n$DIMLUNIT\n 70\n2\n  9\n$DIMLWD\n 70\n-2\n  9\n$DIMLWE\n 70\n-2\n  9\n$DIMTMOVE\n 70\n0\n  9\n$DIMFXL\n 40\n1.0\n  9\n$DIMFXLON\n 70\n0\n  9\n$DIMJOGANG\n 40\n0.785398163397\n  9\n$DIMTFILL\n 70\n0\n  9\n$DIMTFILLCLR\n 70\n0\n  9\n$DIMARCSYM\n 70\n0\n  9\n$DIMLTYPE\n  6\n\n  9\n$DIMLTEX1\n  6\n\n  9\n$DIMLTEX2\n  6\n\n  9\n$DIMTXTDIRECTION\n 70\n0\n  9\n$LUNITS\n 70\n2\n  9\n$LUPREC\n 70\n4\n  9\n$SKETCHINC\n 40\n1.0\n  9\n$FILLETRAD\n 40\n10.0\n  9\n$AUNITS\n 70\n0\n  9\n$AUPREC\n 70\n2\n  9\n$MENU\n  1\n.\n  9\n$ELEVATION\n 40\n0.0\n  9\n$PELEVATION\n 40\n0.0\n  9\n$THICKNESS\n 40\n0.0\n  9\n$LIMCHECK\n 70\n0\n  9\n$CHAMFERA\n 40\n0.0\n  9\n$CHAMFERB\n 40\n0.0\n  9\n$CHAMFERC\n 40\n0.0\n  9\n$CHAMFERD\n 40\n0.0\n  9\n$SKPOLY\n 70\n0\n  9\n$TDCREATE\n 40\n2461321.9202199075\n  9\n$TDUCREATE\n 40\n2458532.153996898\n  9\n$TDUPDATE\n 40\n2461321.9202199075\n  9\n$TDUUPDATE\n 40\n2458532.1544311\n  9\n$TDINDWG\n 40\n0.0\n  9\n$TDUSRTIMER\n 40\n0.0\n  9\n$USRTIMER\n 70\n1\n  9\n$ANGBASE\n 50\n0.0\n  9\n$ANGDIR\n 70\n0\n  9\n$PDMODE\n 70\n0\n  9\n$PDSIZE\n 40\n0.0\n  9\n$PLINEWID\n 40\n0.0\n  9\n$SPLFRAME\n 70\n0\n  9\n$SPLINETYPE\n 70\n6\n  9\n$SPLINESEGS\n 70\n8\n  9\n$HANDSEED\n  5\n@@SEED@@\n  9\n$SURFTAB1\n 70\n6\n  9\n$SURFTAB2\n 70\n6\n  9\n$SURFTYPE\n 70\n6\n  9\n$SURFU\n 70\n6\n  9\n$SURFV\n 70\n6\n  9\n$UCSBASE\n  2\n\n  9\n$UCSNAME\n  2\n\n  9\n$UCSORG\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSXDIR\n 10\n1.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSYDIR\n 10\n0.0\n 20\n1.0\n 30\n0.0\n  9\n$UCSORTHOREF\n  2\n\n  9\n$UCSORTHOVIEW\n 70\n0\n  9\n$UCSORGTOP\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSORGBOTTOM\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSORGLEFT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSORGRIGHT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSORGFRONT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$UCSORGBACK\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSBASE\n  2\n\n  9\n$PUCSNAME\n  2\n\n  9\n$PUCSORG\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSXDIR\n 10\n1.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSYDIR\n 10\n0.0\n 20\n1.0\n 30\n0.0\n  9\n$PUCSORTHOREF\n  2\n\n  9\n$PUCSORTHOVIEW\n 70\n0\n  9\n$PUCSORGTOP\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSORGBOTTOM\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSORGLEFT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSORGRIGHT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSORGFRONT\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PUCSORGBACK\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$USERI1\n 70\n0\n  9\n$USERI2\n 70\n0\n  9\n$USERI3\n 70\n0\n  9\n$USERI4\n 70\n0\n  9\n$USERI5\n 70\n0\n  9\n$USERR1\n 40\n0.0\n  9\n$USERR2\n 40\n0.0\n  9\n$USERR3\n 40\n0.0\n  9\n$USERR4\n 40\n0.0\n  9\n$USERR5\n 40\n0.0\n  9\n$WORLDVIEW\n 70\n1\n  9\n$SHADEDGE\n 70\n3\n  9\n$SHADEDIF\n 70\n70\n  9\n$TILEMODE\n 70\n1\n  9\n$MAXACTVP\n 70\n64\n  9\n$PINSBASE\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  9\n$PLIMCHECK\n 70\n0\n  9\n$PEXTMIN\n 10\n1e+20\n 20\n1e+20\n 30\n1e+20\n  9\n$PEXTMAX\n 10\n-1e+20\n 20\n-1e+20\n 30\n-1e+20\n  9\n$PLIMMIN\n 10\n0.0\n 20\n0.0\n  9\n$PLIMMAX\n 10\n420.0\n 20\n297.0\n  9\n$UNITMODE\n 70\n0\n  9\n$VISRETAIN\n 70\n1\n  9\n$PLINEGEN\n 70\n0\n  9\n$PSLTSCALE\n 70\n1\n  9\n$TREEDEPTH\n 70\n3020\n  9\n$CMLSTYLE\n  2\nStandard\n  9\n$CMLJUST\n 70\n0\n  9\n$CMLSCALE\n 40\n20.0\n  9\n$PROXYGRAPHICS\n 70\n1\n  9\n$MEASUREMENT\n 70\n1\n  9\n$CELWEIGHT\n370\n-1\n  9\n$ENDCAPS\n280\n0\n  9\n$JOINSTYLE\n280\n0\n  9\n$LWDISPLAY\n290\n0\n  9\n$INSUNITS\n 70\n6\n  9\n$HYPERLINKBASE\n  1\n\n  9\n$STYLESHEET\n  1\n\n  9\n$XEDIT\n290\n1\n  9\n$CEPSNTYPE\n380\n0\n  9\n$PSTYLEMODE\n290\n1\n  9\n$FINGERPRINTGUID\n  2\n{43FF2C9B-C570-4517-A843-4B3BB22845E9}\n  9\n$VERSIONGUID\n  2\n{5A08DB43-6C03-4051-AEAE-9F9A5C9E2FD4}\n  9\n$EXTNAMES\n290\n1\n  9\n$PSVPSCALE\n 40\n0.0\n  9\n$OLESTARTUP\n290\n0\n  9\n$SORTENTS\n280\n127\n  9\n$INDEXCTL\n280\n0\n  9\n$HIDETEXT\n280\n1\n  9\n$XCLIPFRAME\n280\n1\n  9\n$HALOGAP\n280\n0\n  9\n$OBSCOLOR\n 70\n257\n  9\n$OBSLTYPE\n280\n0\n  9\n$INTERSECTIONDISPLAY\n280\n0\n  9\n$INTERSECTIONCOLOR\n 70\n257\n  9\n$DIMASSOC\n280\n2\n  9\n$PROJECTNAME\n  1\n\n  9\n$CAMERADISPLAY\n290\n0\n  9\n$LENSLENGTH\n 40\n50.0\n  9\n$CAMERAHEIGHT\n 40\n0.0\n  9\n$STEPSPERSEC\n 40\n24.0\n  9\n$STEPSIZE\n 40\n100.0\n  9\n$3DDWFPREC\n 40\n2.0\n  9\n$PSOLWIDTH\n 40\n0.005\n  9\n$PSOLHEIGHT\n 40\n0.08\n  9\n$LOFTANG1\n 40\n1.570796326795\n  9\n$LOFTANG2\n 40\n1.570796326795\n  9\n$LOFTMAG1\n 40\n0.0\n  9\n$LOFTMAG2\n 40\n0.0\n  9\n$LOFTPARAM\n 70\n7\n  9\n$LOFTNORMALS\n280\n1\n  9\n$LATITUDE\n 40\n37.795\n  9\n$LONGITUDE\n 40\n-122.394\n  9\n$NORTHDIRECTION\n 40\n0.0\n  9\n$TIMEZONE\n 70\n-8000\n  9\n$LIGHTGLYPHDISPLAY\n280\n1\n  9\n$TILEMODELIGHTSYNCH\n280\n1\n  9\n$CMATERIAL\n347\n20\n  9\n$SOLIDHIST\n280\n0\n  9\n$SHOWHIST\n280\n1\n  9\n$DWFFRAME\n280\n2\n  9\n$DGNFRAME\n280\n2\n  9\n$REALWORLDSCALE\n290\n1\n  9\n$INTERFERECOLOR\n 62\n256\n  9\n$CSHADOW\n280\n0\n  9\n$SHADOWPLANELOCATION\n 40\n0.0\n  0\nENDSEC\n  0\nSECTION\n  2\nCLASSES\n  0\nCLASS\n  1\nACDBDICTIONARYWDFLT\n  2\nAcDbDictionaryWithDefault\n  3\nObjectDBX Classes\n 90\n0\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nSUN\n  2\nAcDbSun\n  3\nSCENEOE\n 90\n1153\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nVISUALSTYLE\n  2\nAcDbVisualStyle\n  3\nObjectDBX Classes\n 90\n4095\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nMATERIAL\n  2\nAcDbMaterial\n  3\nObjectDBX Classes\n 90\n1153\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nSCALE\n  2\nAcDbScale\n  3\nObjectDBX Classes\n 90\n1153\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nTABLESTYLE\n  2\nAcDbTableStyle\n  3\nObjectDBX Classes\n 90\n4095\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nMLEADERSTYLE\n  2\nAcDbMLeaderStyle\n  3\nACDB_MLEADERSTYLE_CLASS\n 90\n4095\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nDICTIONARYVAR\n  2\nAcDbDictionaryVar\n  3\nObjectDBX Classes\n 90\n0\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nCELLSTYLEMAP\n  2\nAcDbCellStyleMap\n  3\nObjectDBX Classes\n 90\n1152\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nMENTALRAYRENDERSETTINGS\n  2\nAcDbMentalRayRenderSettings\n  3\nSCENEOE\n 90\n1024\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nACDBDETAILVIEWSTYLE\n  2\nAcDbDetailViewStyle\n  3\nObjectDBX Classes\n 90\n1025\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nACDBSECTIONVIEWSTYLE\n  2\nAcDbSectionViewStyle\n  3\nObjectDBX Classes\n 90\n1025\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nRASTERVARIABLES\n  2\nAcDbRasterVariables\n  3\nISM\n 90\n0\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nACDBPLACEHOLDER\n  2\nAcDbPlaceHolder\n  3\nObjectDBX Classes\n 90\n0\n 91\n0\n280\n0\n281\n0\n  0\nCLASS\n  1\nLAYOUT\n  2\nAcDbLayout\n  3\nObjectDBX Classes\n 90\n0\n 91\n0\n280\n0\n281\n0\n  0\nENDSEC\n  0\nSECTION\n  2\nTABLES\n  0\nTABLE\n  2\nVPORT\n  5\n8\n330\n0\n100\nAcDbSymbolTable\n 70\n1\n  0\nVPORT\n  5\n23\n330\n8\n100\nAcDbSymbolTableRecord\n100\nAcDbViewportTableRecord\n  2\n*Active\n 70\n0\n 10\n0.0\n 20\n0.0\n 11\n1.0\n 21\n1.0\n 12\n0.0\n 22\n0.0\n 13\n0.0\n 23\n0.0\n 14\n0.5\n 24\n0.5\n 15\n0.5\n 25\n0.5\n 16\n0.0\n 26\n0.0\n 36\n1.0\n 17\n0.0\n 27\n0.0\n 37\n0.0\n 40\n1000.0\n 41\n1.34\n 42\n50.0\n 43\n0.0\n 44\n0.0\n 50\n0.0\n 51\n0.0\n 71\n0\n 72\n1000\n 73\n1\n 74\n3\n 75\n0\n 76\n0\n 77\n0\n 78\n0\n281\n0\n 65\n0\n146\n0.0\n  0\nENDTAB\n  0\nTABLE\n  2\nLTYPE\n  5\n2\n330\n0\n100\nAcDbSymbolTable\n 70\n3\n  0\nLTYPE\n  5\n24\n330\n2\n100\nAcDbSymbolTableRecord\n100\nAcDbLinetypeTableRecord\n  2\nByBlock\n 70\n0\n  3\n\n 72\n65\n 73\n0\n 40\n0.0\n  0\nLTYPE\n  5\n25\n330\n2\n100\nAcDbSymbolTableRecord\n100\nAcDbLinetypeTableRecord\n  2\nByLayer\n 70\n0\n  3\n\n 72\n65\n 73\n0\n 40\n0.0\n  0\nLTYPE\n  5\n26\n330\n2\n100\nAcDbSymbolTableRecord\n100\nAcDbLinetypeTableRecord\n  2\nContinuous\n 70\n0\n  3\n\n 72\n65\n 73\n0\n 40\n0.0\n  0\nENDTAB\n  0\nTABLE\n  2\nLAYER\n  5\n1\n330\n0\n100\nAcDbSymbolTable\n 70\n@@NLAY@@\n  0\nLAYER\n  5\n27\n330\n1\n100\nAcDbSymbolTableRecord\n100\nAcDbLayerTableRecord\n  2\n0\n 70\n0\n 62\n7\n  6\nContinuous\n370\n-3\n390\n13\n347\n21\n  0\nLAYER\n  5\n28\n330\n1\n100\nAcDbSymbolTableRecord\n100\nAcDbLayerTableRecord\n  2\nDefpoints\n 70\n0\n 62\n7\n  6\nContinuous\n290\n0\n370\n-3\n390\n13\n347\n21\n", "tail": "  0\nENDTAB\n  0\nTABLE\n  2\nSTYLE\n  5\n5\n330\n0\n100\nAcDbSymbolTable\n 70\n1\n  0\nSTYLE\n  5\n29\n330\n5\n100\nAcDbSymbolTableRecord\n100\nAcDbTextStyleTableRecord\n  2\nStandard\n 70\n0\n 40\n0.0\n 41\n1.0\n 50\n0.0\n 71\n0\n 42\n2.5\n  3\ntxt\n  4\n\n  0\nENDTAB\n  0\nTABLE\n  2\nVIEW\n  5\n7\n330\n0\n100\nAcDbSymbolTable\n 70\n0\n  0\nENDTAB\n  0\nTABLE\n  2\nUCS\n  5\n6\n330\n0\n100\nAcDbSymbolTable\n 70\n0\n  0\nENDTAB\n  0\nTABLE\n  2\nAPPID\n  5\n3\n330\n0\n100\nAcDbSymbolTable\n 70\n3\n  0\nAPPID\n  5\n2A\n330\n3\n100\nAcDbSymbolTableRecord\n100\nAcDbRegAppTableRecord\n  2\nACAD\n 70\n0\n  0\nAPPID\n  5\n37\n330\n3\n100\nAcDbSymbolTableRecord\n100\nAcDbRegAppTableRecord\n  2\nHATCHBACKGROUNDCOLOR\n 70\n0\n  0\nAPPID\n  5\n38\n330\n3\n100\nAcDbSymbolTableRecord\n100\nAcDbRegAppTableRecord\n  2\nEZDXF\n 70\n0\n  0\nENDTAB\n  0\nTABLE\n  2\nDIMSTYLE\n  5\n4\n330\n0\n100\nAcDbSymbolTable\n 70\n1\n100\nAcDbDimStyleTable\n  0\nDIMSTYLE\n105\n2B\n330\n4\n100\nAcDbSymbolTableRecord\n100\nAcDbDimStyleTableRecord\n  2\nStandard\n 70\n0\n 40\n1.0\n 41\n2.5\n 42\n0.625\n 43\n3.75\n 44\n1.25\n 45\n0.0\n 46\n0.0\n 47\n0.0\n 48\n0.0\n 49\n2.5\n140\n2.5\n141\n2.5\n142\n0.0\n143\n0.03937007874\n144\n1.0\n145\n0.0\n146\n1.0\n147\n0.625\n148\n0.0\n 69\n0\n 70\n0\n 71\n0\n 72\n0\n 73\n0\n 74\n0\n 75\n0\n 76\n0\n 77\n1\n 78\n8\n 79\n3\n170\n0\n171\n3\n172\n1\n173\n0\n174\n0\n175\n0\n176\n0\n177\n0\n178\n0\n179\n2\n271\n2\n272\n2\n273\n2\n274\n3\n275\n0\n276\n0\n277\n2\n278\n44\n279\n0\n280\n0\n281\n0\n282\n0\n283\n0\n284\n8\n285\n0\n286\n0\n288\n0\n289\n3\n290\n0\n371\n-2\n372\n-2\n  0\nENDTAB\n  0\nTABLE\n  2\nBLOCK_RECORD\n  5\n9\n330\n0\n100\nAcDbSymbolTable\n 70\n2\n  0\nBLOCK_RECORD\n  5\n17\n330\n9\n100\nAcDbSymbolTableRecord\n100\nAcDbBlockTableRecord\n  2\n*Model_Space\n340\n1A\n 70\n0\n280\n1\n281\n0\n  0\nBLOCK_RECORD\n  5\n1B\n330\n9\n100\nAcDbSymbolTableRecord\n100\nAcDbBlockTableRecord\n  2\n*Paper_Space\n340\n1E\n 70\n0\n280\n1\n281\n0\n  0\nENDTAB\n  0\nENDSEC\n  0\nSECTION\n  2\nBLOCKS\n  0\nBLOCK\n  5\n18\n330\n17\n100\nAcDbEntity\n  8\n0\n100\nAcDbBlockBegin\n  2\n*Model_Space\n 70\n0\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  3\n*Model_Space\n  1\n\n  0\nENDBLK\n  5\n19\n330\n17\n100\nAcDbEntity\n  8\n0\n100\nAcDbBlockEnd\n  0\nBLOCK\n  5\n1C\n330\n1B\n100\nAcDbEntity\n  8\n0\n100\nAcDbBlockBegin\n  2\n*Paper_Space\n 70\n0\n 10\n0.0\n 20\n0.0\n 30\n0.0\n  3\n*Paper_Space\n  1\n\n  0\nENDBLK\n  5\n1D\n330\n1B\n100\nAcDbEntity\n  8\n0\n100\nAcDbBlockEnd\n  0\nENDSEC\n  0\nSECTION\n  2\nENTITIES\n", "foot": "  0\nENDSEC\n  0\nSECTION\n  2\nOBJECTS\n  0\nDICTIONARY\n  5\nA\n330\n0\n100\nAcDbDictionary\n281\n1\n  3\nACAD_COLOR\n350\nB\n  3\nACAD_GROUP\n350\nC\n  3\nACAD_LAYOUT\n350\nD\n  3\nACAD_MATERIAL\n350\nE\n  3\nACAD_MLEADERSTYLE\n350\nF\n  3\nACAD_MLINESTYLE\n350\n10\n  3\nACAD_PLOTSETTINGS\n350\n11\n  3\nACAD_PLOTSTYLENAME\n350\n12\n  3\nACAD_SCALELIST\n350\n14\n  3\nACAD_TABLESTYLE\n350\n15\n  3\nACAD_VISUALSTYLE\n350\n16\n  3\nEZDXF_META\n350\n2D\n  0\nDICTIONARY\n  5\nB\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nDICTIONARY\n  5\nC\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nDICTIONARY\n  5\nD\n330\nA\n100\nAcDbDictionary\n281\n1\n  3\nModel\n350\n1A\n  3\nLayout1\n350\n1E\n  0\nDICTIONARY\n  5\nE\n330\nA\n100\nAcDbDictionary\n281\n1\n  3\nByBlock\n350\n1F\n  3\nByLayer\n350\n20\n  3\nGlobal\n350\n21\n  0\nDICTIONARY\n  5\nF\n330\nA\n100\nAcDbDictionary\n281\n1\n  3\nStandard\n350\n2C\n  0\nDICTIONARY\n  5\n10\n330\nA\n100\nAcDbDictionary\n281\n1\n  3\nStandard\n350\n22\n  0\nDICTIONARY\n  5\n11\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nACDBDICTIONARYWDFLT\n  5\n12\n330\nA\n100\nAcDbDictionary\n281\n1\n  3\nNormal\n350\n13\n100\nAcDbDictionaryWithDefault\n340\n13\n  0\nACDBPLACEHOLDER\n  5\n13\n330\n12\n  0\nDICTIONARY\n  5\n14\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nDICTIONARY\n  5\n15\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nDICTIONARY\n  5\n16\n330\nA\n100\nAcDbDictionary\n281\n1\n  0\nLAYOUT\n  5\n1A\n330\nD\n100\nAcDbPlotSettings\n  1\n\n  4\nA3\n  6\n\n 40\n7.5\n 41\n20.0\n 42\n7.5\n 43\n20.0\n 44\n420.0\n 45\n297.0\n 46\n0.0\n 47\n0.0\n 48\n0.0\n 49\n0.0\n140\n0.0\n141\n0.0\n142\n1.0\n143\n1.0\n 70\n1024\n 72\n1\n 73\n0\n 74\n5\n  7\n\n 75\n16\n 76\n0\n 77\n2\n 78\n300\n147\n1.0\n148\n0.0\n149\n0.0\n100\nAcDbLayout\n  1\nModel\n 70\n1\n 71\n0\n 10\n0.0\n 20\n0.0\n 11\n420.0\n 21\n297.0\n 12\n0.0\n 22\n0.0\n 32\n0.0\n 14\n1e+20\n 24\n1e+20\n 34\n1e+20\n 15\n-1e+20\n 25\n-1e+20\n 35\n-1e+20\n146\n0.0\n 13\n0.0\n 23\n0.0\n 33\n0.0\n 16\n1.0\n 26\n0.0\n 36\n0.0\n 17\n0.0\n 27\n1.0\n 37\n0.0\n 76\n1\n330\n17\n  0\nLAYOUT\n  5\n1E\n330\nD\n100\nAcDbPlotSettings\n  1\n\n  4\nA3\n  6\n\n 40\n7.5\n 41\n20.0\n 42\n7.5\n 43\n20.0\n 44\n420.0\n 45\n297.0\n 46\n0.0\n 47\n0.0\n 48\n0.0\n 49\n0.0\n140\n0.0\n141\n0.0\n142\n1.0\n143\n1.0\n 70\n0\n 72\n1\n 73\n0\n 74\n5\n  7\n\n 75\n16\n 76\n0\n 77\n2\n 78\n300\n147\n1.0\n148\n0.0\n149\n0.0\n100\nAcDbLayout\n  1\nLayout1\n 70\n1\n 71\n1\n 10\n0.0\n 20\n0.0\n 11\n420.0\n 21\n297.0\n 12\n0.0\n 22\n0.0\n 32\n0.0\n 14\n1e+20\n 24\n1e+20\n 34\n1e+20\n 15\n-1e+20\n 25\n-1e+20\n 35\n-1e+20\n146\n0.0\n 13\n0.0\n 23\n0.0\n 33\n0.0\n 16\n1.0\n 26\n0.0\n 36\n0.0\n 17\n0.0\n 27\n1.0\n 37\n0.0\n 76\n1\n330\n1B\n  0\nMATERIAL\n  5\n1F\n102\n{ACAD_REACTORS\n330\nE\n102\n}\n330\nE\n100\nAcDbMaterial\n  1\nByBlock\n  2\n\n 70\n0\n 40\n1.0\n 71\n1\n 41\n1.0\n 91\n-1023410177\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 44\n0.5\n 73\n0\n 45\n1.0\n 46\n1.0\n 77\n1\n  4\n\n 78\n1\n 79\n1\n170\n1\n 48\n1.0\n171\n1\n  6\n\n172\n1\n173\n1\n174\n1\n140\n1.0\n141\n1.0\n175\n1\n  7\n\n176\n1\n177\n1\n178\n1\n143\n1.0\n179\n1\n  8\n\n270\n1\n271\n1\n272\n1\n145\n1.0\n146\n1.0\n273\n1\n  9\n\n274\n1\n275\n1\n276\n1\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 94\n63\n  0\nMATERIAL\n  5\n20\n102\n{ACAD_REACTORS\n330\nE\n102\n}\n330\nE\n100\nAcDbMaterial\n  1\nByLayer\n  2\n\n 70\n0\n 40\n1.0\n 71\n1\n 41\n1.0\n 91\n-1023410177\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 44\n0.5\n 73\n0\n 45\n1.0\n 46\n1.0\n 77\n1\n  4\n\n 78\n1\n 79\n1\n170\n1\n 48\n1.0\n171\n1\n  6\n\n172\n1\n173\n1\n174\n1\n140\n1.0\n141\n1.0\n175\n1\n  7\n\n176\n1\n177\n1\n178\n1\n143\n1.0\n179\n1\n  8\n\n270\n1\n271\n1\n272\n1\n145\n1.0\n146\n1.0\n273\n1\n  9\n\n274\n1\n275\n1\n276\n1\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 94\n63\n  0\nMATERIAL\n  5\n21\n102\n{ACAD_REACTORS\n330\nE\n102\n}\n330\nE\n100\nAcDbMaterial\n  1\nGlobal\n  2\n\n 70\n0\n 40\n1.0\n 71\n1\n 41\n1.0\n 91\n-1023410177\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 44\n0.5\n 73\n0\n 45\n1.0\n 46\n1.0\n 77\n1\n  4\n\n 78\n1\n 79\n1\n170\n1\n 48\n1.0\n171\n1\n  6\n\n172\n1\n173\n1\n174\n1\n140\n1.0\n141\n1.0\n175\n1\n  7\n\n176\n1\n177\n1\n178\n1\n143\n1.0\n179\n1\n  8\n\n270\n1\n271\n1\n272\n1\n145\n1.0\n146\n1.0\n273\n1\n  9\n\n274\n1\n275\n1\n276\n1\n 42\n1.0\n 72\n1\n  3\n\n 73\n1\n 74\n1\n 75\n1\n 94\n63\n  0\nMLINESTYLE\n  5\n22\n102\n{ACAD_REACTORS\n330\n10\n102\n}\n330\n10\n100\nAcDbMlineStyle\n  2\nStandard\n 70\n0\n  3\n\n 62\n256\n 51\n90.0\n 52\n90.0\n 71\n2\n 49\n0.5\n 62\n256\n  6\nBYLAYER\n 49\n-0.5\n 62\n256\n  6\nBYLAYER\n  0\nMLEADERSTYLE\n  5\n2C\n102\n{ACAD_REACTORS\n330\nF\n102\n}\n330\nF\n100\nAcDbMLeaderStyle\n179\n2\n170\n2\n171\n1\n172\n0\n 90\n2\n 40\n0.0\n 41\n0.0\n173\n1\n 91\n-1056964608\n 92\n-2\n290\n1\n 42\n2.0\n291\n1\n 43\n8.0\n  3\nStandard\n 44\n4.0\n300\n\n342\n29\n174\n1\n175\n1\n176\n0\n178\n1\n 93\n-1056964608\n 45\n4.0\n292\n0\n297\n0\n 46\n4.0\n 94\n-1056964608\n 47\n1.0\n 49\n1.0\n140\n1.0\n294\n1\n141\n0.0\n177\n0\n142\n1.0\n295\n0\n296\n0\n143\n3.75\n271\n0\n272\n9\n273\n9\n  0\nDICTIONARY\n  5\n2D\n330\nA\n100\nAcDbDictionary\n280\n1\n281\n1\n  3\nCREATED_BY_EZDXF\n350\n2E\n  3\nWRITTEN_BY_EZDXF\n350\n39\n  0\nDICTIONARYVAR\n  5\n2E\n330\n2D\n100\nDictionaryVariables\n280\n0\n  1\n1.4.4 @ 2026-10-07T20:05:07.423817+00:00\n  0\nDICTIONARYVAR\n  5\n39\n330\n2D\n100\nDictionaryVariables\n280\n0\n  1\n1.4.4 @ 2026-10-07T20:05:07.428944+00:00\n  0\nENDSEC\n  0\nEOF\n"};
+/* ======================================================================
+   Sacar para dibujar: DXF de ecos y relieve (splines reales) + PNG de alta calidad
+   ====================================================================== */
+const XH=1,XNX=Math.round(W/XH),XNY=Math.round(H/XH);          // rejilla de curvas: 1 m
+const lineLen=(P,closed)=>{let l=0;for(let i=1;i<P.length;i++)l+=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);if(closed&&P.length>1)l+=Math.hypot(P[0][0]-P[P.length-1][0],P[0][1]-P[P.length-1][1]);return l;};
+function resampleLine(pts,ds,closed){
+  const P=closed?pts.concat([pts[0]]):pts,n=P.length,s=[0];for(let i=1;i<n;i++)s.push(s[i-1]+Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]));
+  const L=s[n-1];if(L<1e-6)return {pts:[pts[0]],s:[0]};
+  const m=Math.max(Math.round(L/ds),closed?4:1),out=[];let k=0;const cnt=closed?m:m+1;
+  for(let q=0;q<cnt;q++){const t=q*L/m;while(k<n-2&&s[k+1]<t)k++;const seg=s[k+1]-s[k],u=seg>1e-9?(t-s[k])/seg:0;out.push([P[k][0]+(P[k+1][0]-P[k][0])*u,P[k][1]+(P[k+1][1]-P[k][1])*u]);}
+  return {pts:out};}
+function gaussP(P,sigma,closed){const n=P.length;if(n<5||sigma<=0)return P;const r=Math.ceil(3*sigma),w=[];let sw=0;for(let i=-r;i<=r;i++){const v=Math.exp(-i*i/(2*sigma*sigma));w.push(v);sw+=v;}
+  const out=new Array(n);for(let i=0;i<n;i++){let x=0,y=0;for(let j=-r;j<=r;j++){let q=i+j;if(closed)q=((q%n)+n)%n;else q=q<0?0:q>=n?n-1:q;x+=P[q][0]*w[j+r];y+=P[q][1]*w[j+r];}out[i]=[x/sw,y/sw];}return out;}
+function contourLines(val,level){            // marching squares sobre la rejilla de curvas (y hacia arriba)
+  const nx=XNX,ny=XNY,N=nx*ny,h=XH,ox=0,oy=H,segs=[];
+  for(let j=0;j<ny-1;j++)for(let i=0;i<nx-1;i++){
+    const a=j*nx+i,b=a+1,d=a+nx,c=d+1,va=val[a],vb=val[b],vc=val[c],vd=val[d];
+    const idx=((va>=level)<<3)|((vb>=level)<<2)|((vc>=level)<<1)|(vd>=level?1:0);if(idx===0||idx===15)continue;
+    const x0=ox+(i+.5)*h,y0=oy-(j+.5)*h;
+    const T=()=>[j*nx+i,x0+h*(level-va)/(vb-va),y0],R=()=>[N+j*nx+i+1,x0+h,y0-h*(level-vb)/(vc-vb)],B=()=>[(j+1)*nx+i,x0+h*(level-vd)/(vc-vd),y0-h],L=()=>[N+j*nx+i,x0,y0-h*(level-va)/(vd-va)];
+    const add=(p,q)=>segs.push(p[0],q[0],p[1],p[2],q[1],q[2]);
+    switch(idx){case 1:case 14:add(L(),B());break;case 2:case 13:add(B(),R());break;case 4:case 11:add(T(),R());break;case 8:case 7:add(T(),L());break;case 3:case 12:add(L(),R());break;case 6:case 9:add(T(),B());break;
+      case 5:case 10:{const ctr=(va+vb+vc+vd)/4>=level,ac=idx===10;if(ac===ctr){add(T(),R());add(B(),L());}else{add(T(),L());add(R(),B());}break;}}
+  }
+  const ns=segs.length/6,map=new Map();
+  for(let s=0;s<ns;s++)for(let e=0;e<2;e++){const k=segs[s*6+e];const l=map.get(k);if(l)l.push(s);else map.set(k,[s]);}
+  const used=new Uint8Array(ns),lines=[];
+  const walk=(k,out)=>{for(;;){const l=map.get(k);let nx_=-1;for(const t of l)if(!used[t]){nx_=t;break;}if(nx_<0)return k;used[nx_]=1;const other=segs[nx_*6]===k?1:0;out.push([segs[nx_*6+2+other*2],segs[nx_*6+3+other*2]]);k=segs[nx_*6+other];}};
+  for(let s0=0;s0<ns;s0++){if(used[s0])continue;used[s0]=1;
+    const fwd=[[segs[s0*6+2],segs[s0*6+3]],[segs[s0*6+4],segs[s0*6+5]]];const kEnd=walk(segs[s0*6+1],fwd);const back=[];const kStart=walk(segs[s0*6],back);
+    let pts=back.reverse().concat(fwd);const closed=kStart===kEnd&&pts.length>3;
+    if(closed&&Math.hypot(pts[0][0]-pts[pts.length-1][0],pts[0][1]-pts[pts.length-1][1])<1e-6)pts=pts.slice(0,-1);
+    lines.push({pts,len:lineLen(pts,closed),closed});}
+  return lines;}
+function polishLines(lines,ds,sigma,minLen){const out=[];for(const l of lines){if(l.len<minLen)continue;const R=resampleLine(l.pts,ds,l.closed).pts;if(R.length<4)continue;out.push({pts:gaussP(R,sigma,l.closed),closed:l.closed});}return out;}
+
+/* campo para las curvas (rejilla 2,5 m) */
+function fieldFor(m){const n=XNX*XNY,A={h:new Float32Array(n),r:new Float32Array(n),g:new Float32Array(n),b:new Float32Array(n),w:new Float32Array(n)};(m==='cotas'?fieldCotas:fieldOndas)(XNX,XNY,A,t);return A;}
+function flipRows(A){ // la rejilla del campo tiene y hacia abajo; contourLines usa el mismo orden (fila 0 = arriba) con y=H-(j+.5)h
+  return A;}
+let lastStep=.25;
+function niceStep(A){let m=0;for(let k=0;k<A.h.length;k++){const v=Math.abs(A.h[k]);if(v>m)m=v;}const r=m/5,N=[.005,.01,.02,.05,.1,.2,.25,.5,1];for(const v of N)if(v>=r)return lastStep=v;return lastStep=1;}
+function levelsOf(A,step){let mn=1e9,mx=-1e9;for(let k=0;k<A.h.length;k++){const v=A.h[k];if(v<mn)mn=v;if(v>mx)mx=v;}const out=[];for(let L=Math.ceil(mn/step);L*step<=mx;L++)out.push(+(L*step).toFixed(4));return out;}
+function activeTypes(){const c={};for(const s of stones)c[s.type]=(c[s.type]||0)+1;return c;}
+
+/* ---- DXF ---- */
+const TYK={ayuntamiento:'AYUNTAMIENTO',trabajo:'TRABAJO',cultura:'CULTURAL',equipamiento:'EQUIPAMIENTO',manantial:'MANANTIAL'};
+const TYC={ayuntamiento:5,trabajo:30,cultura:200,equipamiento:94,manantial:4};
+function aciOf(n){for(const k in TYK)if(n.endsWith('_'+TYK[k]))return TYC[k];
+  if(n==='ECOS_CRESTA')return 5;if(n==='ECOS_VALLE')return 140;if(n==='ECOS_CERO')return 8;if(n==='ZONAS')return 6;if(n==='COTAS_MAESTRAS')return 250;if(n==='COTAS')return 8;if(n==='CUADRICULA')return 253;return 7;}
+function solveDense(A,B,n,m){for(let c=0;c<n;c++){let p=c,mx=Math.abs(A[c*n+c]);for(let r=c+1;r<n;r++){const v=Math.abs(A[r*n+c]);if(v>mx){mx=v;p=r;}}
+    if(p!==c){for(let k=0;k<n;k++){const t=A[c*n+k];A[c*n+k]=A[p*n+k];A[p*n+k]=t;}for(let k=0;k<m;k++){const t=B[c*m+k];B[c*m+k]=B[p*m+k];B[p*m+k]=t;}}
+    const d=A[c*n+c]||1e-12;for(let r=c+1;r<n;r++){const f=A[r*n+c]/d;if(!f)continue;for(let k=c;k<n;k++)A[r*n+k]-=f*A[c*n+k];for(let k=0;k<m;k++)B[r*m+k]-=f*B[c*m+k];}}
+  for(let c=n-1;c>=0;c--){for(let k=0;k<m;k++){let s=B[c*m+k];for(let q=c+1;q<n;q++)s-=A[c*n+q]*B[q*m+k];B[c*m+k]=s/(A[c*n+c]||1e-12);}}return B;}
+function openSpline(F){const n=F.length-1,p=3,t=[0];let tot=0;const d=[0];
+  for(let i=1;i<=n;i++){d.push(Math.hypot(F[i][0]-F[i-1][0],F[i][1]-F[i-1][1],F[i][2]-F[i-1][2]));tot+=d[i];}
+  let acc=0;for(let i=1;i<=n;i++){acc+=d[i];t.push(tot>0?acc/tot:i/n);}
+  const U=new Array(n+p+2).fill(0);for(let i=n+1;i<=n+p+1;i++)U[i]=1;
+  for(let j=1;j<=n-p;j++){let s=0;for(let i=j;i<=j+p-1;i++)s+=t[i];U[j+p]=s/p;}
+  const A=new Float64Array((n+1)*(n+1)),B=new Float64Array((n+1)*3);
+  for(let k=0;k<=n;k++){const u=t[k];let span=p;if(u>=U[n+1])span=n;else{while(span<n&&u>=U[span+1])span++;}
+    const Nn=[1,0,0,0],left=[0,0,0,0],right=[0,0,0,0];
+    for(let j=1;j<=p;j++){left[j]=u-U[span+1-j];right[j]=U[span+j]-u;let saved=0;for(let r=0;r<j;r++){const den=right[r+1]+left[j-r],tmp=den?Nn[r]/den:0;Nn[r]=saved+right[r+1]*tmp;saved=left[j-r]*tmp;}Nn[j]=saved;}
+    for(let j=0;j<=p;j++)A[k*(n+1)+span-p+j]=Nn[j];B[k*3]=F[k][0];B[k*3+1]=F[k][1];B[k*3+2]=F[k][2];}
+  solveDense(A,B,n+1,3);const ctrl=[];for(let i=0;i<=n;i++)ctrl.push([B[i*3],B[i*3+1],B[i*3+2]]);return {ctrl,knots:U};}
+function closedSpline(F){const n=F.length,A=new Float64Array(n*n),B=new Float64Array(n*3);
+  for(let i=0;i<n;i++){A[i*n+(i+n-1)%n]+=1;A[i*n+i]+=4;A[i*n+(i+1)%n]+=1;B[i*3]=6*F[i][0];B[i*3+1]=6*F[i][1];B[i*3+2]=6*F[i][2];}
+  solveDense(A,B,n,3);const c=[];for(let i=0;i<n;i++)c.push([B[i*3],B[i*3+1],B[i*3+2]]);
+  const ctrl=c.concat([c[0],c[1],c[2]]),knots=[];for(let i=0;i<ctrl.length+4;i++)knots.push(i);return {ctrl,knots};}
+function decimate(P,closed,step){const n=P.length;if(n<2)return P;let L=0;const m=closed?n:n-1;for(let i=0;i<m;i++){const a=P[i],b=P[(i+1)%n];L+=Math.hypot(b[0]-a[0],b[1]-a[1]);}
+  const mean=Math.max(L/m,1e-6),k=Math.max(1,Math.round(step/mean));
+  if(closed){let idx=[];for(let i=0;i<n;i+=k)idx.push(i);if(idx.length<8){idx=[];for(let q=0;q<8;q++)idx.push(Math.floor(q*n/8));}return idx.map(i=>P[i]);}
+  const idx=[];for(let i=0;i<n;i+=k)idx.push(i);
+  if(idx[idx.length-1]!==n-1){if(n-1-idx[idx.length-1]<k*.4&&idx.length>2)idx[idx.length-1]=n-1;else idx.push(n-1);}return idx.map(i=>P[i]);}
+const asc=t=>String(t).replace(/[^\x20-\x7E]/g,c=>({'á':'a','é':'e','í':'i','ó':'o','ú':'u','ñ':'n','Á':'A','É':'E','Í':'I','Ó':'O','Ú':'U','Ñ':'N','−':'-','×':'x'}[c]||'_'));
+function DXF(){let HND=0x10000;const H_=()=>(HND++).toString(16).toUpperCase(),E=[],layers=new Map();
+  const fx=v=>{const r=Math.round(v*1000)/1000;return String(Object.is(r,-0)?0:r);};
+  const lay=name=>{if(!layers.has(name))layers.set(name,aciOf(name));return name;};
+  const ent=(type,layer,sub,body)=>{lay(layer);E.push(`  0\n${type}\n  5\n${H_()}\n330\n17\n100\nAcDbEntity\n  8\n${layer}\n100\n${sub}\n${body}`);};
+  const api={
+    spline(layer,P,closed,z,step){const Q=P.map(p=>[p[0],p[1],p.length>2?p[2]:(z||0)]),F=decimate(Q,closed,step||9);
+      if(F.length<4){for(let i=0;i<F.length-1;i++)api.line(layer,F[i],F[i+1]);return;}
+      const sp=closed?closedSpline(F):openSpline(F);
+      ent('SPLINE',layer,'AcDbSpline',` 70\n${closed?3:0}\n 71\n3\n 72\n${sp.knots.length}\n 73\n${sp.ctrl.length}\n 74\n0\n`+sp.knots.map(k=>' 40\n'+(Math.round(k*1e6)/1e6)).join('\n')+'\n'+sp.ctrl.map(p=>` 10\n${fx(p[0])}\n 20\n${fx(p[1])}\n 30\n${fx(p[2])}`).join('\n'));},
+    line(layer,a,b){ent('LINE',layer,'AcDbLine',` 10\n${fx(a[0])}\n 20\n${fx(a[1])}\n 30\n${fx(a[2]||0)}\n 11\n${fx(b[0])}\n 21\n${fx(b[1])}\n 31\n${fx(b[2]||0)}`);},
+    circle(layer,x,y,r){ent('CIRCLE',layer,'AcDbCircle',` 10\n${fx(x)}\n 20\n${fx(y)}\n 30\n0\n 40\n${fx(r)}`);},
+    text(layer,x,y,z,h,s){ent('TEXT',layer,'AcDbText',` 10\n${fx(x)}\n 20\n${fx(y)}\n 30\n${fx(z)}\n 40\n${h}\n  1\n${asc(s)}\n100\nAcDbText`);},
+    done(){let recs='';layers.forEach((col,name)=>{recs+=`  0\nLAYER\n  5\n${H_()}\n330\n1\n100\nAcDbSymbolTableRecord\n100\nAcDbLayerTableRecord\n  2\n${name}\n 70\n0\n 62\n${col}\n  6\nContinuous\n370\n-3\n390\n13\n347\n21\n`;});
+      return DXF_TPL.head.replace('@@NLAY@@',String(layers.size+2)).replace('@@SEED@@',(HND+64).toString(16).toUpperCase())+recs+DXF_TPL.tail+E.join('\n')+'\n'+DXF_TPL.foot;}};
+  return api;}
+const stoneR=s=>5+1.8*s.w;
+function buildDXF(){
+  const D=DXF(),cad=s=>[s.x,H-s.y];
+  // marco y cuadrícula de 100 m
+  [[[0,0],[W,0]],[[W,0],[W,H]],[[W,H],[0,H]],[[0,H],[0,0]]].forEach(([a,b])=>D.line('MARCO',a,b));
+  for(let x=100;x<W;x+=100)D.line('CUADRICULA',[x,0],[x,H]);for(let y=100;y<H;y+=100)D.line('CUADRICULA',[0,y],[W,y]);
+  for(let x=0;x<=W;x+=100)D.text('CUADRICULA',x+2,2,0,6,String(x));for(let y=100;y<=H;y+=100)D.text('CUADRICULA',2,y+2,0,6,String(y));
+  // ecos: curvas del campo de ondas en este instante
+  const A=fieldFor('ondas'),step=niceStep(A);
+  for(const L of levelsOf(A,step)){const layer=Math.abs(L)<1e-6?'ECOS_CERO':L>0?'ECOS_CRESTA':'ECOS_VALLE';
+    polishLines(contourLines(A.h,L),2,1.2,12).forEach(l=>D.spline(layer,l.pts,l.closed,L,9));}
+  // ecos individuales: frentes de onda circulares de cada piedra
+  for(const s of stones){const a=t-s.t0;if(a<0)continue;const p=P(s.w);if(Math.max(0,1-a/p.life)<=0)continue;const R=p.c*a,[cx,cy]=cad(s);
+    for(let q=-Math.floor(2.6*p.sg/p.lam);q<=Math.floor(2.6*p.sg/p.lam);q++){const r=R+q*p.lam;if(r>1)D.circle('ECO_'+TYK[s.type],cx,cy,r);}}
+  zoneLines().forEach(l=>D.spline('ZONAS',l.pts,l.closed,0,9));
+  // relieve final (cotas): curvas cada 0,8 m, maestras cada 4 m
+  const C=fieldFor('cotas'),cs=.8;
+  for(const L of levelsOf(C,cs)){if(L<cs*.5)continue;const master=Math.abs(L/4-Math.round(L/4))<1e-3;
+    polishLines(contourLines(C.h,L),2,1.2,12).forEach(l=>D.spline(master?'COTAS_MAESTRAS':'COTAS',l.pts,l.closed,L,9));}
+  for(const s of stones){const [cx,cy]=cad(s);D.circle('MESETA_'+TYK[s.type],cx,cy,rStat(s.w));D.circle('PIEDRAS_'+TYK[s.type],cx,cy,stoneR(s));D.text('TEXTOS',cx+stoneR(s)+3,cy,0,7,s.name+'  (peso '+s.w+')');}
+  D.text('TEXTOS',4,H+10,0,10,'Estanque de piedras - '+stones.length+' piedras - t = '+t.toFixed(1)+' s - unidades: metros, y hacia arriba');
+  return D.done();}
+
+/* ---- PNG ---- */
+const hex=c=>`rgb(${c[0]},${c[1]},${c[2]})`;
+function tintAt(A,x,y){const i=Math.min(XNX-1,Math.max(0,Math.floor(x/XH))),j=Math.min(XNY-1,Math.max(0,Math.floor((H-y)/XH))),k=j*XNX+i,w=A.w[k];if(w<.06)return null;return [A.r[k]/w|0,A.g[k]/w|0,A.b[k]/w|0];}
+function strokeTinted(c,pts,closed,sc,A,alpha,lw,dash){
+  c.lineWidth=lw;c.setLineDash(dash||[]);let run=null,rc='';
+  const flush=()=>{if(run&&run.length>1){c.strokeStyle=rc;c.globalAlpha=alpha;c.lineJoin='round';c.lineCap='round';c.beginPath();smoothPath(c,run,false,sc);c.stroke();}};
+  const P=closed?pts.concat([pts[0]]):pts;
+  for(let i=0;i<P.length;i++){const col=tintAt(A,P[i][0],P[i][1]),k=col?hex(col):'rgb(90,110,120)';
+    if(k!==rc){const last=run&&run.length?run[run.length-1]:null;flush();rc=k;run=last?[last]:[];}run.push(P[i]);}
+  flush();c.globalAlpha=1;}
+function canvasOf(px){const w=px,h=Math.round(px*H/W),c=document.createElement('canvas');c.width=w;c.height=h;return c;}
+function drawStonesOn(c,sc,labels){for(const s of stones){const col=TYPES[s.type].c,x=s.x*sc,y=s.y*sc,r=Math.max(4,stoneR(s)*sc);
+  c.beginPath();c.arc(x,y,r,0,6.2832);c.fillStyle=`rgb(${col})`;c.fill();c.lineWidth=Math.max(1.5,sc*.6);c.strokeStyle='#fff';c.stroke();c.lineWidth=Math.max(1,sc*.25);c.strokeStyle='rgba(20,40,50,.8)';c.stroke();
+  if(labels){c.font=`600 ${Math.max(11,sc*5)}px Instrument Sans,system-ui,sans-serif`;c.fillStyle='#15303a';c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=Math.max(2.5,sc*1.4);c.strokeText(s.name,x+r+4,y+4);c.fillText(s.name,x+r+4,y+4);}}}
+function pngOndas(px,mode){const c=canvasOf(px),gw=c.width,gh=c.height,n=gw*gh,A={h:new Float32Array(n),r:new Float32Array(n),g:new Float32Array(n),b:new Float32Array(n),w:new Float32Array(n)};
+  (mode==='cotas'?fieldCotas:fieldOndas)(gw,gh,A,t);const img=shade(mode,gw,gh,A,mode==='cotas'?2:1);c.getContext('2d').putImageData(img,0,0);return c;}
+function pngCalco(px,plantilla){const c=canvasOf(px),g=c.getContext('2d'),sc=c.width/W,A=fieldFor('ondas');
+  if(plantilla){g.fillStyle='#fbfaf5';g.fillRect(0,0,c.width,c.height);
+    g.lineWidth=1;g.strokeStyle='rgba(120,140,150,.28)';g.setLineDash([]);
+    for(let x=0;x<=W;x+=100){g.beginPath();g.moveTo(x*sc,0);g.lineTo(x*sc,c.height);g.stroke();}for(let y=0;y<=H;y+=100){g.beginPath();g.moveTo(0,y*sc);g.lineTo(c.width,y*sc);g.stroke();}
+    g.font=`${Math.max(11,sc*4.5)}px Instrument Sans,system-ui,sans-serif`;g.fillStyle='rgba(60,80,90,.8)';for(let x=100;x<W;x+=100)g.fillText(x+' m',x*sc+3,Math.max(12,sc*5));for(let y=100;y<H;y+=100)g.fillText((H-y)+' m',3,y*sc-3);
+    const C=fieldFor('cotas');g.lineJoin='round';g.lineCap='round';for(const L of levelsOf(C,.8)){if(L<.4)continue;polishLines(contourLines(C.h,L),1.5,1.2,12).forEach(l=>{g.strokeStyle=Math.abs(L/4-Math.round(L/4))<1e-3?'rgba(90,80,70,.6)':'rgba(90,80,70,.3)';g.lineWidth=Math.max(1.2,sc*.4);g.setLineDash([]);g.beginPath();smoothPath(g,l.pts,l.closed,sc);g.stroke();});}}
+  const lw=Math.max(1.4,sc*.6);
+  let mxA=0;for(let k=0;k<A.h.length;k++){const v=Math.abs(A.h[k]);if(v>mxA)mxA=v;}const stepE=[.005,.01,.02,.025,.05,.1,.2,.25,.5,1].find(v=>v>=mxA/8)||1;g.setLineDash([]);g.lineJoin='round';g.lineCap='round';
+  const PAL=['#c1121f','#f3722c','#f9c74f','#90be6d','#2a9d8f','#277da1','#4361ee','#7b2cbf'];
+  const lv=levelsOf(A,stepE),ks=lv.map(L=>Math.round(Math.abs(L)/stepE)),K=Math.max(1,...ks);
+  const colK=k=>PAL[K<=1?0:Math.round((K-k)/(K-1)*(PAL.length-1))];
+  // de la menos importante a la más: las fuertes quedan encima
+  const order=lv.map((L,i)=>i).sort((i,j)=>ks[i]-ks[j]);
+  for(const i of order){const L=lv[i],k=ks[i],zero=k===0;
+    const col=zero?'#3a3f45':colK(k),w=zero?lw*.8:lw*(.8+.9*k/K);
+    polishLines(contourLines(A.h,L),1.5,1.2,12).forEach(l=>{g.strokeStyle=col;g.lineWidth=w;g.beginPath();smoothPath(g,l.pts,l.closed,sc);g.stroke();});}
+  if(plantilla){const lxx=sc*40;let lyy=sc*40+Math.max(18,sc*8)*7;g.font=`600 ${Math.max(12,sc*5.5)}px Instrument Sans,system-ui,sans-serif`;
+    g.fillStyle='#15303a';g.fillText('Importancia de las ondas',lxx,lyy);lyy+=Math.max(18,sc*8);
+    for(let k=K;k>=1;k--){g.strokeStyle=colK(k);g.lineWidth=lw*(.8+.9*k/K);g.beginPath();g.moveTo(lxx,lyy-4);g.lineTo(lxx+sc*14,lyy-4);g.stroke();g.fillStyle='#15303a';g.fillText(k===K?'máxima (cota ±'+(k*stepE).toFixed(2)+')':k===1?'mínima (±'+stepE+')':'±'+(k*stepE).toFixed(2),lxx+sc*18,lyy);lyy+=Math.max(18,sc*8);}}
+  if(plantilla){for(const s of stones){g.setLineDash([sc*6,sc*4]);g.lineWidth=Math.max(1,sc*.4);g.strokeStyle=`rgba(${TYPES[s.type].c},.7)`;g.beginPath();g.arc(s.x*sc,s.y*sc,rStat(s.w)*sc,0,6.2832);g.stroke();}g.setLineDash([]);}
+  drawStonesOn(g,sc,plantilla);
+  if(plantilla){g.setLineDash([]);g.strokeStyle='#15303a';g.lineWidth=Math.max(2,sc);g.strokeRect(1,1,c.width-2,c.height-2);
+    const bx=sc*40,by=c.height-sc*30;g.fillStyle='#15303a';g.fillRect(bx,by,sc*100,Math.max(3,sc*3));g.font=`600 ${Math.max(12,sc*5.5)}px Instrument Sans,system-ui,sans-serif`;g.fillText('0',bx,by-6);g.fillText('100 m',bx+sc*100-sc*14,by-6);
+    const ty=activeTypes();let lx=sc*40,ly=sc*40;g.font=`600 ${Math.max(12,sc*5.5)}px Instrument Sans,system-ui,sans-serif`;
+    for(const k in ty){g.fillStyle=`rgb(${TYPES[k].c})`;g.beginPath();g.arc(lx,ly-4,Math.max(5,sc*2.6),0,6.2832);g.fill();g.fillStyle='#15303a';g.fillText(TYPES[k].n+' ('+ty[k]+')',lx+Math.max(10,sc*5),ly);ly+=Math.max(18,sc*8);}
+    g.fillText('N',c.width-sc*34,sc*34);g.beginPath();g.moveTo(c.width-sc*30,sc*40);g.lineTo(c.width-sc*30,sc*70);g.lineWidth=Math.max(2,sc);g.strokeStyle='#15303a';g.stroke();}
+  return c;}
+
+/* ---- zonas: cada piedra manda en la región donde su distancia relativa (d / radio) es la menor ---- */
+const zoneR=s=>rStat(s.w);
+function zoneLines(){
+  const n=XNX*XNY,m1=new Float32Array(n).fill(1e9),m2=new Float32Array(n).fill(1e9),arg=new Int16Array(n).fill(-1),ST=stones;
+  for(let q=0;q<ST.length;q++){const s=ST[q],R=zoneR(s);
+    for(let j=0;j<XNY;j++){const y=(j+.5)*XH-s.y,row=j*XNX;for(let i=0;i<XNX;i++){const dx=(i+.5)*XH-s.x,ro=Math.sqrt(dx*dx+y*y)/R,k=row+i;
+      if(ro<m1[k]){m2[k]=m1[k];m1[k]=ro;arg[k]=q;}else if(ro<m2[k])m2[k]=ro;}}}
+  const out=[],f=new Float32Array(n);
+  for(let q=0;q<ST.length;q++){const s=ST[q],R=zoneR(s);
+    for(let j=0;j<XNY;j++){const y=(j+.5)*XH-s.y,row=j*XNX;for(let i=0;i<XNX;i++){const k=row+i;
+      if(arg[k]===q)f[k]=m2[k]-m1[k];else{const dx=(i+.5)*XH-s.x;f[k]=m1[k]-Math.sqrt(dx*dx+y*y)/R;}}}
+    polishLines(contourLines(f,0),1.5,1.2,15).forEach(l=>out.push({q,pts:l.pts,closed:l.closed}));}
+  return out;}
+function smoothPath(g,pts,closed,sc){const X=p=>p[0]*sc,Y=p=>(H-p[1])*sc,n=pts.length;if(n<2)return;
+  if(closed&&n>2){g.moveTo((X(pts[n-1])+X(pts[0]))/2,(Y(pts[n-1])+Y(pts[0]))/2);for(let i=0;i<n;i++){const a=pts[i],b=pts[(i+1)%n];g.quadraticCurveTo(X(a),Y(a),(X(a)+X(b))/2,(Y(a)+Y(b))/2);}g.closePath();}
+  else{g.moveTo(X(pts[0]),Y(pts[0]));for(let i=1;i<n-1;i++){const a=pts[i],b=pts[i+1];g.quadraticCurveTo(X(a),Y(a),(X(a)+X(b))/2,(Y(a)+Y(b))/2);}g.lineTo(X(pts[n-1]),Y(pts[n-1]));}}
+function pngZonas(px,variant,rings){
+  const c=canvasOf(px),g=c.getContext('2d'),sc=c.width/W;
+  if(variant==='blanco'){g.fillStyle='#ffffff';g.fillRect(0,0,c.width,c.height);}
+  if(variant==='color'){ // relleno plano por tipo a resolución media, ampliado con suavizado; las líneas se dibujan vectoriales encima
+    const rc=Math.min(px,3000),cw=rc,ch=Math.round(rc*H/W),im=new ImageData(cw,ch),D=im.data,k=W/cw;
+    for(let j=0;j<ch;j++){const y=(j+.5)*k;for(let i=0;i<cw;i++){const x=(i+.5)*k;let best=1e9,bi=0;
+      for(let q=0;q<stones.length;q++){const s=stones[q],dx=x-s.x,dy=y-s.y,ro=(dx*dx+dy*dy)/(zoneR(s)*zoneR(s));if(ro<best){best=ro;bi=q;}}
+      const col=TYPES[stones[bi].type].c,o=(j*cw+i)*4;D[o]=col[0]*.55+255*.45;D[o+1]=col[1]*.55+255*.45;D[o+2]=col[2]*.55+255*.45;D[o+3]=255;}}
+    const t2=document.createElement('canvas');t2.width=cw;t2.height=ch;t2.getContext('2d').putImageData(im,0,0);g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(t2,0,0,c.width,c.height);t2.width=0;}
+  g.lineJoin='round';g.lineCap='round';
+  if(rings){const C=fieldFor('cotas');g.strokeStyle='rgba(30,40,45,.85)';g.setLineDash([]);
+    for(const L of levelsOf(C,.8)){if(L<.4)continue;g.lineWidth=Math.max(1.5,sc*(Math.abs(L/4-Math.round(L/4))<1e-3?.55:.35));
+      polishLines(contourLines(C.h,L),1.5,1.2,12).forEach(l=>{g.beginPath();smoothPath(g,l.pts,l.closed,sc);g.stroke();});}}
+  g.strokeStyle='#10202a';g.lineWidth=Math.max(3,sc*1.1);g.setLineDash([]);
+  zoneLines().forEach(l=>{g.beginPath();smoothPath(g,l.pts,l.closed,sc);g.stroke();});
+  g.lineWidth=Math.max(4,sc*1.3);g.strokeRect(g.lineWidth/2,g.lineWidth/2,c.width-g.lineWidth,c.height-g.lineWidth);
+  return c;}
+async function pngBlob(c){const raw=new Uint8Array(await (await toBlob(c)).arrayBuffer());c.width=0;
+  // metadatos de 300 ppp (pHYs) para que Procreate y los programas de dibujo lo abran a tamaño de impresión
+  const ppm=11811,ph=new Uint8Array(21),dv=new DataView(ph.buffer);dv.setUint32(0,9);ph.set([112,72,89,115],4);dv.setUint32(8,ppm);dv.setUint32(12,ppm);ph[16]=1;dv.setUint32(17,crc32(ph.subarray(4,17)));
+  const out=new Uint8Array(raw.length+21);out.set(raw.subarray(0,33),0);out.set(ph,33);out.set(raw.subarray(33),54);return new Blob([out],{type:'image/png'});}
+const toBlob=c=>new Promise(r=>c.toBlob(r,'image/png'));
+const tick=ms=>new Promise(r=>setTimeout(r,ms||30));
+/* ---- zip ---- */
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function zipStore(files){const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+  for(const f of files){const name=enc.encode(f.name),raw=f.data,crc=crc32(raw),lh=new DataView(new ArrayBuffer(30));
+    lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(8,0,true);lh.setUint16(12,0x21,true);lh.setUint32(14,crc,true);lh.setUint32(18,raw.length,true);lh.setUint32(22,raw.length,true);lh.setUint16(26,name.length,true);
+    parts.push(new Uint8Array(lh.buffer),name,raw);
+    const ch=new DataView(new ArrayBuffer(46));ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(14,0x21,true);ch.setUint32(16,crc,true);ch.setUint32(20,raw.length,true);ch.setUint32(24,raw.length,true);ch.setUint16(28,name.length,true);ch.setUint32(42,off,true);
+    cen.push(new Uint8Array(ch.buffer),name);off+=30+name.length+raw.length;}
+  const cs=cen.reduce((a,b)=>a+b.length,0),end=new DataView(new ArrayBuffer(22));end.setUint32(0,0x06054b50,true);end.setUint16(8,files.length,true);end.setUint16(10,files.length,true);end.setUint32(12,cs,true);end.setUint32(16,off,true);
+  return new Blob([...parts,...cen,new Uint8Array(end.buffer)],{type:'application/zip'});}
+let dlP=null;const getDl=()=>{if(!dlP)dlP=(window.claude&&typeof window.claude.use==='function')?Promise.resolve(window.claude.use('downloads')).catch(()=>null):Promise.resolve(null);return dlP;};
+async function saveBlob(name,blob){const dl=await getDl();
+  if(dl){try{await dl.save({filename:name,data:blob});toast('Descarga lista: '+name);}catch(e){toast(e&&e.code==='declined'?'Descarga cancelada':'No se pudo descargar: '+((e&&e.message)||'error'));}return;}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},4000);toast('Descargando '+name);}
+function leeme(px){return ['ESTANQUE DE PIEDRAS - EXPORTACION PARA DIBUJAR','',
+ 'Piedras: '+stones.length+'. Instante de las ondas: t = '+t.toFixed(1)+' s. Unidades: metros; x hacia el este, y hacia arriba (como en CAD).','',
+ 'estanque_ecos_relieve.dxf   Splines reales. Capas:',
+ '   ECOS_CRESTA / ECOS_VALLE / ECOS_CERO  curvas del campo de ondas (equidistancia '+lastStep+' m, a su cota z)',
+ '   ECO_<TIPO>                            frentes de onda circulares de cada piedra, un color por tipo',
+ '   COTAS / COTAS_MAESTRAS                relieve final (mesetas): curva cada 0,8 m, maestra cada 4 m',
+ '   MESETA_<TIPO>, PIEDRAS_<TIPO>, TEXTOS circulos de meseta, piedras y nombres',
+ '   MARCO, CUADRICULA                     marco 1000 x 700 m y cuadricula cada 100 m',
+ '',
+ 'PNG (todos de '+px+' x '+Math.round(px*H/W)+' px, cubren el marco de 0,0 a '+W+','+H+' m):',
+ '   estanque_ondas_color.png     ondas con luz y color por tipo',
+ '   estanque_cotas_color.png     relieve final por colores con curvas',
+ '   estanque_calco.png           SOLO lineas continuas, un color por importancia (rojo = onda mas fuerte, violeta = mas debil; gris = nivel cero), fondo transparente',
+ '   estanque_plantilla.png       fondo claro con cuadricula de 100 m, escala, norte, leyenda y piedras',
+ '   estanque_zonas_lineas.png    contornos de las zonas (una por piedra), fondo transparente\r\n   estanque_zonas_blanco.png    zonas en blanco con linea negra: para ColorDrop en Procreate\r\n   estanque_zonas_color.png     zonas ya coloreadas por tipo. Capa DXF ZONAS con los mismos limites',
+ '   Todos los PNG a 300 ppi. Ondas y cotas en color se limitan a 4000 px.',
+ '',
+ 'COMO PONER UNA IMAGEN BAJO EL DXF EN AUTOCAD:',
+ '   1. Abre el DXF. 2. Comando IMAGEATTACH (o ADJUNTARIMAGEN) y elige el PNG.',
+ '   3. Punto de insercion 0,0. Escala = '+W+' / '+px+' = '+(W/px).toFixed(4)+' (o escribe el ancho: '+W+' m). Rotacion 0.',
+ '   4. Envia la imagen al fondo (DRAWORDER) y dibuja encima.',
+ '   En Blender/Photoshop/Procreate: usa la plantilla o el calco como capa de fondo y bloquea su escala.'].join('\r\n');}
+async function runExport(kind,btn){
+  if(!stones.length){toast('Tira alguna piedra primero');return;}
+  const px=+$('#pxw').value,old=btn.textContent;btn.disabled=true;const say=m=>{btn.textContent=m;};
+  try{
+    await tick();
+    if(kind==='dxf'){say('Generando DXF…');await tick();await saveBlob('estanque_ecos_relieve.dxf',new Blob([buildDXF()],{type:'application/dxf'}));}
+    else if(kind==='ondas'){say('Dibujando ondas…');await tick();await saveBlob('estanque_ondas_color.png',await pngBlob(pngOndas(Math.min(px,4000),'ondas')));}
+    else if(kind==='cotas'){say('Dibujando cotas…');await tick();await saveBlob('estanque_cotas_color.png',await pngBlob(pngOndas(Math.min(px,4000),'cotas')));}
+    else if(kind==='calco'){say('Dibujando calco…');await tick();await saveBlob('estanque_calco.png',await pngBlob(pngCalco(px,false)));}
+    else if(kind==='plan'){say('Dibujando plantilla…');await tick();await saveBlob('estanque_plantilla.png',await pngBlob(pngCalco(px,true)));}
+    else if(kind==='zonas'){const rg=$('#zrings').checked;for(const v of ['lineas','blanco','color']){say('Zonas '+v+'…');await tick();await saveBlob('estanque_zonas_'+v+'.png',await pngBlob(pngZonas(px,v,rg)));}}
+    else if(kind==='all'){const enc=new TextEncoder(),files=[];
+      say('DXF…');await tick();files.push({name:'estanque_ecos_relieve.dxf',data:enc.encode(buildDXF())});
+      const rg=$('#zrings').checked;
+      for(const [nm,fn,lab] of [['estanque_calco.png',()=>pngCalco(px,false),'calco'],['estanque_plantilla.png',()=>pngCalco(px,true),'plantilla'],['estanque_zonas_lineas.png',()=>pngZonas(px,'lineas',rg),'zonas (líneas)'],['estanque_zonas_blanco.png',()=>pngZonas(px,'blanco',rg),'zonas (blanco)'],['estanque_zonas_color.png',()=>pngZonas(px,'color',rg),'zonas (color)'],['estanque_ondas_color.png',()=>pngOndas(Math.min(px,4000),'ondas'),'ondas'],['estanque_cotas_color.png',()=>pngOndas(Math.min(px,4000),'cotas'),'cotas']]){
+        say('PNG '+lab+'…');await tick();files.push({name:nm,data:new Uint8Array(await (await pngBlob(fn())).arrayBuffer())});}
+      files.push({name:'LEEME.txt',data:enc.encode(leeme(px))});say('Empaquetando…');await tick();
+      await saveBlob('estanque-para-dibujar.zip',zipStore(files));}
+  }catch(e){console.error(e);toast('Error al exportar: '+((e&&e.message)||e));}
+  finally{btn.disabled=false;btn.textContent=old;}
+}
+[['#xZonas','zonas'],['#xDxf','dxf'],['#xOndas','ondas'],['#xCotas','cotas'],['#xCalco','calco'],['#xPlan','plan'],['#xAll','all']].forEach(([id,k])=>{$(id).onclick=e=>runExport(k,e.currentTarget);});
+
+
+/* ---- arranque ---- */
+if(!load())seed();
+setMode(mode);$('#dom').value=Math.round(dom*100);$('#domO').textContent=Math.round(dom*100)+'%';renderDomTypes();
+$('#vel').value=Math.round(vel*100);$('#velO').textContent=vel.toFixed(1).replace('.',',')+'×';
+renderTypes();renderList();sizeGrid();
+new ResizeObserver(sizeGrid).observe(stage);
+requestAnimationFrame(frame);
+})();
+</script>
+
+<a href="./" style="position:fixed;left:12px;bottom:12px;z-index:99999;font:600 12px/1 'Work Sans',system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;background:#0f0f0f;color:#fff;padding:9px 12px;border-radius:999px;text-decoration:none;border:1px solid #cc0000;box-shadow:0 4px 14px rgba(0,0,0,.25)">← Ciudad Acuática</a>
+</body></html>

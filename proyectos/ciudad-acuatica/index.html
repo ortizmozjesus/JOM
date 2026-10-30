@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ciudad Acuática · Proyectos 9 · Jesús Ortiz Muñoz</title>
+<meta name="description" content="Ciudad para 10.000 habitantes generada a partir de ondas: herramientas propias para proyectarla.">
+<meta property="og:title" content="Ciudad Acuática · Proyectos 9 — Jesús Ortiz Muñoz">
+<meta property="og:description" content="Ciudad para 10.000 habitantes generada a partir de ondas: herramientas propias para proyectarla.">
+<meta property="og:image" content="https://ortizmozjesus.github.io/JOM/proyectos/ciudad-acuatica/campo-de-niveles.webp">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<style>
+  .ficha{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:1.2rem 0 0}
+  .ficha div{border-top:1px solid var(--line);padding-top:.5rem}
+  .ficha b{display:block;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .ficha span{font-size:.88rem}
+  @media (max-width:760px){.ficha{grid-template-columns:1fr 1fr}}
+  .piezas{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem}
+  .pieza{display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--line);border-radius:10px;overflow:hidden;text-decoration:none;transition:border-color .25s,transform .25s}
+  .pieza:hover{border-color:var(--red);transform:translateY(-3px)}
+  .pieza img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top left;background:#1b1b1b;display:block}
+  .pieza .tx{padding:.9rem 1rem 1.1rem;display:flex;flex-direction:column;gap:.35rem}
+  .pieza h3{font-family:var(--fh);font-weight:400;letter-spacing:.03em;text-transform:uppercase;font-size:1.15rem}
+  .pieza p{font-size:.85rem;color:#cfcfcf}
+  .pieza .go{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-top:.3rem}
+  .texto{max-width:760px;display:grid;gap:.8rem;color:#d6d6d6;margin:0 0 2rem}
+  .texto h2{font-family:var(--fh);font-weight:400;text-transform:uppercase;letter-spacing:.03em;font-size:1.3rem;color:#fff;margin-top:.8rem}
+  @media (prefers-reduced-motion:reduce){.pieza,.pieza:hover{transition:none;transform:none}}
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="back" href="../../#interactivos">← JOM</a>
+  <span class="crumb">Proyectos 9 · Ciudad Acuática</span>
+  <span class="links"></span>
+</header>
+
+<section class="lab-hero"><p class="lab-eye">Urbanismo · Proyectos 9 · ETSA Sevilla</p><h1>Ciudad Acuática</h1><p class="lead">Una ciudad para 10.000 habitantes que nace de lo que cae al agua. Cada equipamiento es una piedra con un peso; al caer genera ondas, y donde las ondas se cruzan se suman o manda la más pesada. La suma decide el suelo: plaza, agua, vivienda o parque. Para proyectarla me programé las herramientas con las que la dibujo.</p>
+<div class="ficha"><div><b>Curso</b><span>2026-27 · Proyectos 9</span></div><div><b>Escala</b><span>≈ 1 km² · 10.000 hab.</span></div><div><b>Programa</b><span>36 objetos en 5 tipos</span></div><div><b>Papel</b><span>Proyecto individual</span></div></div>
+<div class="stack"><span>JavaScript</span><span>Canvas / SVG</span><span>Exportación DXF para AutoCAD</span><span>Modelo de campos</span></div></section>
+<main class="wrap">
+<div class="piezas">
+<a class="pieza" href="campo-de-niveles.html"><img src="campo-de-niveles.webp" alt="Campo de niveles de la Ciudad Acuática" loading="lazy"><div class="tx"><h3>Campo de niveles</h3><p>Genera la planta de la ciudad a partir de las ondas: usos del suelo, niveles con curvas, densidad y habitantes. Exporta DXF.</p><span class="go">Abrir →</span></div></a>
+<a class="pieza" href="estanque-de-piedras.html"><img src="estanque-de-piedras.webp" alt="Estanque de piedras" loading="lazy"><div class="tx"><h3>Estanque de piedras</h3><p>El concepto en movimiento: tira piedras de distinto peso y mira cómo se cruzan las ondas según la regla de choque.</p><span class="go">Abrir →</span></div></a>
+</div>
+<div class="texto" style="margin-top:2.2rem"><h2>La idea</h2><p>De la <i>civitas</i> a la <i>urbs</i>: el programa (la sociedad) dibuja el suelo (la forma). Tres ayuntamientos, cuatro zonas de trabajo, cinco centros culturales, catorce equipamientos y diez manantiales caen sobre un territorio tipo con una pendiente del 1 % hacia el norte. Cuanto más pesado es el objeto, más grande, rápida y duradera es su onda.</p><h2>Por qué una herramienta</h2><p>El campo de niveles convierte esas reglas en una planta medible: superficie de vivienda, habitantes, densidad (objetivo 7.000–15.000 hab/km²), láminas de agua y cotas. Cambio el peso de una piedra o el choque entre tipos y la ciudad se recalcula; lo que sale se exporta a DXF para seguir dibujando en AutoCAD.</p></div>
+</main>
+<footer class="foot">Jesús Ortiz Muñoz · <a href="../../#interactivos">Volver al portfolio</a></footer>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herramientas BC3 · Jesús Ortiz Muñoz</title>
+<meta name="description" content="Lector de presupuestos BC3 y conversor de tablas (Excel o PDF) a BC3 para Presto, en el navegador.">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<style>
+  .tabs{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}
+  .tabs button{padding:.5rem .9rem;border:1px solid var(--line);border-radius:6px;background:var(--bg2);cursor:pointer;font-size:.85rem}
+  .tabs button.on{background:var(--red);border-color:var(--red);color:#fff}
+  .panel[hidden]{display:none}
+  .drop{border:2px dashed #3a3a3a;border-radius:10px;padding:1.4rem;text-align:center;color:var(--muted);cursor:pointer}
+  .drop.over{border-color:var(--red);color:#fff}
+  .tree{max-height:560px;overflow:auto;border:1px solid var(--line);border-radius:8px;margin-top:1rem}
+  .tree td.code{font-family:var(--mono);white-space:nowrap}
+  .tree tr.d1 td{color:var(--red);font-weight:600;background:#141414}
+  .tree tr.d0 td{font-weight:600;background:#1b1b1b}
+  .tree tr.part{cursor:pointer}
+  .tree tr.med td{font-size:.74rem;color:#bbb}
+  .tree tr.med td:first-child{padding-left:1.4rem}
+  .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:.8rem 0}
+  textarea.txt{min-height:12rem}
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="back" href="../../#herramientas">← JOM</a>
+  <span class="crumb">Herramientas · Herramientas BC3</span>
+  <span class="links"><a class="btn" href="https://github.com/ortizmozjesus/JOM/tree/main/proyectos/bc3" target="_blank" rel="noopener">Código</a></span>
+</header>
+
+<section class="lab-hero">
+  <p class="lab-eye">Presupuestos · FIEBDC-3 · Presto</p>
+  <h1>Presupuestos en BC3,<br>sin teclear partida a partida</h1>
+  <p class="lead">Dos herramientas que nacieron de mis prácticas en obra. La primera abre cualquier BC3 y enseña el árbol de capítulos, partidas y mediciones con los importes recalculados. La segunda convierte una tabla de partidas (sacada de un Excel o de un PDF) en un BC3 listo para importar en Presto 8.8.</p>
+  <div class="stack"><span>FIEBDC-3/2002</span><span>Windows-1252 + CRLF</span><span>JavaScript</span><span>Presto 8.8</span><span>Extracción de PDF con IA (versión completa)</span></div>
+</section>
+
+<main class="wrap">
+  <div class="tabs" role="tablist">
+    <button class="on" data-tab="leer" role="tab">Abrir un BC3</button>
+    <button data-tab="crear" role="tab">De tabla a BC3</button>
+  </div>
+
+  <section class="panel" id="leer">
+    <div class="drop" id="drop" tabindex="0">Arrastra un archivo <b>.bc3</b> aquí o haz clic para elegirlo.<br><span class="small">Se lee en tu navegador; no se sube a ningún sitio.</span></div>
+    <input type="file" id="file" accept=".bc3" hidden>
+    <div class="row"><button class="btn" id="ejemplo">Abrir el ejemplo</button><span class="small muted" id="cab"></span></div>
+    <div class="tree"><table class="t" id="arbol"><thead><tr><th>Código</th><th>Ud</th><th>Resumen</th><th class="n">Cantidad</th><th class="n">Precio</th><th class="n">Importe</th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="panel" id="crear" hidden>
+    <div class="grid2">
+      <div>
+        <p class="small muted" style="margin-bottom:.5rem">Una partida por línea, separada por tabuladores (pegar desde Excel) o por punto y coma: <span class="mono">capítulo; código; ud; resumen; cantidad; precio</span>. Las líneas de un capítulo nuevo empiezan por su nombre.</p>
+        <textarea class="txt" id="tabla" spellcheck="false"></textarea>
+        <div class="row">
+          <label class="small">Obra <input class="txt" id="obra" style="width:16rem" value="Reforma de sala de producción"></label>
+          <button class="btn red" id="gen">Descargar BC3</button>
+        </div>
+        <p class="note">En la versión completa, la tabla no se pega: un modelo de IA la extrae del PDF del presupuesto, y cada importe se comprueba con cantidad × precio antes de escribir el BC3. Lo que no cuadra se marca, nunca se corrige a ojo.</p>
+      </div>
+      <div>
+        <div class="tree" style="margin-top:0"><table class="t" id="prev"><thead><tr><th>Código</th><th>Ud</th><th>Resumen</th><th class="n">Cant.</th><th class="n">Precio</th><th class="n">Importe</th></tr></thead><tbody></tbody></table></div>
+        <p class="small muted" id="chk" style="margin-top:.5rem"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">Jesús Ortiz Muñoz · <a href="../../#herramientas">Volver al portfolio</a> · Datos del ejemplo inventados; la estructura es la de un presupuesto real de obra.</footer>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

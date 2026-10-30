@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planos DXF por código · Jesús Ortiz Muñoz</title>
+<meta name="description" content="Generador paramétrico de plantas en DXF para AutoCAD, escrito a mano en JavaScript: capas, colores, huecos, cotas y superficies.">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<style>
+  .app{display:grid;grid-template-columns:300px minmax(0,1fr);gap:1rem}
+  @media (max-width:900px){.app{grid-template-columns:1fr}}
+  .ctrl label{display:grid;grid-template-columns:1fr 4.2rem;align-items:center;gap:.5rem;font-size:.82rem;margin:.45rem 0}
+  .ctrl input[type=range]{grid-column:1/-1;accent-color:var(--red);width:100%}
+  .ctrl output{text-align:right;font-variant-numeric:tabular-nums;color:#fff}
+  .lienzo{background:#fbfaf7;border-radius:10px;border:1px solid var(--line);min-height:460px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .lienzo svg{width:100%;height:auto;max-height:70vh}
+  .capas{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.8rem}
+  .capas span{font-size:.7rem;display:inline-flex;align-items:center;gap:.3rem;border:1px solid var(--line);padding:.15rem .45rem;border-radius:4px}
+  .capas i{width:.7rem;height:.7rem;border-radius:2px;display:inline-block}
+  pre{font-family:var(--mono);font-size:.72rem;max-height:180px;overflow:auto;background:#0b0b0b;border:1px solid var(--line);border-radius:6px;padding:.6rem;color:#9fd3a8}
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="back" href="../../#herramientas">← JOM</a>
+  <span class="crumb">Herramientas · Planos DXF por código</span>
+  <span class="links"><a class="btn" href="https://github.com/ortizmozjesus/JOM/tree/main/proyectos/dxf" target="_blank" rel="noopener">Código</a></span>
+</header>
+
+<section class="lab-hero">
+  <p class="lab-eye">CAD · Diseño paramétrico · AutoCAD</p>
+  <h1>Planos que se dibujan<br>solos en DXF</h1>
+  <p class="lead">Una planta paramétrica escrita línea a línea en formato DXF, sin librerías. Cambias ancho, fondo, crujías o huecos y el plano se rehace con sus capas y colores (los mismos que uso en AutoCAD y en ArquiViz), cotas y superficies. El archivo se abre directamente en AutoCAD, LT incluido.</p>
+  <div class="stack"><span>DXF R12 (AC1009)</span><span>Capas y colores ACI</span><span>SVG</span><span>JavaScript sin dependencias</span><span>También con Python / ezdxf y AutoLISP</span></div>
+</section>
+
+<main class="wrap">
+  <div class="app">
+    <div class="card ctrl">
+      <h3>Parámetros</h3>
+      <label>Ancho (m) <output id="oW"></output><input type="range" id="W" min="6" max="24" step="0.1" value="12"></label>
+      <label>Fondo (m) <output id="oD"></output><input type="range" id="D" min="5" max="16" step="0.1" value="8"></label>
+      <label>Muro exterior (cm) <output id="oT"></output><input type="range" id="T" min="15" max="50" step="1" value="30"></label>
+      <label>Crujías <output id="oN"></output><input type="range" id="N" min="1" max="6" step="1" value="3"></label>
+      <label>Ancho de ventana (m) <output id="oV"></output><input type="range" id="V" min="0.6" max="3" step="0.1" value="1.6"></label>
+      <label>Ancho de puerta (m) <output id="oP"></output><input type="range" id="P" min="0.8" max="2.4" step="0.1" value="1.0"></label>
+      <div style="display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap">
+        <button class="btn red" id="dxf">Descargar DXF</button>
+        <button class="btn" id="svg">Descargar SVG</button>
+      </div>
+      <div class="capas" id="capas"></div>
+      <p class="small muted" style="margin-top:.8rem" id="sup"></p>
+    </div>
+    <div>
+      <div class="lienzo" id="lienzo"></div>
+      <p class="small muted" style="margin:.6rem 0 .3rem">Primeras líneas del DXF que se genera:</p>
+      <pre id="code"></pre>
+    </div>
+  </div>
+  <div class="grid2" style="margin-top:1rem">
+    <div class="card"><h3>De dónde sale</h3><p class="small">Durante el verano dibujé por código redes de saneamiento y detalles de envolvente en DXF, y monté un servidor que deja a Claude manejar AutoCAD LT con AutoLISP. Esta demo resume la idea en el navegador: el plano es el resultado de unas reglas, así que cambiar una medida no obliga a redibujar.</p></div>
+    <div class="card"><h3>Capas</h3><p class="small">Muros en <b>A-MURO</b> (blanco/negro, ACI 7), huecos en <b>A-CARP</b> (ACI 4), tabiques en <b>A-TABI</b> (ACI 8), cotas en <b>A-COTA</b> (ACI 1) y textos en <b>A-TEXT</b> (ACI 3). Es la convención que ArquiViz traduce luego a materiales en Blender.</p></div>
+  </div>
+</main>
+<footer class="foot">Jesús Ortiz Muñoz · <a href="../../#herramientas">Volver al portfolio</a></footer>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

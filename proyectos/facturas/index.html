@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agente de facturas y control de obra · Jesús Ortiz Muñoz</title>
+<meta name="description" content="Agente con IA que lee facturas de obra, valida que los importes cuadran y cruza albaranes con facturas. Demo con datos de ejemplo.">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<style>
+  .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:1.2rem 0 0}
+  .kpi{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:.7rem .8rem}
+  .kpi b{display:block;font-family:var(--fh);font-weight:400;font-size:1.6rem;letter-spacing:.02em}
+  .kpi span{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  @media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
+  .flujo{display:flex;flex-wrap:wrap;gap:.5rem;align-items:stretch;margin:.4rem 0 0}
+  .paso{flex:1 1 150px;background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:.7rem .8rem;position:relative}
+  .paso b{display:block;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+  .paso span{font-size:.84rem}
+  .docs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem}
+  .docs button{padding:.45rem .8rem;border:1px solid var(--line);border-radius:6px;background:var(--bg2);cursor:pointer;font-size:.8rem}
+  .docs button.on{background:var(--red);border-color:var(--red);color:#fff}
+  .campos{display:grid;grid-template-columns:1fr 1fr;gap:.4rem .8rem}
+  .campos label{font-size:.75rem;color:var(--muted);display:grid;gap:.15rem}
+  .campos input{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:.3rem .45rem;font-family:var(--mono);font-size:.82rem}
+  .campos input.vacio{border-color:#6b5022}
+  .regla{display:grid;grid-template-columns:auto 1fr auto;gap:.6rem;align-items:center;padding:.45rem 0;border-bottom:1px solid #1f1f1f;font-size:.84rem}
+  .regla .mono{font-size:.76rem;color:#bbb}
+  .veredicto{margin-top:.8rem;padding:.7rem .9rem;border-radius:8px;font-size:.9rem}
+  .veredicto.ok{background:#12251a;border:1px solid #2f5f3c}
+  .veredicto.mal{background:#2a1a10;border:1px solid #6b5022}
+  h2.sec{font-family:var(--fh);font-weight:400;text-transform:uppercase;letter-spacing:.03em;font-size:1.4rem;margin:2.2rem 0 .8rem}
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="back" href="../../#herramientas">← JOM</a>
+  <span class="crumb">Herramientas · Agente de facturas</span>
+  <span class="links"></span>
+</header>
+
+<section class="lab-hero">
+  <p class="lab-eye">IA aplicada · Automatización · Obra</p>
+  <h1>Un agente que lee facturas<br>y comprueba que cuadran</h1>
+  <p class="lead">Durante mis prácticas en una constructora, la administración tecleaba a mano unas 4.000 facturas al mes en dos programas que no se hablan entre sí. Diseñé y probé un agente que las lee con IA, las valida con aritmética en vez de con ojos y deja en una bandeja solo las que necesitan a una persona. Lo monté en n8n autoalojado con Docker y medí coste y tiempo antes de proponer escalarlo.</p>
+  <div class="kpis">
+    <div class="kpi"><b>0,025 €</b><span>por factura leída</span></div>
+    <div class="kpi"><b>12,8 s</b><span>por documento</span></div>
+    <div class="kpi"><b>45 docs</b><span>lote real de correo</span></div>
+    <div class="kpi"><b>~130 €</b><span>al mes a volumen real</span></div>
+  </div>
+  <div class="stack" style="margin-top:1rem"><span>n8n + Docker</span><span>API de Claude</span><span>Esquema de extracción propio</span><span>Validación por cuadres</span><span>SQL</span></div>
+</section>
+
+<main class="wrap">
+  <h2 class="sec">La regla que lo hace fiable</h2>
+  <p class="small muted" style="max-width:760px;margin-bottom:.8rem">Un campo que falta se deja vacío y se señala; nunca se deduce. Y cada documento tiene que pasar cuatro cuadres antes de considerarse leído. Prueba a tocar los números de estos tres ejemplos (inventados, con la forma de los reales).</p>
+  <div class="grid2">
+    <div class="card">
+      <div class="docs" id="docs"></div>
+      <div class="campos" id="campos"></div>
+      <table class="t" style="margin-top:.8rem"><thead><tr><th>Línea</th><th class="n">Cant.</th><th class="n">Precio</th><th class="n">Dto. %</th><th class="n">Importe</th></tr></thead><tbody id="lineas"></tbody></table>
+    </div>
+    <div class="card">
+      <h3>Cuadres</h3>
+      <div id="reglas"></div>
+      <div id="veredicto"></div>
+    </div>
+  </div>
+
+  <h2 class="sec">El flujo completo</h2>
+  <div class="flujo">
+    <div class="paso"><b>Entrada</b><span>Correo (PDF nativo) y papel escaneado en lotes de varias páginas.</span></div>
+    <div class="paso"><b>Agente 00</b><span>Clasifica el documento y separa los PDF que traen varias facturas dentro.</span></div>
+    <div class="paso"><b>Agente 01</b><span>Extrae cabecera y líneas con un esquema fijo, incluido el descuento.</span></div>
+    <div class="paso"><b>Cuadres</b><span>Base × IVA, total, bases por tipo y suma de líneas.</span></div>
+    <div class="paso"><b>Bandeja</b><span>Una persona solo ve lo que no cuadra o no tiene obra asignada.</span></div>
+    <div class="paso"><b>Agente 02</b><span>Asigna la obra con un diccionario de alias y detecta duplicados.</span></div>
+    <div class="paso"><b>Agente 03</b><span>Registra en el ERP y en contabilidad, uno por programa.</span></div>
+    <div class="paso"><b>Agente 04</b><span>Checklist por documento: en qué fase está y qué falta.</span></div>
+  </div>
+  <p class="note" style="margin-top:1rem">Lo que enseñó la prueba: en el lote de correo el 62 % de los documentos salía con los números correctos, pero solo el 11 % estaba listo para registrar sin tocar. La causa principal no era la IA: 18 de 45 fallaban porque la obra no se podía asignar (cada persona la nombra a su manera) y 32 líneas no cuadraban porque los proveedores facturan a tarifa con descuento y mi esquema no tenía ese campo. Lo segundo era fallo mío y lo arreglé; lo primero es un problema de organización que el sistema hace visible.</p>
+
+  <h2 class="sec">Albaranes contra facturas</h2>
+  <p class="small muted" style="max-width:760px;margin-bottom:.8rem">La misma lógica para el control de obra: cada albarán de hormigón se cruza con las facturas del proveedor y con lo presupuestado. Lo que llega sin factura o con otra cantidad salta solo.</p>
+  <div class="card">
+    <div class="tablewrap" style="overflow:auto"><table class="t" id="alb"><thead><tr><th>Fecha</th><th>Albarán</th><th>Hormigón</th><th class="n">m³</th><th>Factura</th><th class="n">m³ facturados</th><th>Estado</th></tr></thead><tbody></tbody></table></div>
+    <p class="small" id="albres" style="margin-top:.7rem"></p>
+  </div>
+</main>
+<footer class="foot">Jesús Ortiz Muñoz · <a href="../../#herramientas">Volver al portfolio</a> · Datos de ejemplo; la empresa y sus proveedores no aparecen.</footer>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const eur = (x) => Number.isFinite(x) ? x.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—';
+const DOCS = [
+  { nombre: 'Factura que cuadra', f: { proveedor: 'Materiales del Sur, S.L.', fecha: '04/07/2026', obra: 'Nave Polígono Norte', base: 412.04, iva: 21, cuota: 86.53, retencion: 0, total: 498.57 },
+    l: [['Saco cemento CEM II 25 kg', 40, 6.20, 0], ['Mallazo 15×15 Ø6', 12, 13.67, 0]] },
+  { nombre: 'Falta el descuento', f: { proveedor: 'Ferretería Industrial Guadalquivir', fecha: '11/07/2026', obra: 'Reforma sala producción', base: 283.00, iva: 21, cuota: 59.43, retencion: 0, total: 342.43 },
+    l: [['Taco químico 300 ml', 12, 14.90, 0], ['Varilla roscada M12 1 m', 30, 3.95, 0]] },
+  { nombre: 'Sin obra asignada', f: { proveedor: 'Hormigones Aljarafe, S.A.', fecha: '22/07/2026', obra: '', base: 1785.00, iva: 21, cuota: 374.85, retencion: 0, total: 2159.85 },
+    l: [['HA-25/B/20/IIa', 21, 85.00, 0]] },
+];
+let doc = 0;
+const CAMPOS = [['proveedor', 'Proveedor'], ['fecha', 'Fecha emisión'], ['obra', 'Obra'], ['base', 'Base imponible'], ['iva', '% IVA'], ['cuota', 'Cuota IVA'], ['retencion', 'Retención'], ['total', 'Total']];
+
+function pintar() {
+  $('#docs').innerHTML = DOCS.map((d, i) => `<button class="${i === doc ? 'on' : ''}" data-i="${i}">${d.nombre}</button>`).join('');
+  $('#docs').querySelectorAll('button').forEach((b) => b.onclick = () => { doc = +b.dataset.i; pintar(); });
+  const D = DOCS[doc];
+  $('#campos').innerHTML = CAMPOS.map(([k, t]) => `<label>${t}<input data-k="${k}" value="${D.f[k]}" class="${String(D.f[k]).trim() === '' ? 'vacio' : ''}"></label>`).join('');
+  $('#campos').querySelectorAll('input').forEach((inp) => inp.oninput = () => {
+    const k = inp.dataset.k; const v = inp.value;
+    D.f[k] = ['base', 'iva', 'cuota', 'retencion', 'total'].includes(k) ? (v.trim() === '' ? '' : +v.replace(',', '.')) : v;
+    inp.classList.toggle('vacio', v.trim() === '');
+    validar();
+  });
+  $('#lineas').innerHTML = D.l.map((l, i) => `<tr><td>${l[0]}</td>${[1, 2, 3].map((j) => `<td class="n"><input class="num" data-i="${i}" data-j="${j}" value="${l[j]}"></td>`).join('')}<td class="n imp">${eur(imp(l))}</td></tr>`).join('');
+  $('#lineas').querySelectorAll('input').forEach((inp) => inp.oninput = () => {
+    D.l[+inp.dataset.i][+inp.dataset.j] = +inp.value.replace(',', '.') || 0;
+    inp.closest('tr').querySelector('.imp').textContent = eur(imp(D.l[+inp.dataset.i]));
+    validar();
+  });
+  validar();
+}
+const imp = (l) => Math.round(l[1] * l[2] * (1 - l[3] / 100) * 100) / 100;
+
+function validar() {
+  const { f, l } = DOCS[doc];
+  const tol = 0.02;
+  const n = (x) => (x === '' || x == null || !Number.isFinite(+x)) ? null : +x;
+  const base = n(f.base), iva = n(f.iva), cuota = n(f.cuota), ret = n(f.retencion) ?? 0, total = n(f.total);
+  const sumL = l.reduce((s, x) => s + imp(x), 0);
+  const R = [
+    ['Base × %IVA ≈ cuota', base != null && iva != null && cuota != null, () => Math.abs(base * iva / 100 - cuota) <= tol, () => `${eur(base * iva / 100)} vs ${eur(cuota)}`],
+    ['Base + cuota − retención = total', base != null && cuota != null && total != null, () => Math.abs(base + cuota - ret - total) <= tol, () => `${eur(base + cuota - ret)} vs ${eur(total)}`],
+    ['Σ bases por tipo = base total', base != null, () => true, () => 'un solo tipo de IVA'],
+    ['Σ líneas = base imponible', base != null, () => Math.abs(sumL - base) <= tol, () => `${eur(sumL)} vs ${eur(base)}`],
+  ];
+  const faltan = CAMPOS.filter(([k]) => String(f[k]).trim() === '').map(([, t]) => t);
+  let ok = true;
+  $('#reglas').innerHTML = R.map(([t, puede, test, det]) => {
+    if (!puede) { ok = false; return `<div class="regla"><span class="tag warn">falta dato</span><span>${t}</span><span></span></div>`; }
+    const r = test(); ok = ok && r;
+    return `<div class="regla"><span class="tag ${r ? 'ok' : 'bad'}">${r ? 'cuadra' : 'no cuadra'}</span><span>${t}</span><span class="mono">${det()}</span></div>`;
+  }).join('');
+  let msg;
+  if (ok && !faltan.length) msg = '<b>Lista para registrar.</b> Pasa los cuatro cuadres y no le falta ningún campo obligatorio.';
+  else {
+    const motivos = [];
+    if (faltan.length) motivos.push(`faltan campos (${faltan.join(', ')}): se dejan vacíos y se señalan, no se inventan`);
+    if (!ok) motivos.push(doc === 1 ? 'las líneas no suman la base: mira si el proveedor aplica descuento (prueba un 8 % en la primera línea)' : 'algún cuadre no sale');
+    msg = `<b>A la bandeja de revisión.</b> ${motivos.join('; ')}.`;
+  }
+  $('#veredicto').innerHTML = `<div class="veredicto ${ok && !faltan.length ? 'ok' : 'mal'}">${msg}</div>`;
+  window.__demo = { ok: true };
+}
+pintar();
+
+// --------------------------------------------------- albaranes
+const ALB = [
+  ['03/07', 'A-1021', 'HM-20/B/20/I', 8], ['03/07', 'A-1022', 'HM-20/B/20/I', 8], ['07/07', 'A-1045', 'HA-25/B/20/IIa', 9],
+  ['07/07', 'A-1046', 'HA-25/B/20/IIa', 9], ['14/07', 'A-1102', 'HA-25/B/20/IIa', 7.5], ['21/07', 'A-1160', 'HA-25/B/20/IIa', 9],
+  ['04/08', 'A-1233', 'HA-25/B/20/IIa', 9], ['04/08', 'A-1234', 'HA-25/B/20/IIa', 6],
+];
+const FAC = { 'A-1021': ['F-0958', 8], 'A-1022': ['F-0958', 8], 'A-1045': ['F-0958', 9], 'A-1046': ['F-0958', 9], 'A-1102': ['F-1000', 8], 'A-1160': ['F-1000', 9] };
+let r = { ok: 0, dif: 0, sin: 0, m3: 0 };
+$('#alb tbody').innerHTML = ALB.map(([f, c, t, m]) => {
+  const fa = FAC[c]; r.m3 += m;
+  let est;
+  if (!fa) { r.sin++; est = '<span class="tag warn">sin factura</span>'; }
+  else if (Math.abs(fa[1] - m) > 0.01) { r.dif++; est = '<span class="tag bad">cantidad distinta</span>'; }
+  else { r.ok++; est = '<span class="tag ok">cuadra</span>'; }
+  return `<tr><td>${f}</td><td class="mono">${c}</td><td>${t}</td><td class="n">${m.toLocaleString('es-ES')}</td><td class="mono">${fa ? fa[0] : '—'}</td><td class="n">${fa ? fa[1].toLocaleString('es-ES') : '—'}</td><td>${est}</td></tr>`;
+}).join('');
+$('#albres').innerHTML = `${ALB.length} albaranes, ${r.m3.toLocaleString('es-ES')} m³ servidos: <b>${r.ok}</b> cuadran, <b>${r.dif}</b> con cantidad distinta y <b>${r.sin}</b> pendientes de factura.`;
+</script>
+</body>
+</html>

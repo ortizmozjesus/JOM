@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dibujo 4 · Cerezales del Condado · Jesús Ortiz Muñoz</title>
+<meta name="description" content="Informe gráfico A1 y modelos de viento, sonido y relieve para Cerezales del Condado (León).">
+<meta property="og:title" content="Dibujo 4 · Cerezales del Condado — Jesús Ortiz Muñoz">
+<meta property="og:description" content="Informe gráfico A1 y modelos de viento, sonido y relieve para Cerezales del Condado (León).">
+<meta property="og:image" content="https://ortizmozjesus.github.io/JOM/proyectos/cerezales/panel-a1-thumb.webp">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/lab.css">
+<style>
+  .ficha{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:1.2rem 0 0}
+  .ficha div{border-top:1px solid var(--line);padding-top:.5rem}
+  .ficha b{display:block;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .ficha span{font-size:.88rem}
+  @media (max-width:760px){.ficha{grid-template-columns:1fr 1fr}}
+  .piezas{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem}
+  .pieza{display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--line);border-radius:10px;overflow:hidden;text-decoration:none;transition:border-color .25s,transform .25s}
+  .pieza:hover{border-color:var(--red);transform:translateY(-3px)}
+  .pieza img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top left;background:#1b1b1b;display:block}
+  .pieza .tx{padding:.9rem 1rem 1.1rem;display:flex;flex-direction:column;gap:.35rem}
+  .pieza h3{font-family:var(--fh);font-weight:400;letter-spacing:.03em;text-transform:uppercase;font-size:1.15rem}
+  .pieza p{font-size:.85rem;color:#cfcfcf}
+  .pieza .go{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-top:.3rem}
+  .texto{max-width:760px;display:grid;gap:.8rem;color:#d6d6d6;margin:0 0 2rem}
+  .texto h2{font-family:var(--fh);font-weight:400;text-transform:uppercase;letter-spacing:.03em;font-size:1.3rem;color:#fff;margin-top:.8rem}
+  @media (prefers-reduced-motion:reduce){.pieza,.pieza:hover{transition:none;transform:none}}
+</style>
+</head>
+<body>
+<header class="lab-top">
+  <a class="back" href="../../#interactivos">← JOM</a>
+  <span class="crumb">Dibujo 4 · Cerezales</span>
+  <span class="links"></span>
+</header>
+
+<section class="lab-hero"><p class="lab-eye">Ideación gráfica arquitectónica · Dibujo 4</p><h1>Cerezales<br>sentido</h1><p class="lead">Un informe gráfico A1 sobre Cerezales del Condado (León) que no empieza por el plano del pueblo sino por lo que se siente al recorrerlo, y unos modelos que miden lo que se puede medir: viento, sonido, agua y relieve. Del mapa sale el proyecto de residencias para artistas.</p>
+<div class="ficha"><div><b>Curso</b><span>2026-27 · Dibujo 4</span></div><div><b>Formato</b><span>Panel A1 · 1:2000</span></div><div><b>Datos</b><span>MDT05, Catastro, viento</span></div><div><b>Papel</b><span>Proyecto individual</span></div></div>
+<div class="stack"><span>Dibujo vectorial</span><span>d3.js</span><span>GeoTIFF / MDT05</span><span>Modelos físicos simplificados</span></div></section>
+<main class="wrap">
+<div class="piezas">
+<a class="pieza" href="panel-a1.html"><img src="panel-a1-thumb.webp" alt="Panel A1 Cerezales sentido" loading="lazy"><div class="tx"><h3>Panel A1 · Cerezales sentido</h3><p>Cartografía por deriva: siete estados, el paseo y las manchas de lo que se siente al pasar. Escala 1:2000.</p><span class="go">Ver panel →</span></div></a>
+<a class="pieza" href="modelo-cerezales.html"><img src="modelo-cerezales.webp" alt="Modelo de viento y sonido de Cerezales" loading="lazy"><div class="tx"><h3>Modelo de viento y sonido</h3><p>Líneas de viento, isófonas y zonas R sobre una malla de 4 × 4 m. Cambia los parámetros y el plano se recalcula.</p><span class="go">Abrir →</span></div></a>
+<a class="pieza" href="modelo-curueno-porma.html"><img src="modelo-curueno-porma.webp" alt="Modelo Curueño-Porma" loading="lazy"><div class="tx"><h3>Modelo Curueño-Porma</h3><p>Topografía, agua, población y caminos entre cuatro pueblos para decidir dónde va la pasarela. Admite el MDT05 real del CNIG.</p><span class="go">Abrir →</span></div></a>
+</div>
+<div class="texto" style="margin-top:2.2rem"><h2>Cartografía subjetiva y modelos medibles</h2><p>El panel cruza un paseo por el pueblo con siete estados (encuentro, calma, memoria, asombro, inquietud, miedo, indiferencia). Los modelos ponen números al lugar: un programa genera las líneas de viento, las isófonas y las zonas de ruido a partir de la dirección y velocidad del viento y del freno de choperas y edificios; otro dibuja la topografía y los ríos Curueño y Porma para colocar una pasarela donde vive la gente.</p></div>
+</main>
+<footer class="foot">Jesús Ortiz Muñoz · <a href="../../#interactivos">Volver al portfolio</a></footer>
+</body>
+</html>
