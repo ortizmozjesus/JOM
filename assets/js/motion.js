@@ -14,35 +14,67 @@
   var localize = function (n) { $$('[data-es]', n).forEach(function (e) { e.textContent = e.getAttribute('data-' + lang()); }); };
 
 
-  /* ---------- apertura: las ondas dibujan el plano y se abre el telón ---------- */
-  var introOn = root.classList.contains('intro-pending'), heroTl = null;
-  var endIntro = function () { root.classList.remove('intro-pending'); try { localStorage.setItem('jom-intro', String(Date.now())); } catch (e) {} if (heroTl) heroTl.play(); };
+  /* ---------- carátula: cubre la pantalla; se abre al pulsar o deslizar hacia abajo y vuelve al subir ---------- */
+  var introOn = root.classList.contains('intro-pending'), heroTl = null, cover = null, coverState = 'up', coolUntil = 0;
+  var endIntro = function () { root.classList.remove('intro-pending'); if (heroTl) heroTl.play(); };
   var playIntro = function () {
     if (!hasG) return endIntro();
-    var es = lang() === 'es', box = d.createElement('div'); box.className = 'intro'; box.setAttribute('role', 'presentation');
-    var rings = [90, 170, 260, 370, 500].map(function (r) { return '<circle cx="500" cy="300" r="' + r + '"/>'; }).join('');
-    box.innerHTML = '<svg class="intro-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + rings +
-      '<line class="ln" x1="0" y1="300" x2="1000" y2="300"/><line class="ln" x1="500" y1="0" x2="500" y2="600"/>' +
-      '<line class="ln" x1="140" y1="520" x2="860" y2="520"/><line class="ln" x1="140" y1="508" x2="140" y2="532"/><line class="ln" x1="860" y1="508" x2="860" y2="532"/></svg>' +
-      '<div class="intro-center"><p class="intro-name" aria-hidden="true"><span>Jesús Ortiz Muñoz</span></p><p class="intro-sub"><span>' + (es ? 'Arquitectura y software' : 'Architecture and software') + '</span></p></div>' +
-      '<button type="button" class="intro-skip">' + (es ? 'Saltar' : 'Skip') + '</button>';
-    root.appendChild(box);
-    var circles = $$('circle', box), lines = $$('.ln', box), done = false;
-    circles.forEach(function (c) { var L = 2 * Math.PI * parseFloat(c.getAttribute('r')); c.style.strokeDasharray = L; c.style.strokeDashoffset = L; });
-    var finish = function () { if (done) return; done = true; box.remove(); endIntro(); };
-    var tl = gsap.timeline({ defaults: { ease: 'power3.out' }, onComplete: finish });
-    tl.from(lines, { opacity: 0, duration: 0.5, stagger: 0.05 }, 0)
-      .to(circles, { strokeDashoffset: 0, duration: 0.9, stagger: 0.07, ease: 'power2.inOut' }, 0.05)
-      .fromTo('.intro-name span', { yPercent: 110 }, { yPercent: 0, duration: 0.6 }, 0.25)
-      .fromTo('.intro-sub span', { yPercent: 110 }, { yPercent: 0, duration: 0.5 }, 0.45)
-      .to('.intro-name span,.intro-sub span', { yPercent: -110, duration: 0.35, ease: 'power3.out', stagger: 0.04 }, 1.05)
-      .to('.intro-skip,.intro-svg', { opacity: 0, duration: 0.3 }, 1.05)
-      .to(box, { clipPath: 'inset(0 0 100% 0)', duration: 0.6, ease: 'power4.inOut' }, 1.2);
-    var skip = function () { if (!done) { tl.timeScale(4); if (tl.time() < 1.0) tl.seek(1.0); } };
-    box.addEventListener('click', skip);
-    $('.intro-skip', box).addEventListener('click', function (e) { e.stopPropagation(); skip(); });
-    d.addEventListener('keydown', function k(e) { if (e.key === 'Escape' || e.key === 'Enter') { skip(); d.removeEventListener('keydown', k); } });
-    root.classList.remove('intro-pending');
+    cover = d.createElement('div'); cover.className = 'intro cover'; cover.setAttribute('role', 'dialog'); cover.setAttribute('aria-label', 'Carátula');
+    var ringsHtml = [90, 170, 260, 370, 500].map(function (r, k) { return '<circle pathLength="1" cx="500" cy="300" r="' + r + '" style="--k:' + k + '"/>'; }).join('');
+    cover.innerHTML = '<svg class="intro-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + ringsHtml +
+      '<line class="ln" x1="0" y1="300" x2="1000" y2="300"/><line class="ln" x1="500" y1="0" x2="500" y2="600"/></svg>' +
+      '<div class="intro-center"><p class="intro-name" aria-hidden="true"><span>Jesús Ortiz Muñoz</span></p><p class="intro-sub"><span data-es="Arquitectura y software" data-en="Architecture and software">Arquitectura y software</span></p></div>' +
+      '<p class="cover-hint"><span class="cover-line" aria-hidden="true"></span><span data-es="Desliza o pulsa para entrar" data-en="Scroll or click to enter">Desliza o pulsa para entrar</span></p>' +
+      '<button type="button" class="intro-skip" data-es="Entrar" data-en="Enter">Entrar</button>';
+    root.appendChild(cover); localize(cover);
+    d.addEventListener('langchange', function () { localize(cover); });
+    var circles = $$('circle', cover), lines = $$('.ln', cover);
+    circles.forEach(function (c) { c.style.strokeDasharray = 1; c.style.strokeDashoffset = 1; });
+    var cTl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+    cTl.fromTo(lines, { opacity: 0 }, { opacity: 0.6, duration: 0.6, stagger: 0.06 }, 0)
+       .fromTo(circles, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.1, stagger: 0.08, ease: 'power2.inOut' }, 0.05)
+       .fromTo('.cover .intro-name span', { yPercent: 110 }, { yPercent: 0, duration: 0.8 }, 0.3)
+       .fromTo('.cover .intro-sub span', { yPercent: 110 }, { yPercent: 0, duration: 0.6 }, 0.55)
+       .fromTo('.cover .cover-hint,.cover .intro-skip', { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.1 }, 1.0);
+    var lock = function (on) { d.body.classList.toggle('is-locked', on); $$('main,.nav,.foot').forEach(function (n) { if (on) n.setAttribute('inert', ''); else n.removeAttribute('inert'); }); };
+    var offY = function () { return -(innerHeight + 24); };
+    var open = function () {
+      if (coverState !== 'up') return; coverState = 'opening'; lock(false);
+      gsap.to(cover, { y: offY(), duration: 0.95, ease: 'power4.inOut', onComplete: function () { coverState = 'down'; coolUntil = performance.now() + 800; cover.style.visibility = 'hidden'; } });
+      if (heroTl) gsap.delayedCall(0.4, function () { heroTl.restart(); });
+    };
+    var show = function () {
+      if (coverState !== 'down' || performance.now() < coolUntil) return; coverState = 'showing';
+      window.scrollTo(0, 0); lock(true); cover.style.visibility = 'visible';
+      gsap.fromTo(cover, { y: offY() }, { y: 0, duration: 0.8, ease: 'power3.out', onComplete: function () { coverState = 'up'; if (heroTl) heroTl.progress(0).pause(); var b = $('.intro-skip', cover); if (b) b.focus({ preventScroll: true }); } });
+      cTl.restart();
+    };
+    /* arranque */
+    root.classList.remove('intro-pending'); lock(true); cTl.play();
+    var acc = 0, wt = 0, t0 = null;
+    cover.addEventListener('click', open);
+    addEventListener('wheel', function (e) {
+      if (coverState === 'up') {
+        e.preventDefault();
+        if (e.deltaY > 0) { acc += e.deltaY; gsap.set(cover, { y: -Math.min(acc * 0.6, innerHeight * 0.3) }); if (acc > 90) { acc = 0; open(); } clearTimeout(wt); wt = setTimeout(function () { if (coverState === 'up') { acc = 0; gsap.to(cover, { y: 0, duration: 0.5, ease: 'power3.out' }); } }, 160); }
+      } else if (coverState === 'down' && window.scrollY <= 0 && e.deltaY < -10) show();
+    }, { passive: false });
+    d.addEventListener('keydown', function (e) {
+      if (coverState !== 'up') return;
+      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); open(); }
+    });
+    cover.addEventListener('touchstart', function (e) { t0 = { y: e.touches[0].clientY, t: Date.now() }; }, { passive: true });
+    cover.addEventListener('touchmove', function (e) { if (!t0) return; var dy = t0.y - e.touches[0].clientY; if (dy > 0 && coverState === 'up') gsap.set(cover, { y: -dy }); }, { passive: true });
+    cover.addEventListener('touchend', function (e) {
+      if (!t0) return; var dy = t0.y - e.changedTouches[0].clientY, fast = Date.now() - t0.t < 260; t0 = null;
+      if (coverState !== 'up') return;
+      if (dy > innerHeight * 0.18 || (dy > 30 && fast)) { e.preventDefault(); open(); } else gsap.to(cover, { y: 0, duration: 0.5, ease: 'power3.out' });
+    });
+    var pull = null;
+    d.addEventListener('touchstart', function (e) { pull = (coverState === 'down' && window.scrollY <= 0) ? e.touches[0].clientY : null; }, { passive: true });
+    d.addEventListener('touchmove', function (e) { if (pull !== null && e.touches[0].clientY - pull > 70) { pull = null; show(); } }, { passive: true });
+    var away = false;
+    addEventListener('scroll', function () { var y = window.scrollY; if (y > innerHeight * 0.6) away = true; else if (away && y < 24) { away = false; show(); } }, { passive: true });
   };
 
   /* ---------- progreso de lectura y barra ---------- */
@@ -167,13 +199,6 @@
         .from('.hero-fig img', { scale: 1.18, duration: 1.5 }, 0.25)
         .from('.hero-fig figcaption', { autoAlpha: 0, y: 8, duration: 0.6 }, 1.0);
       tl.add(function () { burst(2); }, 0.35).add(function () { burst(1); }, 0.75).add(function () { burst(2); }, 1.15);
-      /* vuelve a sonar cada vez que se regresa arriba */
-      var away = false;
-      addEventListener('scroll', function () {
-        var y = window.scrollY;
-        if (y > innerHeight * 0.6) away = true;
-        else if (away && y < 24 && !tl.isActive() && !d.body.classList.contains('is-locked')) { away = false; tl.restart(); }
-      }, { passive: true });
       if (plate) gsap.to(plate, { yPercent: -5, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
     } else if (tgt && !reduce) {
       setTimeout(function () { var r = tgt.getBoundingClientRect(), hr = hero.getBoundingClientRect(); spawn(r.left - hr.left + r.width / 2, r.top - hr.top + r.height / 2, 1); }, 400);
