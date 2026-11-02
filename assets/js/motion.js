@@ -98,7 +98,7 @@
   if (hero) {
     hero.classList.add('has-field');
     var cv = d.createElement('canvas'); cv.className = 'field'; cv.setAttribute('aria-hidden', 'true'); hero.insertBefore(cv, hero.firstChild);
-    var ctx = cv.getContext('2d'), w = 0, h = 0, dpr = 1, SP = 28, rings = [], run = false, inView = true, ink = '#0a1522', acc = '#2aa7c9';
+    var ctx = cv.getContext('2d'), w = 0, h = 0, dpr = 1, SP = 28, rings = [], run = false, inView = true, ink = '#0a1522', acc = '#ff2800';
     var cs = getComputedStyle(root); ink = cs.getPropertyValue('--color-ink').trim() || ink; acc = cs.getPropertyValue('--color-accent').trim() || acc;
     var size = function () {
       var r = hero.getBoundingClientRect(); dpr = Math.min(2, devicePixelRatio || 1); w = r.width; h = r.height;
@@ -222,7 +222,7 @@
   /* ---------- teatro de herramientas ---------- */
   var th = $('#theatre');
   if (th) {
-    var items = $$('.t-item', th), frameBox = $('#tFrame'), poster = $('#tPoster'), cover = $('#tCover'), meta = $('#tPath'), openTab = $('#tTab'), bFull = $('#tFull'), bUse = $('#tUse');
+    var items = $$('.t-item', th), frameBox = $('#tFrame'), art = $('#tArt'), cover = $('#tCover'), meta = $('#tPath'), openTab = $('#tTab'), bFull = $('#tFull'), bUse = $('#tUse');
     var cur = -1, iframe = null, started = false;
     var mountStage = function (i) {
       var it = items[i], src = it.getAttribute('data-src');
@@ -240,9 +240,9 @@
       opt = opt || {}; if (i === cur) return; cur = i;
       items.forEach(function (it, k) { it.setAttribute('data-active', k === i ? 'true' : 'false'); $('.t-btn', it).setAttribute('aria-pressed', k === i ? 'true' : 'false'); });
       var it = items[i];
-      poster.src = it.getAttribute('data-poster'); poster.alt = it.getAttribute('data-title');
+      if (art) { art.classList.remove('is-drawn'); art.innerHTML = $('.t-art-src', it).innerHTML; var sv = $('.line-art', art); void art.offsetWidth; requestAnimationFrame(function () { requestAnimationFrame(function () { if (sv) sv.classList.add('is-drawn'); }); }); }
       meta.textContent = it.getAttribute('data-src').replace('/index.html', '');
-      var gp = $('#tGuide'); if (gp) { gp.innerHTML = $('.t-guide', it).innerHTML; localize(gp); }
+      var gp = $('#tGuide'); if (gp) { gp.innerHTML = $('.t-guide', it).innerHTML; localize(gp); gp.classList.remove('is-swap'); void gp.offsetWidth; gp.classList.add('is-swap'); }
       openTab.href = it.getAttribute('data-src');
       if (history.replaceState && !opt.silent) history.replaceState(null, '', '#' + it.id);
       if (hasG && !reduce && !opt.instant) gsap.fromTo(frameBox, { clipPath: 'inset(-24px 100% -24px -24px)' }, { clipPath: 'inset(-24px -24px -24px -24px)', duration: 0.8, ease: 'power3.out' });
@@ -301,6 +301,12 @@
     bFull.addEventListener('click', function () { openIm(cur, frameBox); });
     var fs = $('#tFullCover'); if (fs) fs.addEventListener('click', function () { openIm(cur, frameBox); });
   }
+
+  /* ---------- dibujos de línea de las tarjetas ---------- */
+  if ('IntersectionObserver' in window) {
+    var lio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-drawn'); lio.unobserve(e.target); } }); }, { threshold: 0.35 });
+    $$('.tool-note .line-art').forEach(function (s) { lio.observe(s); });
+  } else $$('.tool-note .line-art').forEach(function (s) { s.classList.add('is-drawn'); });
 
   /* ---------- visor de láminas: transición al cambiar de imagen ---------- */
   var lbImg = $('#lbImg');

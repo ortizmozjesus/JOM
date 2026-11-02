@@ -52,7 +52,7 @@ async function imagenPrueba(texto, ancho, alto) {
   g.fillStyle = '#f1f7f8'; g.fillRect(0, 0, ancho, alto);
   g.fillStyle = '#c4cccf';
   for (let x = 12; x < ancho; x += 24) for (let y = 12; y < alto; y += 24) g.fillRect(x, y, 2, 2);
-  g.strokeStyle = '#2aa7c9'; g.lineWidth = 3; g.strokeRect(24, 24, ancho - 48, alto - 48);
+  g.strokeStyle = '#ff2800'; g.lineWidth = 3; g.strokeRect(24, 24, ancho - 48, alto - 48);
   g.fillStyle = '#0a1522'; g.font = '600 26px Georgia, serif';
   const palabras = String(texto).replace(/\s+/g, ' ').slice(0, 220).split(' ');
   let linea = ''; let y = 80;

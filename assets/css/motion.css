@@ -399,3 +399,40 @@ h3,.group h2{line-height:1.2;letter-spacing:-.01em}
 .t-p{font-size:1rem}
 @keyframes imgin{from{clip-path:inset(0 0 100% 0);transform:scale(1.04)}to{clip-path:inset(0 0 0 0);transform:none}}
 @media (prefers-reduced-motion:no-preference){.solo-gallery .frame:first-child img{animation:imgin 900ms var(--ease-out) 120ms both}}
+
+/* ============ v4: rojo Ferrari, dibujos de línea, muelles (Apple) ============ */
+:root{--spring:linear(0.0, 0.0212, 0.0733, 0.1434, 0.2222, 0.3034, 0.3831, 0.4586, 0.5284, 0.5918, 0.6487, 0.699, 0.7433, 0.7818, 0.8151, 0.8438, 0.8684, 0.8894, 0.9073, 0.9224, 0.9351, 0.9459, 0.9549, 0.9625, 0.9689, 0.9742, 0.9786, 0.9823, 0.9854, 0.9879, 0.99, 0.9918, 0.9932, 0.9944, 0.9954, 0.9962, 0.9969, 0.9974, 0.9979, 0.9983, 0.9986, 0.9988, 0.9991, 0.9992, 1);--spring-d:620ms;--spring-b:linear(0.0, 0.0249, 0.0877, 0.1733, 0.2706, 0.3713, 0.4696, 0.5616, 0.645, 0.7187, 0.7822, 0.8358, 0.8801, 0.9161, 0.9445, 0.9666, 0.9832, 0.9954, 1.0039, 1.0096, 1.013, 1.0147, 1.0152, 1.0148, 1.0138, 1.0125, 1.0111, 1.0095, 1.008, 1.0066, 1.0054, 1.0043, 1.0033, 1.0025, 1.0018, 1.0013, 1.0008, 1.0005, 1.0003, 1.0001, 0.9999, 0.9999, 0.9998, 0.9998, 1);--spring-bd:750ms}
+.nav{backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);background:color-mix(in oklab,var(--color-paper) 72%,transparent)}
+@media (prefers-reduced-transparency:reduce){.nav{backdrop-filter:none;background:var(--color-paper)}}
+
+/* dibujos de línea */
+.line-art{display:block;width:100%;height:auto;overflow:visible}
+.line-art .ln{fill:none;stroke:var(--color-ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1100ms var(--ease-out) calc(var(--i,0) * 70ms)}
+.line-art .ln.ac{stroke:var(--color-accent);stroke-width:2.25}
+.is-drawn .ln,.line-art.is-drawn .ln{stroke-dashoffset:0}
+.t-frame{background:var(--color-paper-2);box-shadow:none}
+.t-art{position:absolute;inset:0;display:grid;place-items:center;padding:7%;transition:opacity var(--spring-d) var(--spring)}
+.t-art .line-art{max-height:100%}
+.t-frame.is-ready .t-art{opacity:0;pointer-events:none}
+.tool-note .art{padding:var(--space-lg);background:var(--color-paper-2);aspect-ratio:16/10;display:grid;place-items:center}
+.tool-note .art .line-art{max-height:100%}
+.tool-note .what{max-width:32ch}
+@media (prefers-reduced-motion:reduce){.line-art .ln{stroke-dashoffset:0;transition:none}}
+
+/* muelles: critically damped (1.0) por defecto, con rebote (0.8) donde hay inercia */
+.btn,.tab,.lang,.t-btn,.menu-btn,.tool-note .go,.intro-skip{transition:transform var(--spring-d) var(--spring),background-color var(--dur-short) var(--ease-out),color var(--dur-short) var(--ease-out),border-color var(--dur-short) var(--ease-out)}
+.btn:active,.tab:active,.lang:active,.t-btn:active,.menu-btn:active,.tool-note .go:active{transition-duration:90ms,var(--dur-short),var(--dur-short),var(--dur-short);transform:scale(.97)}
+.t-item{transition:background-color var(--spring-d) var(--spring)}
+.t-p{transform:translateY(-6px);transition:opacity var(--spring-d) var(--spring),transform var(--spring-d) var(--spring)}
+.t-item[data-active="true"] .t-p{transform:none}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.t-guidepanel.is-swap>*{animation:rise var(--spring-bd) var(--spring-b) both}
+.t-guidepanel.is-swap>*:nth-child(2){animation-delay:60ms}
+.t-guidepanel.is-swap>*:nth-child(3){animation-delay:120ms}
+.immerse-guide{transition:transform var(--spring-bd) var(--spring-b)}
+@media (max-width:40rem){
+  .nav nav{transform:translateY(-12px);transition:opacity var(--dur-short) var(--ease-out),transform var(--spring-d) var(--spring),visibility 0s linear var(--dur-short)}
+  .nav.is-menu nav{transform:none}
+}
+@media (max-width:60rem){.immerse-guide{transition:transform var(--spring-bd) var(--spring-b)}}
+@media (prefers-reduced-motion:reduce){.t-guidepanel.is-swap>*{animation:none}.t-p{transform:none}.nav nav{transform:none}}

@@ -1,15 +1,26 @@
 <!doctype html>
 <html lang="es">
 <head>
-<title>Visor IFC | Jesús Ortiz Muñoz</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  
+  <title>Visor 3D multiformato</title>
   <meta name="description" content="Visor 3D multiformato de Jesús Ortiz Muñoz: abre IFC, DXF, OBJ, STL y más en el navegador." />
-  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
-  
-  <link rel="stylesheet" href="../../assets/css/fonts.css">
-
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    /* Abierto con doble clic (file://) el navegador bloquea módulos, CSS y WebAssembly: se avisa en lugar de dejar la página muerta. */
+    if (location.protocol === "file:") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var d = document.createElement("div");
+        d.setAttribute("role", "alert");
+        d.style.cssText = "position:fixed;inset:34px 0 auto 0;z-index:99;padding:16px 24px;background:#0a1522;color:#f1f7f8;font:16px/1.5 system-ui,sans-serif";
+        d.innerHTML = "<b>Este visor necesita un servidor.</b> Abierto con doble clic, el navegador lo bloquea. " +
+          "Ábrelo desde la web publicada (ortizmozjesus.github.io/JOM/herramientas/visor-ifc/) o ejecuta <b>iniciar-visor.bat</b> en esta carpeta.";
+        document.body.appendChild(d);
+      });
+    }
+  </script>
   <script type="module" crossorigin src="./assets/index-DodkpIu6.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-9pW4KaHC.css">
 </head>
@@ -85,7 +96,6 @@
   <div id="busy" hidden><div><div class="spin"></div><p id="busyt">Cargando…</p></div></div>
   <div id="dropfx" hidden><p>Suelta para abrir</p></div>
   <div id="toast"></div>
-
-
+
 </body>
 </html>
