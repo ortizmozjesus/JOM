@@ -1,0 +1,7 @@
+node_modules
+dist
+public/wasm
+public/rhino3dm
+public/fragments-worker.mjs
+.claude
+.impeccable

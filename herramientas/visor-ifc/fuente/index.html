@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Visor 3D multiformato</title>
+  <meta name="description" content="Visor 3D multiformato de Jesús Ortiz Muñoz: abre IFC, DXF, OBJ, STL y más en el navegador." />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./src/style.css" />
+  <script>
+    /* Abierto con doble clic (file://) el navegador bloquea módulos, CSS y WebAssembly: se avisa en lugar de dejar la página muerta. */
+    if (location.protocol === "file:") {
+      document.addEventListener("DOMContentLoaded", function () {
+        var d = document.createElement("div");
+        d.setAttribute("role", "alert");
+        d.style.cssText = "position:fixed;inset:34px 0 auto 0;z-index:99;padding:16px 24px;background:#0a1522;color:#f1f7f8;font:16px/1.5 system-ui,sans-serif";
+        d.innerHTML = "<b>Este visor necesita un servidor.</b> Abierto con doble clic, el navegador lo bloquea. " +
+          "Ábrelo desde la web publicada (ortizmozjesus.github.io/JOM/herramientas/visor-ifc/) o ejecuta <b>iniciar-visor.bat</b> en esta carpeta.";
+        document.body.appendChild(d);
+      });
+    }
+  </script>
+</head>
+<body>
+  <div class="jom-bar"><a href="../../herramientas.html">Herramientas</a><span>Visor IFC</span></div>
+  <div id="viewer"></div>
+
+  <aside id="side">
+    <header>
+      <h1>Visor 3D</h1>
+      <p class="mut">IFC, FRAG, DXF, STL, 3DS, OBJ y más, con That Open Engine.</p>
+    </header>
+
+    <label id="drop" for="file">
+      <strong>Abrir archivos</strong>
+      <span class="mut">o arrástralos aquí</span>
+      <input id="file" type="file" multiple hidden />
+    </label>
+    <p class="mut tiny" id="fmts"></p>
+
+    <div class="opts">
+      <label>Unidades
+        <select id="units">
+          <option value="auto">Automático</option>
+          <option value="0.001">mm</option>
+          <option value="0.01">cm</option>
+          <option value="1">m</option>
+          <option value="0.0254">pulgadas</option>
+          <option value="0.3048">pies</option>
+        </select>
+      </label>
+      <span class="mut tiny">Se aplica a lo que abras (no a IFC/FRAG)</span>
+    </div>
+
+    <h2>Modelos <span id="count" class="mut"></span></h2>
+    <div id="models" class="list"><p class="mut tiny empty">Todavía no hay nada cargado.</p></div>
+
+    <h2>Vista</h2>
+    <div class="row">
+      <button data-view="fit" title="Encuadrar todo (F)">Encuadrar</button>
+      <button data-view="iso">3D</button>
+      <button data-view="top">Planta</button>
+      <button data-view="front">Alzado</button>
+      <button id="proj">Ortogonal</button>
+    </div>
+
+    <h2>Herramientas</h2>
+    <div class="row">
+      <button id="edges">Aristas</button>
+      <button id="wire">Alambre</button>
+      <button id="measure">Medir</button>
+      <button id="gridb" class="on">Rejilla</button>
+      <button id="shot">Captura</button>
+    </div>
+    <p id="mres" class="mut tiny"></p>
+
+    <label class="chk"><input type="checkbox" id="cut" /> Sección horizontal</label>
+    <input type="range" id="cutv" min="0" max="100" value="50" disabled />
+    <p id="cutl" class="mut tiny"></p>
+
+    <section id="layersw" hidden>
+      <h2 id="layersh">Capas</h2>
+      <div class="row"><button id="lall">Todas</button><button id="lnone">Ninguna</button></div>
+      <div id="layers" class="list"></div>
+    </section>
+  </aside>
+
+  <aside id="propsw" hidden>
+    <button id="close" aria-label="Cerrar">×</button>
+    <div id="props"></div>
+  </aside>
+
+  <div id="busy" hidden><div><div class="spin"></div><p id="busyt">Cargando…</p></div></div>
+  <div id="dropfx" hidden><p>Suelta para abrir</p></div>
+  <div id="toast"></div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
