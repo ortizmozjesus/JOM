@@ -1,39 +1,40 @@
 <!doctype html><html lang="es"><head>
-<meta name="description" content="Herramienta de Jesús Ortiz Muñoz: arquitectura y programación."><link rel="icon" href="../../favicon.svg"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body><div class="jom-bar"><a href="../../herramientas.html">Herramientas</a><span>Estanque de piedras</span></div><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Hedvig+Letters+Serif:opsz@12..24&display=swap"><!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>/* Hallmark · shape: Portfolio Index · genre: editorial · theme: Studio (deal 3/3, seed portfolio-arquitectura-estudiante-proyectos-a195·c8a659d1·2026-10-30·r0) · job: hire · draw: custom-by-brief
+<title>Estanque de piedras | Jesús Ortiz Muñoz</title>
+<meta name="description" content="Herramienta de Jesús Ortiz Muñoz: arquitectura y programación."><link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body><div class="jom-bar"><a href="../../herramientas.html">Herramientas</a><span>Estanque de piedras</span></div><link rel="stylesheet" href="../../assets/css/fonts.css"><style>/* Hallmark · shape: Portfolio Index · genre: editorial · theme: Studio (deal 3/3, seed portfolio-arquitectura-estudiante-proyectos-a195·c8a659d1·2026-10-30·r0) · job: hire · draw: custom-by-brief
  * hero: Ledge, name beside a crop-marked plate · nav: edge-aligned wordmark and four pages · footer: rule, wordmark over links · imagery: the author's own drawings and renders · signature: a drawing sheet with crop marks and a dimension line drawn at its real pixel width
  * axes: light/roman-serif/warm · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
-:root{--lit-1:#0d3040;--lit-2:rgba(8,24,30,.72);--lit-3:rgba(255,255,255,.14);--lit-4:#dcebee;--lit-5:#e8f4f6;--lit-6:#0b2a33;--lit-7:rgba(255,255,255,.12);--lit-8:#f1f7f8;--lit-9:#0a1522;--lit-10:#aa4600;--lit-11:#e97219;--lit-12:#f9fcfd;--lit-13:#c4cccf;--lit-14:#58626a;--lit-15:#161616;--lit-16:rgba(10,21,34,.78);--lit-17:#3a4652;--lit-18:#e8eef2;--lit-19:rgba(10,21,34,.86);--lit-20:#eef3f6;--fam-1:'Geist',ui-sans-serif,system-ui,sans-serif;--fam-2:'Hedvig Letters Serif',ui-serif,Georgia,serif!important;}
+:root{--lit-1:#0d3040;--lit-2:rgba(8,24,30,.72);--lit-3:rgba(255,255,255,.14);--lit-4:#dcebee;--lit-5:#e8f4f6;--lit-6:#0b2a33;--lit-7:rgba(255,255,255,.12);--lit-8:#f1f7f8;--lit-9:#0a1522;--lit-10:#0b6f8a;--lit-11:#2aa7c9;--lit-12:#f9fcfd;--lit-13:#c4cccf;--lit-14:#58626a;--lit-15:#161616;--lit-16:rgba(10,21,34,.78);--lit-17:#3a4652;--lit-18:#e8eef2;--lit-19:rgba(10,21,34,.86);--lit-20:#eef3f6;--fam-1:'Schibsted Grotesk',ui-sans-serif,system-ui,sans-serif;--fam-2:'Hedvig Letters Serif',ui-serif,Georgia,serif!important;}
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.4}
 *{box-sizing:border-box}
 .app{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:0}
 .stage{position:relative;min-width:0;min-height:0;background:var(--lit-1)}
 canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
-.bar{position:absolute;left:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 24px)}
-.seg{display:flex;background:var(--lit-2);border:1px solid var(--lit-3);border-radius:10px;padding:3px;backdrop-filter:blur(6px)}
-.seg button,.btn{font:inherit;border:0;background:transparent;color:var(--lit-4);padding:7px 12px;border-radius:7px;cursor:pointer}
+.bar{position:absolute;left:12px;top:12px;display:flex;gap:8px;flex-wrap:wrap;max-width:calc(100% - 24px)}
+.seg{display:flex;background:var(--lit-2);border:1px solid var(--lit-3);border-radius:10px;padding:4px;backdrop-filter:blur(6px)}
+.seg button,.btn{font:inherit;border:0;background:transparent;color:var(--lit-4);padding:8px 12px;border-radius:7px;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--lit-5);color:var(--lit-6);font-weight:600}
 .seg button:hover:not([aria-pressed="true"]){background:var(--lit-7)}
-.hint{position:absolute;left:12px;bottom:12px;max-width:calc(100% - 24px);width:fit-content;color:var(--lit-5);font-size:13px;background:var(--lit-2);padding:6px 10px;border-radius:8px;pointer-events:none}
-.side{background:var(--panel);border-left:1px solid var(--line);padding:18px max(16px,env(safe-area-inset-right,0px)) 18px 16px;overflow:auto;display:flex;flex-direction:column;gap:18px;min-height:0}
+.hint{position:absolute;left:12px;bottom:12px;max-width:calc(100% - 24px);width:fit-content;color:var(--lit-5);font-size:13px;background:var(--lit-2);padding:8px 8px;border-radius:8px;pointer-events:none}
+.side{background:var(--panel);border-left:1px solid var(--line);padding:16px max(16px,env(safe-area-inset-right,0px)) 16px 16px;overflow:auto;display:flex;flex-direction:column;gap:16px;min-height:0}
 h1{font-family:var(--f-display);font-weight:700;font-size:24px;line-height:1.1;margin:0 0 4px;text-wrap:balance}
 .lede{margin:0;color:var(--mute)}
 h2{font-size:11px;letter-spacing:0;color:var(--mute);margin:0 0 8px;font-weight:600}
-.types{display:grid;grid-template-columns:minmax(0,1fr) 1fr;gap:6px}
-.type{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;font:inherit;cursor:pointer;text-align:left;min-width:0}
+.types{display:grid;grid-template-columns:minmax(0,1fr) 1fr;gap:8px}
+.type{display:flex;align-items:center;gap:8px;padding:8px 8px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;font:inherit;cursor:pointer;text-align:left;min-width:0}
 .type[aria-pressed="true"]{border-color:var(--accent);background:var(--chip)}
 .dot{width:11px;height:11px;border-radius:50%;flex:none}
-.row{display:grid;grid-template-columns:90px minmax(0,1fr) 44px;align-items:center;gap:8px;margin:6px 0}
+.row{display:grid;grid-template-columns:90px minmax(0,1fr) 44px;align-items:center;gap:8px;margin:8px 0}
 .row label{color:var(--mute)}
 .row output{text-align:right;font-variant-numeric:tabular-nums}
 input[type=range]{width:100%;accent-color:var(--accent)}
-.btns{display:flex;gap:6px;flex-wrap:wrap}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
 .b{font:inherit;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
 .b:hover{background:var(--chip)}
 .b.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
 .b[aria-pressed="true"]{background:var(--chip);border-color:var(--accent)}
-.list{display:flex;flex-direction:column;gap:6px}
-.st{display:grid;grid-template-columns:12px minmax(0,1fr) 84px 28px;align-items:center;gap:8px;padding:7px 8px;border:1px solid var(--line);border-radius:8px}
+.list{display:flex;flex-direction:column;gap:8px}
+.st{display:grid;grid-template-columns:12px minmax(0,1fr) 84px 28px;align-items:center;gap:8px;padding:8px 8px;border:1px solid var(--line);border-radius:8px}
 .st.sel{border-color:var(--accent);background:var(--chip)}
 .st .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
 .st .del{border:0;background:transparent;color:var(--mute);cursor:pointer;font-size:16px;line-height:1}
@@ -48,7 +49,7 @@ textarea{width:100%;height:90px;font:12px ui-monospace,monospace;background:var(
 }
 
 /* ---- Studio skin ---- */
-:root{--bg:#f1f7f8;--panel:#f9fcfd;--ink:#0a1522;--mute:#58626a;--line:#c4cccf;--accent:#e97219;--accent-ink:#0a1522;--chip:#e5edef;--f-display:'Hedvig Letters Serif',Georgia,serif;--f-body:'Geist',ui-sans-serif,system-ui,sans-serif;color-scheme:light}
+:root{--bg:#f1f7f8;--panel:#f9fcfd;--ink:#0a1522;--mute:#58626a;--line:#c4cccf;--accent:#2aa7c9;--accent-ink:#0a1522;--chip:#e5edef;--f-display:'Hedvig Letters Serif',Georgia,serif;--f-body:'Schibsted Grotesk',ui-sans-serif,system-ui,sans-serif;color-scheme:light}
 
 html,body{margin:0;background:var(--lit-8)!important;color:var(--lit-9)!important}
 body{font-family:var(--fam-1);-webkit-font-smoothing:antialiased}
@@ -60,10 +61,10 @@ button:not(.x):not([class*=lb]){cursor:pointer}
 :focus-visible{outline:2px solid var(--lit-10)!important;outline-offset:2px}
 input[type=range]{accent-color:var(--lit-11)}
 .num,output,td{font-variant-numeric:tabular-nums}
-.jom-bar{position:fixed;inset:0 0 auto 0;z-index:1000;height:34px;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 max(14px,env(safe-area-inset-right,0px)) 0 max(14px,env(safe-area-inset-left,0px));background:var(--lit-12);color:var(--lit-9);font:500 13px 'Geist',ui-sans-serif,system-ui,sans-serif;border-bottom:1px solid var(--lit-13)}
+.jom-bar{position:fixed;inset:0 0 auto 0;z-index:1000;height:34px;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));background:var(--lit-12);color:var(--lit-9);font:500 13px 'Schibsted Grotesk',ui-sans-serif,system-ui,sans-serif;border-bottom:1px solid var(--lit-13)}
 .jom-bar a{color:var(--lit-9);text-decoration:underline;text-decoration-color:transparent;text-underline-offset:.2em;text-decoration-thickness:1px;transition:text-decoration-color 160ms}
 .jom-bar a:hover{text-decoration-color:var(--lit-11)}.jom-bar span{color:var(--lit-14);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-body{padding-top:34px!important}
+body{padding-top:32px!important}
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
 .stage{background:var(--lit-15)}.seg{background:var(--lit-16);border-color:var(--lit-17)}.seg button{color:var(--lit-18)}.seg button[aria-pressed="true"]{background:var(--lit-11);color:var(--lit-9)}
 .hint,.toast{background:var(--lit-19)!important;color:var(--lit-20)!important}
@@ -110,7 +111,7 @@ html,body{overflow-x:clip}
     </section>
     <section>
       <h2>Editar todas las de un tipo</h2>
-      <div class="row"><label for="gt">Tipo</label><select id="gt" style="grid-column:2/4;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)"></select></div>
+      <div class="row"><label for="gt">Tipo</label><select id="gt" style="grid-column:2/4;font:inherit;padding:8px 8px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)"></select></div>
       <div class="row"><label for="gw">Peso</label><input id="gw" type="range" min="1" max="5" step="1" value="3"><output id="gwO">3</output></div>
       <div class="btns"><button class="b" id="gdel">Borrar todas de este tipo</button></div>
       <p class="note">El peso se aplica a todas las piedras de ese tipo a la vez, y ellas recalculan sus ondas.</p>
@@ -126,10 +127,10 @@ html,body{overflow-x:clip}
     <section>
       <h2>Sacar para dibujar</h2>
       <p class="note">Usa el instante que ves ahora: pausa cuando las ondas estén como quieras (o pulsa «Soltar todas a la vez» y pausa).</p>
-      <div class="row"><label for="pxw">Resolución PNG</label><select id="pxw" style="grid-column:2/4;font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)"><option value="4000">4000 px</option><option value="6000">6000 px</option><option value="8000" selected>8000 px (iPad Pro, recomendado)</option><option value="10000">10000 px (máxima, pesado)</option></select></div>
-      <label style="display:flex;gap:8px;align-items:center;margin:6px 0"><input type="checkbox" id="zrings"> Incluir anillos de cota dentro de las zonas</label>
+      <div class="row"><label for="pxw">Resolución PNG</label><select id="pxw" style="grid-column:2/4;font:inherit;padding:8px 8px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)"><option value="4000">4000 px</option><option value="6000">6000 px</option><option value="8000" selected>8000 px (iPad Pro, recomendado)</option><option value="10000">10000 px (máxima, pesado)</option></select></div>
+      <label style="display:flex;gap:8px;align-items:center;margin:8px 0"><input type="checkbox" id="zrings"> Incluir anillos de cota dentro de las zonas</label>
       <div class="btns"><button class="b main" id="xAll">Paquete completo (.zip)</button></div>
-      <div class="btns" style="margin-top:6px">
+      <div class="btns" style="margin-top:8px">
         <button class="b" id="xDxf">DXF de ecos y relieve</button>
         <button class="b" id="xOndas">PNG ondas en color</button>
         <button class="b" id="xCotas">PNG cotas en color</button>
@@ -279,7 +280,7 @@ function drawStones(){
     const c=TYPES[s.type].c,x=s.x*sx,y=s.y*sy,r=(5+s.w*1.8)*dpr;
     ctx.beginPath();ctx.arc(x,y,r,0,6.2832);ctx.fillStyle=`rgb(${c[0]},${c[1]},${c[2]})`;ctx.fill();
     ctx.lineWidth=(s.id===sel?3:1.6)*dpr;ctx.strokeStyle=s.id===sel?'#ffffff':'rgba(255,255,255,.85)';ctx.stroke();
-    if(mode==='cotas'||s.id===sel){ctx.font=`${12*dpr}px Geist,system-ui,sans-serif`;ctx.fillStyle='#fff';ctx.shadowColor='rgba(0,0,0,.7)';ctx.shadowBlur=4*dpr;ctx.fillText(s.name,x+r+5*dpr,y+4*dpr);ctx.shadowBlur=0}
+    if(mode==='cotas'||s.id===sel){ctx.font=`${12*dpr}px Schibsted Grotesk,system-ui,sans-serif`;ctx.fillStyle='#fff';ctx.shadowColor='rgba(0,0,0,.7)';ctx.shadowBlur=4*dpr;ctx.fillText(s.name,x+r+5*dpr,y+4*dpr);ctx.shadowBlur=0}
   }
 }
 
@@ -319,7 +320,7 @@ $('#rain').onclick=e=>{rain=!rain;e.target.setAttribute('aria-pressed',rain)};
 $('#dom').oninput=e=>{const v=e.target.value/100;dom=v;$('#domO').textContent=e.target.value+'%';for(const k in domT)domT[k]=v;renderDomTypes();save()};
 function renderDomTypes(){const el=$('#domTypes');el.innerHTML='';
   for(const k in TYPES){const r=document.createElement('div');r.className='row';r.style.gridTemplateColumns='128px minmax(0,1fr) 44px';const v=Math.round(domT[k]*100);
-    r.innerHTML=`<label for="dt_${k}" style="display:flex;align-items:center;gap:6px"><span class="dot" style="background:rgb(${TYPES[k].c})"></span>${TYPES[k].n}</label><input id="dt_${k}" type="range" min="0" max="100" value="${v}"><output>${v}%</output>`;
+    r.innerHTML=`<label for="dt_${k}" style="display:flex;align-items:center;gap:8px"><span class="dot" style="background:rgb(${TYPES[k].c})"></span>${TYPES[k].n}</label><input id="dt_${k}" type="range" min="0" max="100" value="${v}"><output>${v}%</output>`;
     r.querySelector('input').oninput=e=>{domT[k]=e.target.value/100;r.querySelector('output').textContent=e.target.value+'%';save()};
     el.appendChild(r)}}
 $('#vel').oninput=e=>{vel=e.target.value/100;$('#velO').textContent=vel.toFixed(1).replace('.',',')+'×';save()};
@@ -516,14 +517,14 @@ function strokeTinted(c,pts,closed,sc,A,alpha,lw,dash){
 function canvasOf(px){const w=px,h=Math.round(px*H/W),c=document.createElement('canvas');c.width=w;c.height=h;return c;}
 function drawStonesOn(c,sc,labels){for(const s of stones){const col=TYPES[s.type].c,x=s.x*sc,y=s.y*sc,r=Math.max(4,stoneR(s)*sc);
   c.beginPath();c.arc(x,y,r,0,6.2832);c.fillStyle=`rgb(${col})`;c.fill();c.lineWidth=Math.max(1.5,sc*.6);c.strokeStyle='#fff';c.stroke();c.lineWidth=Math.max(1,sc*.25);c.strokeStyle='rgba(20,40,50,.8)';c.stroke();
-  if(labels){c.font=`600 ${Math.max(11,sc*5)}px Geist,system-ui,sans-serif`;c.fillStyle='#15303a';c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=Math.max(2.5,sc*1.4);c.strokeText(s.name,x+r+4,y+4);c.fillText(s.name,x+r+4,y+4);}}}
+  if(labels){c.font=`600 ${Math.max(11,sc*5)}px Schibsted Grotesk,system-ui,sans-serif`;c.fillStyle='#15303a';c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=Math.max(2.5,sc*1.4);c.strokeText(s.name,x+r+4,y+4);c.fillText(s.name,x+r+4,y+4);}}}
 function pngOndas(px,mode){const c=canvasOf(px),gw=c.width,gh=c.height,n=gw*gh,A={h:new Float32Array(n),r:new Float32Array(n),g:new Float32Array(n),b:new Float32Array(n),w:new Float32Array(n)};
   (mode==='cotas'?fieldCotas:fieldOndas)(gw,gh,A,t);const img=shade(mode,gw,gh,A,mode==='cotas'?2:1);c.getContext('2d').putImageData(img,0,0);return c;}
 function pngCalco(px,plantilla){const c=canvasOf(px),g=c.getContext('2d'),sc=c.width/W,A=fieldFor('ondas');
   if(plantilla){g.fillStyle='#fbfaf5';g.fillRect(0,0,c.width,c.height);
     g.lineWidth=1;g.strokeStyle='rgba(120,140,150,.28)';g.setLineDash([]);
     for(let x=0;x<=W;x+=100){g.beginPath();g.moveTo(x*sc,0);g.lineTo(x*sc,c.height);g.stroke();}for(let y=0;y<=H;y+=100){g.beginPath();g.moveTo(0,y*sc);g.lineTo(c.width,y*sc);g.stroke();}
-    g.font=`${Math.max(11,sc*4.5)}px Geist,system-ui,sans-serif`;g.fillStyle='rgba(60,80,90,.8)';for(let x=100;x<W;x+=100)g.fillText(x+' m',x*sc+3,Math.max(12,sc*5));for(let y=100;y<H;y+=100)g.fillText((H-y)+' m',3,y*sc-3);
+    g.font=`${Math.max(11,sc*4.5)}px Schibsted Grotesk,system-ui,sans-serif`;g.fillStyle='rgba(60,80,90,.8)';for(let x=100;x<W;x+=100)g.fillText(x+' m',x*sc+3,Math.max(12,sc*5));for(let y=100;y<H;y+=100)g.fillText((H-y)+' m',3,y*sc-3);
     const C=fieldFor('cotas');g.lineJoin='round';g.lineCap='round';for(const L of levelsOf(C,.8)){if(L<.4)continue;polishLines(contourLines(C.h,L),1.5,1.2,12).forEach(l=>{g.strokeStyle=Math.abs(L/4-Math.round(L/4))<1e-3?'rgba(90,80,70,.6)':'rgba(90,80,70,.3)';g.lineWidth=Math.max(1.2,sc*.4);g.setLineDash([]);g.beginPath();smoothPath(g,l.pts,l.closed,sc);g.stroke();});}}
   const lw=Math.max(1.4,sc*.6);
   let mxA=0;for(let k=0;k<A.h.length;k++){const v=Math.abs(A.h[k]);if(v>mxA)mxA=v;}const stepE=[.005,.01,.02,.025,.05,.1,.2,.25,.5,1].find(v=>v>=mxA/8)||1;g.setLineDash([]);g.lineJoin='round';g.lineCap='round';
@@ -535,14 +536,14 @@ function pngCalco(px,plantilla){const c=canvasOf(px),g=c.getContext('2d'),sc=c.w
   for(const i of order){const L=lv[i],k=ks[i],zero=k===0;
     const col=zero?'#3a3f45':colK(k),w=zero?lw*.8:lw*(.8+.9*k/K);
     polishLines(contourLines(A.h,L),1.5,1.2,12).forEach(l=>{g.strokeStyle=col;g.lineWidth=w;g.beginPath();smoothPath(g,l.pts,l.closed,sc);g.stroke();});}
-  if(plantilla){const lxx=sc*40;let lyy=sc*40+Math.max(18,sc*8)*7;g.font=`600 ${Math.max(12,sc*5.5)}px Geist,system-ui,sans-serif`;
+  if(plantilla){const lxx=sc*40;let lyy=sc*40+Math.max(18,sc*8)*7;g.font=`600 ${Math.max(12,sc*5.5)}px Schibsted Grotesk,system-ui,sans-serif`;
     g.fillStyle='#15303a';g.fillText('Importancia de las ondas',lxx,lyy);lyy+=Math.max(18,sc*8);
     for(let k=K;k>=1;k--){g.strokeStyle=colK(k);g.lineWidth=lw*(.8+.9*k/K);g.beginPath();g.moveTo(lxx,lyy-4);g.lineTo(lxx+sc*14,lyy-4);g.stroke();g.fillStyle='#15303a';g.fillText(k===K?'máxima (cota ±'+(k*stepE).toFixed(2)+')':k===1?'mínima (±'+stepE+')':'±'+(k*stepE).toFixed(2),lxx+sc*18,lyy);lyy+=Math.max(18,sc*8);}}
   if(plantilla){for(const s of stones){g.setLineDash([sc*6,sc*4]);g.lineWidth=Math.max(1,sc*.4);g.strokeStyle=`rgba(${TYPES[s.type].c},.7)`;g.beginPath();g.arc(s.x*sc,s.y*sc,rStat(s.w)*sc,0,6.2832);g.stroke();}g.setLineDash([]);}
   drawStonesOn(g,sc,plantilla);
   if(plantilla){g.setLineDash([]);g.strokeStyle='#15303a';g.lineWidth=Math.max(2,sc);g.strokeRect(1,1,c.width-2,c.height-2);
-    const bx=sc*40,by=c.height-sc*30;g.fillStyle='#15303a';g.fillRect(bx,by,sc*100,Math.max(3,sc*3));g.font=`600 ${Math.max(12,sc*5.5)}px Geist,system-ui,sans-serif`;g.fillText('0',bx,by-6);g.fillText('100 m',bx+sc*100-sc*14,by-6);
-    const ty=activeTypes();let lx=sc*40,ly=sc*40;g.font=`600 ${Math.max(12,sc*5.5)}px Geist,system-ui,sans-serif`;
+    const bx=sc*40,by=c.height-sc*30;g.fillStyle='#15303a';g.fillRect(bx,by,sc*100,Math.max(3,sc*3));g.font=`600 ${Math.max(12,sc*5.5)}px Schibsted Grotesk,system-ui,sans-serif`;g.fillText('0',bx,by-6);g.fillText('100 m',bx+sc*100-sc*14,by-6);
+    const ty=activeTypes();let lx=sc*40,ly=sc*40;g.font=`600 ${Math.max(12,sc*5.5)}px Schibsted Grotesk,system-ui,sans-serif`;
     for(const k in ty){g.fillStyle=`rgb(${TYPES[k].c})`;g.beginPath();g.arc(lx,ly-4,Math.max(5,sc*2.6),0,6.2832);g.fill();g.fillStyle='#15303a';g.fillText(TYPES[k].n+' ('+ty[k]+')',lx+Math.max(10,sc*5),ly);ly+=Math.max(18,sc*8);}
     g.fillText('N',c.width-sc*34,sc*34);g.beginPath();g.moveTo(c.width-sc*30,sc*40);g.lineTo(c.width-sc*30,sc*70);g.lineWidth=Math.max(2,sc);g.strokeStyle='#15303a';g.stroke();}
   return c;}
@@ -657,4 +658,4 @@ requestAnimationFrame(frame);
 })();
 </script>
 
-</body></html></body></html>
+</body></html>

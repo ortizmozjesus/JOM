@@ -8,6 +8,7 @@
   function applyLang(l) {
     lang = l; root.lang = l; store('jom-lang', l);
     document.querySelectorAll('[data-es]').forEach(function (el) { el.textContent = el.getAttribute('data-' + l); });
+    document.querySelectorAll('[data-alt-es]').forEach(function (el) { el.setAttribute('alt', el.getAttribute('data-alt-' + l)); });
     document.querySelectorAll('[data-aria-es]').forEach(function (el) { el.setAttribute('aria-label', el.getAttribute('data-aria-' + l)); });
     var t = document.querySelector('title[data-en]'); if (t) document.title = t.getAttribute('data-' + l);
     var md = document.querySelector('meta[name="description"][data-en]'); if (md) md.setAttribute('content', md.getAttribute('data-' + l));
@@ -49,7 +50,7 @@
       var fr = frames(c); cur.c = c; cur.i = (i + fr.length) % fr.length;
       var img = fr[cur.i].querySelector('img');
       var big = document.getElementById('lbImg'); big.src = img.currentSrc || img.src; big.alt = img.alt;
-      document.getElementById('lbTitle').textContent = c.querySelector('h2').textContent;
+      document.getElementById('lbTitle').textContent = (c.querySelector('h2') || c.querySelector('h1')).textContent;
       document.getElementById('lbAlt').textContent = img.alt + ' (' + (cur.i + 1) + '/' + fr.length + ')';
       if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); }
     };
