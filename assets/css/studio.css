@@ -17,7 +17,7 @@
   --color-paper: oklch(97.2% 0.006 215); --color-paper-2: oklch(94% 0.009 215); --color-paper-3: oklch(90.5% 0.011 215); --color-paper-hi: oklch(99% 0.004 215);
   --color-ink: oklch(16% 0.032 250); --color-ink-2: oklch(34% 0.022 245); --color-muted: oklch(41% 0.02 240);
   --color-rule: oklch(84% 0.010 225);
-  --color-accent: oklch(63% 0.255 31); --color-accent-ink: oklch(16% 0.032 250); --color-focus: oklch(48% 0.2 33);
+  --color-accent: #ff2800; --color-accent-ink: oklch(16% 0.032 250); --color-focus: #b31b00;
   --color-dot: color-mix(in oklab, var(--color-ink) 20%, transparent); --color-mark: color-mix(in oklab, var(--color-ink) 72%, transparent);
   --font-display: "Hedvig Letters Serif", ui-serif, Georgia, serif; --font-body: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-outlier: "Sofia Sans Extra Condensed", "Arial Narrow", ui-sans-serif, sans-serif;

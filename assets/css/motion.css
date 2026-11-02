@@ -484,3 +484,4 @@ body:has(.tool-grid) .page-head{padding-block:var(--space-xl) var(--space-lg)}
 @keyframes cring{from{transform:scale(1)}to{transform:scale(1.035)}}
 @media (prefers-reduced-motion:reduce){.cover-line,.cover .intro-svg circle{animation:none}}
 .intro-svg circle{vector-effect:none}
+:root{--text-lead:clamp(1.25rem,.9vw + 1rem,1.75rem)}

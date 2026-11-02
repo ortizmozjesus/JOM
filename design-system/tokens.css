@@ -1,0 +1,90 @@
+/* Hallmark · JOM Design System · tokens canónicos · v1.0 (2 nov 2026)
+ * Origen: assets/css/studio.css + assets/css/motion.css (cascada final).
+ * Uso: <link rel="stylesheet" href="tokens.css"> y programa SOLO con estas variables.
+ * Reglas: ver DESIGN.md. Nunca colores, fuentes, espacios ni duraciones sueltas. */
+:root {
+  color-scheme: light;
+
+  /* ---------- color (OKLCH; hex aproximado entre paréntesis) ---------- */
+  --color-paper:    oklch(97.2% 0.006 215);  /* fondo base            (#f1f7f8) */
+  --color-paper-2:  oklch(94%   0.009 215);  /* bandas, paneles       (#e5edef) */
+  --color-paper-3:  oklch(90.5% 0.011 215);  /* hover de superficies  (#d8e2e4) */
+  --color-paper-hi: oklch(99%   0.004 215);  /* panel elevado         (#f9fcfd) */
+  --color-ink:      oklch(16%   0.032 250);  /* texto y trazo         (#030e1a) */
+  --color-ink-2:    oklch(34%   0.022 245);  /* texto secundario      (#2f3943) */
+  --color-muted:    oklch(41%   0.020 240);  /* metadatos, etiquetas  (#414c54) */
+  --color-rule:     oklch(84%   0.010 225);  /* bordes de controles   (#c4cccf) */
+  --color-accent:   #ff2800;                  /* rojo Ferrari (hex canónico) */
+  --color-accent-ink: var(--color-ink);      /* texto sobre el acento: tinta, 4.9:1 */
+  --color-focus:    #b31b00;                  /* rojo oscuro: foco y texto rojo */
+  --color-error:    oklch(52%   0.190 27);
+  --color-success:  oklch(50%   0.120 150);
+  --color-mask:     oklch(12%   0.030 250);  /* fondos oscuros (carátula, visor) */
+  --color-dot:  color-mix(in oklab, var(--color-ink) 20%, transparent);
+  --color-mark: color-mix(in oklab, var(--color-ink) 72%, transparent);
+
+  /* ---------- tipografía ---------- */
+  --font-display: "Hedvig Letters Serif", ui-serif, Georgia, serif;            /* un solo peso: 400 */
+  --font-body:    "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;   /* 400 500 600 700 */
+  --tracking-display: -0.03em;
+  --leading-display: 1;
+  --leading-body: 1.6;
+
+  --text-xs: 0.8125rem;   /* 13  pie, metadato mínimo */
+  --text-sm: 0.9375rem;   /* 15  pies de imagen, tablas, botones */
+  --text-md: 1.0625rem;   /* 17  cuerpo */
+  --text-lg: 1.25rem;     /* 20  */
+  --text-xl: 1.5625rem;   /* 25  */
+  --text-2xl: 1.953rem;   /* 31  */
+  --text-3xl: 2.441rem;   /* 39  */
+  --text-lead:      clamp(1.25rem, 0.9vw + 1rem, 1.75rem);          /* frase de apoyo, peso 400, lh 1.4 */
+  --text-title:     clamp(1.5rem, 1vw + 1rem, 2rem);                /* h3 */
+  --text-section:   clamp(2.5rem, 3.4vw + 1rem, 4.75rem);           /* h2 */
+  --text-display-s: clamp(2.5rem, 5vw + 0.5rem, 4.5rem);
+  --text-page:      clamp(3.5rem, 9vw, 8rem);                       /* h1 de página, lh .92, tracking -.04em */
+  --text-hero:      clamp(3.25rem, 7.4vw, 7.25rem);                 /* nombre en portada, lh .92, tracking -.035em */
+
+  /* ---------- espacio (escala de 4 px) y rejilla ---------- */
+  --space-3xs: 2px;  --space-2xs: 4px;  --space-xs: 8px;   --space-sm: 12px;  --space-md: 16px;
+  --space-lg: 24px;  --space-xl: 40px;  --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
+  --container: 1440px;       /* ancho máximo, centrado */
+  --gutter: 64px;            /* 24 px ≤ 60rem, 16 px ≤ 40rem */
+  --gap-columns: 32px;       /* 16 px ≤ 40rem; rejilla de 12 columnas */
+  --section-gap-s: 120px;  --section-gap: 144px;  --section-gap-l: 176px;   /* ÷ en móvil: 80/96/120 y 56/72/96 */
+  --nav-h: 72px;             /* 60 px en móvil */
+  --touch: 44px;             /* alto mínimo de todo lo pulsable */
+
+  /* ---------- forma ---------- */
+  --radius-card: 3px;  --radius-pill: 3px;  --radius-control: 2px;
+  --rule-hair: 1px;
+  --shadow-card: none;  --shadow-sheet: none;      /* sin sombras en reposo */
+
+  /* ---------- movimiento ---------- */
+  --ease-out:    cubic-bezier(0.23, 1, 0.32, 1);   /* entradas y salidas: la curva por defecto */
+  --ease-in:     cubic-bezier(0.23, 1, 0.32, 1);   /* alias: nunca ease-in en interfaz */
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);  /* movimiento en pantalla */
+  --dur-micro: 100ms;  --dur-press: 90ms;  --dur-short: 180ms;  --dur-long: 360ms;
+  /* muelles Apple en linear(): ζ = 1.0 respuesta .40 s (sin rebote) y ζ = 0.8 respuesta .45 s (rebote leve, con inercia) */
+  --spring-d: 620ms;
+  --spring: linear(0.0, 0.0212, 0.0733, 0.1434, 0.2222, 0.3034, 0.3831, 0.4586, 0.5284, 0.5918, 0.6487, 0.699, 0.7433, 0.7818, 0.8151, 0.8438, 0.8684, 0.8894, 0.9073, 0.9224, 0.9351, 0.9459, 0.9549, 0.9625, 0.9689, 0.9742, 0.9786, 0.9823, 0.9854, 0.9879, 0.99, 0.9918, 0.9932, 0.9944, 0.9954, 0.9962, 0.9969, 0.9974, 0.9979, 0.9983, 0.9986, 0.9988, 0.9991, 0.9992, 1);
+  --spring-bd: 750ms;
+  --spring-b: linear(0.0, 0.0249, 0.0877, 0.1733, 0.2706, 0.3713, 0.4696, 0.5616, 0.645, 0.7187, 0.7822, 0.8358, 0.8801, 0.9161, 0.9445, 0.9666, 0.9832, 0.9954, 1.0039, 1.0096, 1.013, 1.0147, 1.0152, 1.0148, 1.0138, 1.0125, 1.0111, 1.0095, 1.008, 1.0066, 1.0054, 1.0043, 1.0033, 1.0025, 1.0018, 1.0013, 1.0008, 1.0005, 1.0003, 1.0001, 0.9999, 0.9999, 0.9998, 0.9998, 1);
+  --stagger: 70ms;           /* entre elementos de un grupo: 30–90 ms */
+
+  /* ---------- capas ---------- */
+  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
+}
+
+/* reglas globales que acompañan a los tokens */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { overflow-x: clip; }
+body { background: var(--color-paper); color: var(--color-ink); font: var(--text-md)/var(--leading-body) var(--font-body); -webkit-font-smoothing: antialiased; caret-color: var(--color-accent); }
+::selection { background: color-mix(in oklab, var(--color-accent) 22%, transparent); color: var(--color-ink); }
+html { scrollbar-color: var(--color-muted) var(--color-paper); }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: var(--tracking-display); line-height: var(--leading-display); text-wrap: balance; }
+p { text-wrap: pretty; }
+@media (max-width: 60rem) { :root { --gutter: 24px; --section-gap-s: 80px; --section-gap: 96px; --section-gap-l: 120px; } }
+@media (max-width: 40rem) { :root { --gutter: 16px; --section-gap-s: 56px; --section-gap: 72px; --section-gap-l: 96px; --gap-columns: 16px; --nav-h: 60px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+@media (prefers-reduced-transparency: reduce) { :root { --nav-blur: none; } }
