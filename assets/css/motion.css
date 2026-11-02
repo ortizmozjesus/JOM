@@ -436,3 +436,36 @@ h3,.group h2{line-height:1.2;letter-spacing:-.01em}
 }
 @media (max-width:60rem){.immerse-guide{transition:transform var(--spring-bd) var(--spring-b)}}
 @media (prefers-reduced-motion:reduce){.t-guidepanel.is-swap>*{animation:none}.t-p{transform:none}.nav nav{transform:none}}
+
+/* ============ v5: herramientas = solo diagramas ============ */
+.tool-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-xl) var(--gap-columns);padding-bottom:var(--section-gap-s)}
+.tool-tile{margin:0;min-width:0}
+.tile-btn{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:var(--space-sm);width:100%;cursor:pointer;text-decoration:none;color:var(--color-ink)}
+.tile-btn:focus-visible .art{outline:2px solid var(--color-focus);outline-offset:3px}
+.tile-btn .art,.tool-note .art{display:grid;place-items:center;aspect-ratio:16/10;padding:var(--space-lg);background:var(--color-paper-2);transition:background-color var(--dur-short) var(--ease-out),transform var(--spring-d) var(--spring)}
+.tile-btn:active .art{transform:scale(.985);transition-duration:90ms,90ms}
+@media (hover:hover) and (pointer:fine){.tile-btn:hover .art{background:color-mix(in oklab,var(--color-paper-2) 90%,var(--color-ink))}}
+.tile-btn .tn{font-family:var(--font-display);font-size:var(--text-title);letter-spacing:-.02em;line-height:1.1}
+.tool-note h3{font-size:var(--text-title)}
+.page-head{padding-block:var(--space-2xl) var(--space-xl)}
+@media (max-width:60rem){.tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:34rem){.tool-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* wireframe en movimiento: bucles discretos, solo en pantalla */
+.line-art .lp{fill:none;stroke:var(--color-ink);stroke-width:1.5;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:0;transform-box:fill-box;transform-origin:center;animation-play-state:paused}
+.line-art .lp.ac{stroke:var(--color-accent);stroke-width:2.25}
+.line-art .lp.fill{fill:var(--color-accent);stroke:none}
+.line-art .lp.flow{stroke-dasharray:6 12}
+.is-live .line-art.is-drawn .lp{animation-play-state:running}
+.line-art.is-drawn .lp.flow{opacity:.5;animation:flow 1.8s linear infinite}
+.line-art.is-drawn .lp.flow.ac{opacity:1}
+.line-art.is-drawn .lp.breathe{opacity:.5;animation:breathe 3.2s var(--ease-in-out) infinite alternate;animation-delay:calc(var(--i) * 400ms)}
+.line-art.is-drawn .lp.ping{animation:ping 3.6s var(--ease-out) infinite;animation-delay:calc(var(--i) * 700ms)}
+.line-art.is-drawn .lp.blink{animation:blink 3s var(--ease-in-out) infinite;animation-delay:calc(var(--i) * 160ms)}
+@keyframes flow{to{stroke-dashoffset:-36}}
+@keyframes breathe{from{transform:scale(1)}to{transform:scale(1.07)}}
+@keyframes ping{0%{opacity:.8;transform:scale(.3)}70%,100%{opacity:0;transform:scale(1)}}
+@keyframes blink{0%,60%,100%{opacity:0}30%{opacity:.85}}
+@media (prefers-reduced-motion:reduce){.line-art .lp{display:none}}
+body:has(.tool-grid) .page-head h1{font-size:clamp(2.75rem,5.5vw,4.5rem)}
+body:has(.tool-grid) .page-head{padding-block:var(--space-xl) var(--space-lg)}

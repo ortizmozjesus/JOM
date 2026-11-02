@@ -219,93 +219,60 @@
     else if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) mountLive(box); else if (liveNow === box) { unmount(box); liveNow = null; } }); }, { threshold: 0.75 }).observe(box);
   });
 
-  /* ---------- teatro de herramientas ---------- */
-  var th = $('#theatre');
-  if (th) {
-    var items = $$('.t-item', th), frameBox = $('#tFrame'), art = $('#tArt'), cover = $('#tCover'), meta = $('#tPath'), openTab = $('#tTab'), bFull = $('#tFull'), bUse = $('#tUse');
-    var cur = -1, iframe = null, started = false;
-    var mountStage = function (i) {
-      var it = items[i], src = it.getAttribute('data-src');
-      if (iframe) { if (iframe._ro) iframe._ro.disconnect(); iframe.remove(); iframe = null; }
-      frameBox.classList.remove('is-ready', 'is-active'); frameBox.classList.add('is-loading');
-      iframe = d.createElement('iframe'); iframe.setAttribute('title', it.getAttribute('data-title')); iframe.style.width = '1440px'; iframe.style.height = '900px';
-      var fit = function () { iframe.style.transform = 'scale(' + (frameBox.clientWidth / 1440) + ')'; }; fit();
-      if ('ResizeObserver' in window) { iframe._ro = new ResizeObserver(fit); iframe._ro.observe(frameBox); }
-      var done = false, ok = function () { if (done) return; done = true; frameBox.classList.remove('is-loading'); frameBox.classList.add('is-ready'); };
-      iframe.addEventListener('load', function () { embedFix(iframe); try { iframe.contentDocument.addEventListener('keydown', function (e) { if (e.key === 'Escape') release(); }); } catch (e) {} ok(); });
-      setTimeout(ok, 9000);
-      iframe.src = src; frameBox.appendChild(iframe);
-    };
-    var select = function (i, opt) {
-      opt = opt || {}; if (i === cur) return; cur = i;
-      items.forEach(function (it, k) { it.setAttribute('data-active', k === i ? 'true' : 'false'); $('.t-btn', it).setAttribute('aria-pressed', k === i ? 'true' : 'false'); });
-      var it = items[i];
-      if (art) { art.classList.remove('is-drawn'); art.innerHTML = $('.t-art-src', it).innerHTML; var sv = $('.line-art', art); void art.offsetWidth; requestAnimationFrame(function () { requestAnimationFrame(function () { if (sv) sv.classList.add('is-drawn'); }); }); }
-      meta.textContent = it.getAttribute('data-src').replace('/index.html', '');
-      var gp = $('#tGuide'); if (gp) { gp.innerHTML = $('.t-guide', it).innerHTML; localize(gp); gp.classList.remove('is-swap'); void gp.offsetWidth; gp.classList.add('is-swap'); }
-      openTab.href = it.getAttribute('data-src');
-      if (history.replaceState && !opt.silent) history.replaceState(null, '', '#' + it.id);
-      if (hasG && !reduce && !opt.instant) gsap.fromTo(frameBox, { clipPath: 'inset(-24px 100% -24px -24px)' }, { clipPath: 'inset(-24px -24px -24px -24px)', duration: 0.8, ease: 'power3.out' });
-      if (started) mountStage(i);
-    };
-    var activate = function () { if (!iframe) return; frameBox.classList.add('is-active'); bUse.textContent = tr('stop'); bUse.setAttribute('aria-pressed', 'true'); try { iframe.focus(); } catch (e) {} };
-    var release = function () { frameBox.classList.remove('is-active'); bUse.textContent = tr('use'); bUse.setAttribute('aria-pressed', 'false'); };
-    items.forEach(function (it, i) {
-      $('.t-btn', it).addEventListener('click', function () { select(i); });
-      $('.t-btn', it).addEventListener('keydown', function (e) {
-        var n = e.key === 'ArrowDown' ? i + 1 : e.key === 'ArrowUp' ? i - 1 : null; if (n === null) return;
-        e.preventDefault(); n = (n + items.length) % items.length; select(n, { instant: true }); $('.t-btn', items[n]).focus();
-      });
-    });
-    cover.addEventListener('click', function () { if (innerWidth <= 960) openIm(cur, frameBox); else activate(); });
-    bUse.addEventListener('click', function () { if (innerWidth <= 960) return openIm(cur, frameBox); frameBox.classList.contains('is-active') ? release() : activate(); });
-    d.addEventListener('keydown', function (e) { if (e.key === 'Escape' && frameBox.classList.contains('is-active')) release(); });
-    d.addEventListener('pointerdown', function (e) { if (frameBox.classList.contains('is-active') && !e.target.closest('#tFrame,#tUse')) release(); });
-    d.addEventListener('langchange', function () { var gp = $('#tGuide'); if (gp) localize(gp); if (im && im.classList.contains('is-open')) showIm(imIdx); bUse.textContent = frameBox.classList.contains('is-active') ? tr('stop') : tr('use'); });
-    var first = Math.max(0, items.map(function (x) { return '#' + x.id; }).indexOf(location.hash));
-    select(first, { silent: true });
-    var kick = function () { if (started) return; started = true; mountStage(cur); };
-    if ('IntersectionObserver' in window) new IntersectionObserver(function (es, o) { if (es[0].isIntersecting) { kick(); o.disconnect(); } }, { threshold: 0.2 }).observe(frameBox); else kick();
-
-    /* pantalla completa inmersiva */
-    var im = null, imIdx = 0, opener = null;
+  /* ---------- galería de herramientas: diagramas; al pulsar se abre la herramienta ---------- */
+  var gal = $('#toolGrid');
+  if (gal) {
+    var items = $$('.tool-tile[data-src]', gal), im = null, imIdx = 0, opener = null;
+    items.forEach(function (it, i) { $('.tile-btn', it).addEventListener('click', function () { openIm(i, it); }); });
+    var rectOf = function (el) { var r = el.getBoundingClientRect(); return 'inset(' + r.top + 'px ' + (innerWidth - r.right) + 'px ' + (innerHeight - r.bottom) + 'px ' + r.left + 'px)'; };
     var build = function () {
       im = d.createElement('div'); im.className = 'immerse'; im.setAttribute('role', 'dialog'); im.setAttribute('aria-modal', 'true');
-      im.innerHTML = '<div class="immerse-bar"><span class="t"></span><div class="g"><button type="button" data-a="guide" aria-pressed="false"></button><button type="button" data-a="prev"></button><button type="button" data-a="next"></button><a target="_blank" rel="noopener" data-a="tab"></a><button type="button" data-a="close"></button></div></div><div class="immerse-body"><aside class="immerse-guide"></aside><iframe title="" ></iframe></div>';
+      im.innerHTML = '<div class="immerse-bar"><span class="t"></span><div class="g"><button type="button" data-a="guide" aria-pressed="false"></button><button type="button" data-a="prev"></button><button type="button" data-a="next"></button><button type="button" data-a="close"></button></div></div><div class="immerse-body"><aside class="immerse-guide"></aside><iframe title=""></iframe></div>';
       d.body.appendChild(im);
-      im.addEventListener('click', function (e) { var a = e.target.closest('[data-a]'); if (!a) return; var k = a.getAttribute('data-a'); if (k === 'close') closeIm(); if (k === 'guide') { var on = !im.classList.contains('is-guide'); im.classList.toggle('is-guide', on); a.setAttribute('aria-pressed', on); } if (k === 'prev') showIm(imIdx - 1); if (k === 'next') showIm(imIdx + 1); });
+      im.addEventListener('click', function (e) { var a = e.target.closest('[data-a]'); if (!a) return; var k = a.getAttribute('data-a'); if (k === 'close') closeIm(); if (k === 'prev') showIm(imIdx - 1); if (k === 'next') showIm(imIdx + 1); if (k === 'guide') { var on = !im.classList.contains('is-guide'); im.classList.toggle('is-guide', on); a.setAttribute('aria-pressed', on); } });
       d.addEventListener('keydown', function (e) { if (!im.classList.contains('is-open')) return; if (e.key === 'Escape') closeIm(); if (e.key === 'ArrowLeft' && e.altKey) showIm(imIdx - 1); if (e.key === 'ArrowRight' && e.altKey) showIm(imIdx + 1); });
     };
-    var labels = function () { $('[data-a=guide]', im).textContent = tr('guide'); $('[data-a=prev]', im).textContent = tr('prev'); $('[data-a=next]', im).textContent = tr('next'); $('[data-a=tab]', im).textContent = tr('tab'); $('[data-a=close]', im).textContent = tr('close'); };
+    var labels = function () { $('[data-a=guide]', im).textContent = tr('guide'); $('[data-a=prev]', im).textContent = tr('prev'); $('[data-a=next]', im).textContent = tr('next'); $('[data-a=close]', im).textContent = tr('close'); };
     var showIm = function (i) {
       imIdx = (i + items.length) % items.length; var it = items[imIdx], f = $('iframe', im), body = $('.immerse-body', im);
-      $('.t', im).textContent = it.getAttribute('data-title'); $('[data-a=tab]', im).href = it.getAttribute('data-src'); im.setAttribute('aria-label', it.getAttribute('data-title')); f.title = it.getAttribute('data-title');
+      $('.t', im).textContent = it.getAttribute('data-title'); im.setAttribute('aria-label', it.getAttribute('data-title')); f.title = it.getAttribute('data-title');
       f.classList.remove('is-ready'); body.classList.add('is-loading');
       f.onload = function () { embedFix(f); try { f.contentDocument.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeIm(); }); } catch (e) {} f.classList.add('is-ready'); body.classList.remove('is-loading'); };
       var gi = $('.immerse-guide', im); gi.innerHTML = '<h2 style="font-size:var(--text-2xl)">' + it.getAttribute('data-title') + '</h2>' + $('.t-guide', it).innerHTML; localize(gi);
       f.src = it.getAttribute('data-src'); labels();
+      if (history.replaceState) history.replaceState(null, '', '#' + it.id);
     };
     var openIm = function (i, from) {
-      if (!im) build(); opener = d.activeElement; release();
-      showIm(i); var r = (from || frameBox).getBoundingClientRect();
-      var gOn = innerWidth > 960; im.classList.toggle('is-guide', gOn); $('[data-a=guide]', im).setAttribute('aria-pressed', gOn); d.body.classList.add('is-locked'); $$('main,.nav,.foot').forEach(function (n) { n.setAttribute('inert', ''); });
-      im.classList.add('is-open');
-      if (hasG && !reduce) gsap.fromTo(im, { clipPath: 'inset(' + r.top + 'px ' + (innerWidth - r.right) + 'px ' + (innerHeight - r.bottom) + 'px ' + r.left + 'px)' }, { clipPath: 'inset(0px 0px 0px 0px)', duration: 0.8, ease: 'power3.inOut', clearProps: 'clipPath' });
+      if (!im) build(); opener = d.activeElement; showIm(i);
+      var gOn = innerWidth > 960; im.classList.toggle('is-guide', gOn); $('[data-a=guide]', im).setAttribute('aria-pressed', gOn);
+      d.body.classList.add('is-locked'); $$('main,.nav,.foot').forEach(function (n) { n.setAttribute('inert', ''); });
+      var from0 = rectOf(from || items[imIdx]); im.classList.add('is-open');
+      if (hasG && !reduce) gsap.fromTo(im, { clipPath: from0 }, { clipPath: 'inset(0px 0px 0px 0px)', duration: 0.8, ease: 'power4.out', clearProps: 'clipPath' });
       setTimeout(function () { $('[data-a=close]', im).focus(); }, 60);
     };
     var closeIm = function () {
-      var r = frameBox.getBoundingClientRect();
-      var fin = function () { im.classList.remove('is-open'); $('iframe', im).removeAttribute('src'); d.body.classList.remove('is-locked'); $$('main,.nav,.foot').forEach(function (n) { n.removeAttribute('inert'); }); if (opener && opener.focus) opener.focus(); };
-      if (hasG && !reduce) gsap.to(im, { clipPath: 'inset(' + r.top + 'px ' + (innerWidth - r.right) + 'px ' + (innerHeight - r.bottom) + 'px ' + r.left + 'px)', duration: 0.6, ease: 'power3.inOut', onComplete: function () { fin(); gsap.set(im, { clearProps: 'clipPath' }); } }); else fin();
+      var tile = items[imIdx];
+      var fin = function () { im.classList.remove('is-open'); $('iframe', im).removeAttribute('src'); d.body.classList.remove('is-locked'); $$('main,.nav,.foot').forEach(function (n) { n.removeAttribute('inert'); }); if (history.replaceState) history.replaceState(null, '', location.pathname); if (opener && opener.focus) opener.focus(); };
+      if (hasG && !reduce) gsap.to(im, { clipPath: rectOf(tile), duration: 0.5, ease: 'power3.inOut', onComplete: function () { fin(); gsap.set(im, { clearProps: 'clipPath' }); } }); else fin();
     };
-    bFull.addEventListener('click', function () { openIm(cur, frameBox); });
-    var fs = $('#tFullCover'); if (fs) fs.addEventListener('click', function () { openIm(cur, frameBox); });
+    d.addEventListener('langchange', function () { if (im && im.classList.contains('is-open')) showIm(imIdx); });
+    /* dibujo al entrar y bucle solo en pantalla */
+    var tiles = $$('.tool-tile', gal);
+    if ('IntersectionObserver' in window) {
+      var tio = new IntersectionObserver(function (es) { es.forEach(function (e) {
+        var t = e.target, sv = $('.line-art', t); t.classList.toggle('is-live', e.isIntersecting);
+        if (e.isIntersecting && sv && !sv.classList.contains('is-drawn')) setTimeout(function () { sv.classList.add('is-drawn'); }, (tiles.indexOf(t) % 3) * 110);
+      }); }, { threshold: 0.25 });
+      tiles.forEach(function (t) { tio.observe(t); });
+    } else tiles.forEach(function (t) { t.classList.add('is-live'); var sv = $('.line-art', t); if (sv) sv.classList.add('is-drawn'); });
+    var hit = items.map(function (x) { return '#' + x.id; }).indexOf(location.hash);
+    if (hit > -1) setTimeout(function () { openIm(hit, items[hit]); }, 500);
   }
 
   /* ---------- dibujos de línea de las tarjetas ---------- */
   if ('IntersectionObserver' in window) {
-    var lio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-drawn'); lio.unobserve(e.target); } }); }, { threshold: 0.35 });
-    $$('.tool-note .line-art').forEach(function (s) { lio.observe(s); });
+    var lio = new IntersectionObserver(function (es) { es.forEach(function (e) { var sv = $('.line-art', e.target); e.target.classList.toggle('is-live', e.isIntersecting); if (e.isIntersecting && sv) sv.classList.add('is-drawn'); }); }, { threshold: 0.35 });
+    $$('.tool-note').forEach(function (s) { lio.observe(s); });
   } else $$('.tool-note .line-art').forEach(function (s) { s.classList.add('is-drawn'); });
 
   /* ---------- visor de láminas: transición al cambiar de imagen ---------- */
