@@ -56,7 +56,7 @@ Reglas: el acento ocupa **menos del 5 %** de una pantalla. Texto sobre rojo = ti
 **Dos familias, funciones distintas.** Alojadas en local (`assets/fonts`, WOFF2, `font-display: swap`).
 
 - **Hedvig Letters Serif 400** (única) → titulares, nombres, números de pasos, wordmark. Tracking negativo, interlineado cerrado.
-- **Schibsted Grotesk 400/500/600/700** → todo lo demás: cuerpo 400, botones/menú/etiquetas 600, datos en negrita 700.
+- **Highland Gothic 300/400/700** (la tipografía de texto elegida por Jesús, archivos .ttf originales) → todo lo demás: cuerpo 400, botones/menú/etiquetas 700, ligero 300. No existe 500/600: el navegador usa 400 y 700. Sus cifras 1/I y 0/O se parecen: en tablas y códigos numéricos, usar tamaño ≥ 15 px.
 
 | Rol | Tamaño | Interlineado | Tracking | Familia/peso |
 |---|---|---|---|---|
@@ -65,10 +65,10 @@ Reglas: el acento ocupa **menos del 5 %** de una pantalla. Texto sobre rojo = ti
 | H2 sección | `--text-section` 40–76 px | 1 | −.03em | Hedvig 400 |
 | H3 / título de ficha | `--text-title` 24–32 px | 1.1–1.2 | −.02em | Hedvig 400 |
 | Titular de herramienta | clamp(1.75rem, 1.6vw+1rem, 2.5rem) | 1.05 | −.03em | Hedvig 400 |
-| Lead | `--text-lead` 20–28 px | 1.4 | −.012em | Schibsted 400 |
-| Cuerpo | `--text-md` 17 px | 1.6 | 0 | Schibsted 400 |
-| Pie, tabla, botón | `--text-sm` 15 px | 1.5 | 0 | Schibsted 500–600 |
-| Metadato mínimo | `--text-xs` 13 px | 1.4 | 0 | Schibsted 500 |
+| Lead | `--text-lead` 20–28 px | 1.4 | −.012em | Highland 400 |
+| Cuerpo | `--text-md` 17 px | 1.6 | 0 | Highland 400 |
+| Pie, tabla, botón | `--text-sm` 15 px | 1.5 | 0 | Highland 400–700 |
+| Metadato mínimo | `--text-xs` 13 px | 1.4 | 0 | Highland 400 |
 
 Reglas: cuanto más grande, más tracking negativo y menos interlineado; por debajo de 32 px, interlineado ≥ 1.15. Línea de lectura 45–75 caracteres (`ch`). `text-wrap: balance` en titulares, `pretty` en párrafos. Números en `tabular-nums`. Titular ≤ 2 líneas a cualquier ancho. Nada por debajo de 13 px.
 
@@ -128,7 +128,7 @@ Nunca `ease-in` en interfaz. Animar solo `transform`, `opacity`, `clip-path`, `s
 - **Caso de proyecto:** H1 de página + lead + datos en línea (`dt` 600 muted, `dd` normal) + lámina a ancho completo + rejilla de 2 columnas + navegación anterior/siguiente en Hedvig.
 - **Visor de láminas:** `<dialog>`; clic = zoom 2,4× con arrastre y rueda (1–5×); ←/→; difuminado 4 px al cambiar de imagen.
 - **Carátula:** ver §6.
-- **Interfaz de herramienta embebida:** mismo skin (papel, tinta, acento rojo, Hedvig en títulos, Schibsted en controles, 2 px de radio, sin sombras); barra superior `Herramientas / Nombre` que se oculta al embeber.
+- **Interfaz de herramienta embebida:** mismo skin (papel, tinta, acento rojo, Hedvig en títulos, Highland Gothic en controles, 2 px de radio, sin sombras); barra superior `Herramientas / Nombre` que se oculta al embeber.
 
 ## 8. Diagramas de línea (wireframes en movimiento)
 

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>IFC a BC3 · Jesús Ortiz Muñoz</title>
+<meta name="description" content="Abre un modelo IFC en el navegador, lee sus cantidades y exporta un BC3 para Presto con el GlobalId de cada elemento. Hecho con That Open Engine.">
+<meta property="og:title" content="IFC a BC3 · Jesús Ortiz Muñoz">
+<meta property="og:description" content="Del modelo BIM a un presupuesto BC3 revisable, en el navegador.">
+<meta property="og:image" content="https://ortizmozjesus.github.io/JOM/assets/img/og-software.jpg">
+<meta name="theme-color" content="#f1f7f8">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/fonts.css">
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+    "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.webgpu.js",
+    "three/tsl": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.tsl.js",
+    "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "camera-controls": "https://cdn.jsdelivr.net/npm/camera-controls@3.1.2/dist/camera-controls.module.js",
+    "web-ifc": "https://cdn.jsdelivr.net/npm/web-ifc@0.0.77/web-ifc-api.js",
+    "@thatopen/fragments": "https://cdn.jsdelivr.net/npm/@thatopen/fragments@3.6.0/dist/index.mjs",
+    "@thatopen/components": "https://cdn.jsdelivr.net/npm/@thatopen/components@3.6.0/dist/index.mjs"
+  }
+}
+</script>
+<style>
+body{margin:0;padding-top:34px}
+.jom-bar{position:fixed;inset:0 0 auto 0;z-index:var(--z-sticky-nav);height:34px;display:flex;justify-content:space-between;align-items:center;gap:var(--space-sm);padding:0 var(--space-md);background:var(--color-paper-2);color:var(--color-ink);font:500 13px var(--font-body);border-bottom:1px solid var(--color-rule)}
+.jom-bar a{color:var(--color-ink);text-decoration:underline;text-decoration-color:transparent;text-underline-offset:.2em;transition:text-decoration-color var(--dur-short)}
+.jom-bar a:hover{text-decoration-color:var(--color-accent)}
+.jom-bar span{color:var(--color-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header.head{padding:var(--space-xl) var(--space-lg) var(--space-lg);max-width:var(--container);margin:0 auto}
+header.head h1{font-size:var(--text-section);margin:0 0 var(--space-sm)}
+header.head p{font-size:var(--text-lg);line-height:1.4;color:var(--color-ink-2);max-width:56ch;margin:0}
+.app{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(360px,1fr);gap:var(--space-lg);max-width:var(--container);margin:0 auto;padding:0 var(--space-lg) var(--space-xl)}
+.viewer{position:relative;height:min(72vh,720px);min-height:420px;border:1px solid var(--color-rule);border-radius:var(--radius-card);overflow:hidden;background:var(--color-paper-2)}
+.viewer canvas{display:block}
+#status{position:absolute;left:var(--space-sm);bottom:var(--space-sm);right:var(--space-sm);font-size:var(--text-xs);color:var(--color-ink);background:var(--color-paper-hi);padding:var(--space-xs) var(--space-sm);border-radius:var(--radius-control);pointer-events:none}
+#status.hide{display:none}
+.drop{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:color-mix(in oklab,var(--color-accent) 14%,transparent);border:2px dashed var(--color-accent);font-family:var(--font-display);font-size:var(--text-xl);z-index:5}
+.viewer.dragging .drop{display:flex}
+.tools{position:absolute;top:var(--space-sm);left:var(--space-sm);display:flex;gap:var(--space-xs);flex-wrap:wrap;z-index:4}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:var(--touch);padding:0 var(--space-md);border-radius:var(--radius-control);border:1px solid var(--color-rule);background:var(--color-paper-hi);color:var(--color-ink);font:600 var(--text-sm)/1 var(--font-body);cursor:pointer;white-space:nowrap;transition:transform var(--dur-press) var(--ease-out),background var(--dur-short)}
+.btn:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){.btn:hover{background:var(--color-paper-3)}.btn.red:hover{background:var(--color-focus);color:var(--color-paper-hi)}}
+.btn.red{background:var(--color-accent);border-color:var(--color-accent);color:var(--color-accent-ink)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.side{display:flex;flex-direction:column;gap:var(--space-md);min-width:0}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-xs)}
+.kpi{background:var(--color-paper-2);border-radius:var(--radius-card);padding:var(--space-sm) var(--space-md)}
+.kpi b{display:block;font-family:var(--font-display);font-weight:400;font-size:var(--text-xl);letter-spacing:var(--tracking-display)}
+.kpi span{font-size:var(--text-xs);color:var(--color-muted)}
+.card{background:var(--color-paper-hi);border:1px solid var(--color-rule);border-radius:var(--radius-card);padding:var(--space-md)}
+#info{font-size:var(--text-sm);min-height:var(--space-2xl)}
+.muted{color:var(--color-muted)}.small{font-size:var(--text-xs)}.mono{font-variant-numeric:tabular-nums}
+.tag{display:inline-block;padding:0 var(--space-xs);border-radius:var(--radius-control);background:var(--color-paper-2);font-size:var(--text-xs)}
+.tag.warn{background:color-mix(in oklab,var(--color-accent) 18%,transparent);color:var(--color-focus)}
+.tablewrap{max-height:min(52vh,520px);overflow:auto;border:1px solid var(--color-rule);border-radius:var(--radius-card);background:var(--color-paper-hi)}
+table.t{width:100%;border-collapse:collapse;font-size:var(--text-xs)}
+table.t th{text-align:left;font-weight:600;color:var(--color-muted);border-bottom:1px solid var(--color-rule);padding:var(--space-xs);position:sticky;top:0;background:var(--color-paper-2)}
+table.t td{border-bottom:1px solid var(--color-paper-3);padding:var(--space-xs);vertical-align:top}
+table.t td.n,table.t th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.t tr.cap td{color:var(--color-focus);font-weight:700;background:var(--color-paper-2)}
+table.t tr.sum td{font-weight:700;border-top:1px solid var(--color-ink)}
+table.t tr.part{cursor:pointer}
+table.t tr.line td{color:var(--color-ink-2);padding-top:var(--space-2xs);padding-bottom:var(--space-2xs)}
+table.t tr.line td:first-child{padding-left:var(--space-lg)}
+table.t tr.sel td{background:color-mix(in oklab,var(--color-accent) 14%,transparent)}
+@media (hover:hover) and (pointer:fine){table.t tr.part:hover td{background:var(--color-paper-3)}}
+input.num{width:5.5rem;min-height:var(--space-xl);padding:0 var(--space-xs);border:1px solid var(--color-rule);border-radius:var(--radius-control);background:var(--color-paper);color:var(--color-ink);font:inherit;text-align:right}
+.actions{display:flex;flex-wrap:wrap;gap:var(--space-xs)}
+.how{max-width:var(--container);margin:0 auto;padding:var(--space-lg) var(--space-lg) var(--space-3xl)}
+.how h2{font-size:var(--text-title);margin:0 0 var(--space-md)}
+.how ol{margin:0;padding-left:var(--space-lg);display:grid;gap:var(--space-xs);max-width:70ch;color:var(--color-ink-2)}
+@media (max-width:980px){.app{grid-template-columns:1fr}.viewer{height:56vh}}
+@media (max-width:40rem){header.head,.app,.how{padding-left:var(--space-md);padding-right:var(--space-md)}}
+</style>
+</head>
+<body>
+<div class="jom-bar"><a href="../../herramientas.html">Herramientas</a><span>IFC a BC3</span></div>
+
+<header class="head">
+  <h1>Del modelo IFC al presupuesto BC3</h1>
+  <p>Abre un IFC en el navegador, lee las cantidades de cada elemento y descarga un BC3 para Presto con su GlobalId.</p>
+</header>
+
+<main class="app">
+  <div>
+    <div class="viewer" id="viewer">
+      <div class="tools">
+        <label class="btn red" for="file">Abrir mi IFC</label>
+        <input id="file" type="file" accept=".ifc" hidden>
+        <button class="btn" id="fit" type="button">Encuadrar</button>
+        <button class="btn" id="xray" type="button">Rayos X</button>
+      </div>
+      <div class="drop">Suelta el IFC aquí</div>
+      <div id="status">Cargando motor…</div>
+    </div>
+    <p class="small muted" style="margin:var(--space-xs) 0 0">Modelo de ejemplo: casa-taller de 8 × 8 m para un escultor (Proyectos III), modelada en IFC. Pulsa un elemento para ver su partida y una línea de medición para verla en 3D. Tu archivo no sale del navegador.</p>
+  </div>
+
+  <aside class="side">
+    <div class="kpis">
+      <div class="kpi"><b id="kElems">—</b><span>Elementos</span></div>
+      <div class="kpi"><b id="kParts">—</b><span>Partidas</span></div>
+      <div class="kpi"><b id="kTotal">—</b><span>PEM orientativo</span></div>
+    </div>
+    <div class="card" id="info"><span class="muted">Selecciona un elemento.</span></div>
+    <div class="tablewrap">
+      <table class="t" id="tabla">
+        <thead><tr><th>Código</th><th>Ud</th><th>Resumen</th><th class="n">Medición</th><th class="n">Precio</th><th class="n">Importe</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="actions">
+      <button class="btn red" id="bc3" type="button" disabled>Descargar BC3</button>
+      <button class="btn" id="csv" type="button" disabled>Descargar CSV</button>
+    </div>
+    <p class="small muted" style="margin:0">Precios orientativos y editables: cámbialos en la tabla y el BC3 sale con los tuyos. Formato FIEBDC-3/2002, capítulos con #, medición detallada con el GlobalId de cada elemento.</p>
+  </aside>
+</main>
+
+<section class="how">
+  <h2>Cómo funciona</h2>
+  <ol>
+    <li><b>That Open Engine</b> convierte el IFC a Fragments y lo dibuja con Three.js.</li>
+    <li><b>web-ifc</b> lee los conjuntos de cantidades (Qto), los Pset y la planta de cada elemento.</li>
+    <li>Unas reglas asignan cada elemento a una partida: clase IFC, tipo, si es exterior, espesor.</li>
+    <li>Se escribe el BC3 con raíz, capítulos, partidas, texto y mediciones.</li>
+  </ol>
+</section>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

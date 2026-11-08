@@ -25,7 +25,7 @@
 
   /* ---------- tipografía ---------- */
   --font-display: "Hedvig Letters Serif", ui-serif, Georgia, serif;            /* un solo peso: 400 */
-  --font-body:    "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;   /* 400 500 600 700 */
+  --font-body:    "Highland Gothic", ui-sans-serif, system-ui, sans-serif;   /* 300 400 700 */
   --tracking-display: -0.03em;
   --leading-display: 1;
   --leading-body: 1.6;
