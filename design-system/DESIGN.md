@@ -194,4 +194,4 @@ Orden de trabajo: tokens → composición sin animación → texto real → movi
 - **Subtítulo importante** (h3, nombres de ficha, etiquetas de datos): negro, pequeño (17–20 px), Highland 700.
 - **Lead y etiquetas** (frase bajo el titular, metadatos, pies): gris claro `--color-soft` `#606b72` (5.3:1).
 - **Texto corrido**: gris `--color-text` `#4f5a62` (6.9:1).
-- **Estado "En desarrollo / Work in progress"**: etiqueta con borde `--color-focus` y punto rojo que parpadea (se detiene con reduced-motion).
+- **Estado "En desarrollo / Work in progress"**: etiqueta con borde `--color-focus` y punto rojo estático (sin pulso: no hay datos en vivo).
