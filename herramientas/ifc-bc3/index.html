@@ -44,7 +44,7 @@ header.head p{font-size:var(--text-lg);line-height:1.4;color:var(--color-ink-2);
 .drop{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:color-mix(in oklab,var(--color-accent) 14%,transparent);border:2px dashed var(--color-accent);font-family:var(--font-display);font-size:var(--text-xl);z-index:5}
 .viewer.dragging .drop{display:flex}
 .tools{position:absolute;top:var(--space-sm);left:var(--space-sm);display:flex;gap:var(--space-xs);flex-wrap:wrap;z-index:4}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:var(--touch);padding:0 var(--space-md);border-radius:var(--radius-control);border:1px solid var(--color-rule);background:var(--color-paper-hi);color:var(--color-ink);font:600 var(--text-sm)/1 var(--font-body);cursor:pointer;white-space:nowrap;transition:transform var(--dur-press) var(--ease-out),background var(--dur-short)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:var(--touch);padding:var(--space-xs) var(--space-md);border-radius:var(--radius-control);border:1px solid var(--color-rule);background:var(--color-paper-hi);color:var(--color-ink);font:600 var(--text-sm)/1 var(--font-body);cursor:pointer;white-space:nowrap;transition:transform var(--dur-press) var(--ease-out),background var(--dur-short)}
 .btn:active{transform:scale(.97)}
 @media (hover:hover) and (pointer:fine){.btn:hover{background:var(--color-paper-3)}.btn.red:hover{background:var(--color-focus);color:var(--color-paper-hi)}}
 .btn.red{background:var(--color-accent);border-color:var(--color-accent);color:var(--color-accent-ink)}
@@ -57,7 +57,7 @@ header.head p{font-size:var(--text-lg);line-height:1.4;color:var(--color-ink-2);
 .card{background:var(--color-paper-hi);border:1px solid var(--color-rule);border-radius:var(--radius-card);padding:var(--space-md)}
 #info{font-size:var(--text-sm);min-height:var(--space-2xl)}
 .muted{color:var(--color-muted)}.small{font-size:var(--text-xs)}.mono{font-variant-numeric:tabular-nums}
-.tag{display:inline-block;padding:0 var(--space-xs);border-radius:var(--radius-control);background:var(--color-paper-2);font-size:var(--text-xs)}
+.tag{display:inline-block;padding:var(--space-3xs) var(--space-xs);border-radius:var(--radius-control);background:var(--color-paper-2);font-size:var(--text-xs)}
 .tag.warn{background:color-mix(in oklab,var(--color-accent) 18%,transparent);color:var(--color-focus)}
 .tablewrap{max-height:min(52vh,520px);overflow:auto;border:1px solid var(--color-rule);border-radius:var(--radius-card);background:var(--color-paper-hi)}
 table.t{width:100%;border-collapse:collapse;font-size:var(--text-xs)}
