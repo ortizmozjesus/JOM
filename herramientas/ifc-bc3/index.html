@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>IFC a BC3 · Jesús Ortiz Muñoz</title>
+<title>IFC a BC3 (en desarrollo) · Jesús Ortiz Muñoz</title>
 <meta name="description" content="Abre un modelo IFC en el navegador, lee sus cantidades y exporta un BC3 para Presto con el GlobalId de cada elemento. Hecho con That Open Engine.">
 <meta property="og:title" content="IFC a BC3 · Jesús Ortiz Muñoz">
 <meta property="og:description" content="Del modelo BIM a un presupuesto BC3 revisable, en el navegador.">
@@ -78,13 +78,26 @@ input.num{width:5.5rem;min-height:var(--space-xl);padding:0 var(--space-xs);bord
 .how ol{margin:0;padding-left:var(--space-lg);display:grid;gap:var(--space-xs);max-width:70ch;color:var(--color-ink-2)}
 @media (max-width:980px){.app{grid-template-columns:1fr}.viewer{height:56vh}}
 @media (max-width:40rem){header.head,.app,.how{padding-left:var(--space-md);padding-right:var(--space-md)}}
+.wip{display:inline-flex;align-items:center;gap:var(--space-xs);padding:var(--space-3xs) var(--space-xs);border:1px solid var(--color-focus);border-radius:var(--radius-control);color:var(--color-focus);font-size:var(--text-xs);font-weight:700;line-height:1.3;white-space:nowrap}
+.wip i{width:6px;height:6px;border-radius:50%;background:var(--color-accent);animation:blink-dot 1.6s var(--ease-in-out) infinite}
+@keyframes blink-dot{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.wip i{animation:none}}
+header.head p.wipnote{display:flex;align-items:center;gap:var(--space-sm);flex-wrap:wrap;margin-top:var(--space-md);font-size:var(--text-sm);color:var(--color-soft)}
+.board{max-width:var(--container);margin:0 auto;padding:0 var(--space-lg) var(--space-3xl);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-lg)}
+.board h3{font-size:var(--text-md);margin:0 0 var(--space-sm);display:flex;align-items:center;gap:var(--space-xs)}
+.board ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--space-xs)}
+.board li{padding:var(--space-sm) var(--space-md);background:var(--color-paper-2);border-radius:var(--radius-card);font-size:var(--text-sm);color:var(--color-text)}
+.board .done li::before{content:"✓ ";color:var(--color-focus);font-weight:700}
+.board .now li{border-left:2px solid var(--color-accent)}
+@media (max-width:48rem){.board{grid-template-columns:1fr;padding-left:var(--space-md);padding-right:var(--space-md)}}
 </style>
 </head>
 <body>
-<div class="jom-bar"><a href="../../herramientas.html">Herramientas</a><span>IFC a BC3</span></div>
+<div class="jom-bar"><a href="../../herramientas.html">Herramientas</a><span>IFC a BC3 · en desarrollo</span></div>
 
 <header class="head">
   <h1>Del modelo IFC al presupuesto BC3</h1>
+  <p class="wipnote"><span class="wip"><i></i>Work in progress</span> Versión de trabajo: los resultados son orientativos y la herramienta cambia a menudo.</p>
   <p>Abre un IFC en el navegador, lee las cantidades de cada elemento y descarga un BC3 para Presto con su GlobalId.</p>
 </header>
 
@@ -124,6 +137,11 @@ input.num{width:5.5rem;min-height:var(--space-xl);padding:0 var(--space-xs);bord
   </aside>
 </main>
 
+<section class="board" aria-label="Estado del proyecto">
+  <div class="done"><h3>Hecho</h3><ul><li>Lectura de cantidades (Qto) de cada elemento</li><li>Reglas que asignan cada elemento a una partida</li><li>Exportación a BC3 y CSV con el GlobalId</li></ul></div>
+  <div class="now"><h3>En curso</h3><ul><li>Elementos sin cantidades: avisarlos y medirlos</li><li>Precios editables en la tabla</li></ul></div>
+  <div><h3>Siguiente</h3><ul><li>Probar el BC3 con más modelos y en Presto</li><li>Cubrir más clases IFC</li></ul></div>
+</section>
 <section class="how">
   <h2>Cómo funciona</h2>
   <ol>

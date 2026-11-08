@@ -55,16 +55,16 @@ Reglas: el acento ocupa **menos del 5 %** de una pantalla. Texto sobre rojo = ti
 
 **Dos familias, funciones distintas.** Alojadas en local (`assets/fonts`, WOFF2, `font-display: swap`).
 
-- **Hedvig Letters Serif 400** (única) → titulares, nombres, números de pasos, wordmark. Tracking negativo, interlineado cerrado.
+- **Highland Gothic 400** (única) → titulares, nombres, números de pasos, wordmark. Tracking negativo, interlineado cerrado.
 - **Highland Gothic 300/400/700** (la tipografía de texto elegida por Jesús, archivos .ttf originales) → todo lo demás: cuerpo 400, botones/menú/etiquetas 700, ligero 300. No existe 500/600: el navegador usa 400 y 700. Sus cifras 1/I y 0/O se parecen: en tablas y códigos numéricos, usar tamaño ≥ 15 px.
 
 | Rol | Tamaño | Interlineado | Tracking | Familia/peso |
 |---|---|---|---|---|
-| Hero (nombre) | `--text-hero` 52–116 px | .92 | −.035em | Hedvig 400 |
-| H1 de página | `--text-page` 56–128 px | .92 | −.04em | Hedvig 400 |
-| H2 sección | `--text-section` 40–76 px | 1 | −.03em | Hedvig 400 |
-| H3 / título de ficha | `--text-title` 24–32 px | 1.1–1.2 | −.02em | Hedvig 400 |
-| Titular de herramienta | clamp(1.75rem, 1.6vw+1rem, 2.5rem) | 1.05 | −.03em | Hedvig 400 |
+| Hero (nombre) | `--text-hero` 52–116 px | .92 | −.035em | Highland 400 |
+| H1 de página | `--text-page` 56–128 px | .92 | −.04em | Highland 400 |
+| H2 sección | `--text-section` 40–76 px | 1 | −.03em | Highland 400 |
+| H3 / título de ficha | `--text-title` 24–32 px | 1.1–1.2 | −.02em | Highland 400 |
+| Titular de herramienta | clamp(1.75rem, 1.6vw+1rem, 2.5rem) | 1.05 | −.03em | Highland 400 |
 | Lead | `--text-lead` 20–28 px | 1.4 | −.012em | Highland 400 |
 | Cuerpo | `--text-md` 17 px | 1.6 | 0 | Highland 400 |
 | Pie, tabla, botón | `--text-sm` 15 px | 1.5 | 0 | Highland 400–700 |
@@ -123,12 +123,12 @@ Nunca `ease-in` en interfaz. Animar solo `transform`, `opacity`, `clip-path`, `s
 - **Botón** (`.btn`): alto 44 px, borde 1 px tinta, radio 2 px, 600. Primario = fondo `--color-accent` + texto tinta. Estados: hover (tono), `:active` scale .97, foco 2 px `--color-focus`, `:disabled` opacidad .45 + `not-allowed`.
 - **Pestaña/filtro** (`.tab`): igual que botón, alto 44; activa = acento.
 - **Enlace:** subrayado de 1 px en `--color-rule` (offset .16em); al pasar el ratón el subrayado pasa a `--color-accent`.
-- **Cabecera:** wordmark Hedvig 24 px a la izquierda, enlaces 600 al centro, `EN` a la derecha. Móvil: botón "Menú" → hoja a pantalla completa con enlaces en Hedvig 44 px.
-- **Ficha de herramienta** (`.tool-tile`): diagrama en contenedor `--color-paper-2` 16:10 + nombre Hedvig `--text-title`. Hover = tono. Pulsar = abre la herramienta a pantalla completa con guía lateral ("Para qué sirve / Cómo se usa", 1 frase + 3 pasos cortos).
+- **Cabecera:** wordmark Highland 24 px a la izquierda, enlaces 600 al centro, `EN` a la derecha. Móvil: botón "Menú" → hoja a pantalla completa con enlaces en Hedvig 44 px.
+- **Ficha de herramienta** (`.tool-tile`): diagrama en contenedor `--color-paper-2` 16:10 + nombre Highland 700 `--text-md`. Hover = tono. Pulsar = abre la herramienta a pantalla completa con guía lateral ("Para qué sirve / Cómo se usa", 1 frase + 3 pasos cortos).
 - **Caso de proyecto:** H1 de página + lead + datos en línea (`dt` 600 muted, `dd` normal) + lámina a ancho completo + rejilla de 2 columnas + navegación anterior/siguiente en Hedvig.
 - **Visor de láminas:** `<dialog>`; clic = zoom 2,4× con arrastre y rueda (1–5×); ←/→; difuminado 4 px al cambiar de imagen.
 - **Carátula:** ver §6.
-- **Interfaz de herramienta embebida:** mismo skin (papel, tinta, acento rojo, Hedvig en títulos, Highland Gothic en controles, 2 px de radio, sin sombras); barra superior `Herramientas / Nombre` que se oculta al embeber.
+- **Interfaz de herramienta embebida:** mismo skin (papel, tinta, acento rojo, Highland Gothic en todo, 2 px de radio, sin sombras); barra superior `Herramientas / Nombre` que se oculta al embeber.
 
 ## 8. Diagramas de línea (wireframes en movimiento)
 
@@ -186,3 +186,12 @@ Orden de trabajo: tokens → composición sin animación → texto real → movi
 - [ ] Movimiento: curvas del sistema, < 300 ms en interfaz, hover bajo `(hover:hover)`, solo transform/opacity.
 - [ ] Texto corto y verdadero, ES y EN.
 - [ ] 390 / 768 / 1440 sin scroll horizontal ni errores de consola.
+
+
+## Jerarquía de color y peso (v1.1, 8 nov 2026)
+
+- **Titular** (h1, h2): negro `--color-ink`, grande, Highland 400.
+- **Subtítulo importante** (h3, nombres de ficha, etiquetas de datos): negro, pequeño (17–20 px), Highland 700.
+- **Lead y etiquetas** (frase bajo el titular, metadatos, pies): gris claro `--color-soft` `#606b72` (5.3:1).
+- **Texto corrido**: gris `--color-text` `#4f5a62` (6.9:1).
+- **Estado "En desarrollo / Work in progress"**: etiqueta con borde `--color-focus` y punto rojo que parpadea (se detiene con reduced-motion).

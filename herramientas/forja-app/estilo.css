@@ -4,7 +4,7 @@
   --texto:#0a1522; --suave:#58626a; --texto2:#2f3943; --acento:#ff2800; --acento-tinta:#0a1522; --acento2:#b31b00;
   --ok:#2c7a54; --error:#b3261e; --aviso-fondo:#f6e8d6; --aviso-linea:#e0b988; --aviso-texto:#6a3d0e;
   --velo:rgba(10,21,34,.55); --visor:#0a1522; --sombra:rgba(10,21,34,.14);
-  --radio:3px; --fuente-texto:Highland Gothic,system-ui,-apple-system,"Segoe UI",sans-serif; --fuente-titulo:"Hedvig Letters Serif",Georgia,serif;
+  --radio:3px; --fuente-texto:Highland Gothic,system-ui,-apple-system,"Segoe UI",sans-serif; --fuente-titulo:"Highland Gothic",ui-sans-serif,system-ui,sans-serif;
   --dur:160ms; --ease:cubic-bezier(.2,.7,.2,1);
 }
 *{box-sizing:border-box}

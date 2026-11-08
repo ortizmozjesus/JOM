@@ -13,6 +13,8 @@
   --color-ink:      oklch(16%   0.032 250);  /* texto y trazo         (#030e1a) */
   --color-ink-2:    oklch(34%   0.022 245);  /* texto secundario      (#2f3943) */
   --color-muted:    oklch(41%   0.020 240);  /* metadatos, etiquetas  (#414c54) */
+  --color-text: #4f5a62;   /* gris del texto corrido (6.9:1 sobre el papel) */
+  --color-soft: #606b72;   /* gris claro: subtítulos y etiquetas (5.3:1) */
   --color-rule:     oklch(84%   0.010 225);  /* bordes de controles   (#c4cccf) */
   --color-accent:   #ff2800;                  /* rojo Ferrari (hex canónico) */
   --color-accent-ink: var(--color-ink);      /* texto sobre el acento: tinta, 4.9:1 */
@@ -24,7 +26,7 @@
   --color-mark: color-mix(in oklab, var(--color-ink) 72%, transparent);
 
   /* ---------- tipografía ---------- */
-  --font-display: "Hedvig Letters Serif", ui-serif, Georgia, serif;            /* un solo peso: 400 */
+  --font-display: "Highland Gothic", ui-sans-serif, system-ui, sans-serif;            /* un solo peso: 400 */
   --font-body:    "Highland Gothic", ui-sans-serif, system-ui, sans-serif;   /* 300 400 700 */
   --tracking-display: -0.03em;
   --leading-display: 1;
